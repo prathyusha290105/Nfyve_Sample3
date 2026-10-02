@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import { MapPin, Phone, Mail, Clock, Send, CheckCircle2, AlertCircle } from 'lucide-react';
+import { submitInquiryRecord } from '../lib/firestore';
 import { api } from '../api/client';
 
 export const ContactPage: React.FC = () => {
@@ -27,8 +28,8 @@ export const ContactPage: React.FC = () => {
     setSuccessMsg('');
 
     try {
-      const res = await api.submitInquiry(formData);
-      setSuccessMsg(res.message);
+      await submitInquiryRecord(formData);
+      setSuccessMsg('Your inquiry has been received. Our clinical concierge will respond within 4 business hours.');
       setFormData({
         name: '',
         email: '',

@@ -1,0 +1,113 @@
+rules_version = '2';
+service cloud.firestore {
+  match /databases/{database}/documents {
+    
+    // Helper functions
+    function isAuthenticated() {
+      return request.auth != null;
+    }
+    
+    function isUser(uid) {
+      return isAuthenticated() && request.auth.uid == uid;
+    }
+    
+    function getUserData() {
+      return get(/databases/$(database)/documents/users/$(request.auth.uid)).data;
+    }
+    
+    function isAdmin() {
+      return isAuthenticated() && 
+        (request.auth.token.role == 'admin' || 
+         (exists(/databases/$(database)/documents/users/$(request.auth.uid)) && 
+          getUserData().role == 'admin' && getUserData().active == true));
+    }
+    
+    function isStaff() {
+      return isAuthenticated() && 
+        (request.auth.token.role == 'staff' || 
+         (exists(/databases/$(database)/documents/users/$(request.auth.uid)) && 
+          getUserData().role == 'staff' && getUserData().active == true));
+    }
+
+    // Default deny
+    match /{document=**} {
+      allow read, write: if false;
+    }
+    
+    // USERS COLLECTION
+    match /users/{userId} {
+      allow read: if isAdmin() || isUser(userId);
+      allow create: if isAdmin() || (isAuthenticated() && request.auth.uid == userId && request.resource.data.role == 'customer');
+      allow update: if isAdmin() || 
+        (isUser(userId) && 
+         // Staff/customers can update profile details but cannot alter role or active status
+         request.resource.data.role == resource.data.role &&
+         request.resource.data.active == resource.data.active);
+      allow delete: if isAdmin();
+    }
+    
+    // SERVICES COLLECTION
+    match /services/{serviceId} {
+      // Anyone can read active services; admins can read all
+      allow read: if resource.data.active == true || isAdmin();
+      allow write: if isAdmin();
+    }
+    
+    // APPOINTMENTS COLLECTION
+    match /appointments/{appointmentId} {
+      // Admins read all; Staff only reads assigned appointments; Customer reads their own
+      allow read: if isAdmin() || 
+        (isStaff() && resource.data.assignedStaffId == request.auth.uid) ||
+        (isAuthenticated() && resource.data.customerId == request.auth.uid);
+        
+      // Validated booking creation
+      allow create: if request.resource.data.bookingReference is string &&
+        request.resource.data.customerName is string &&
+        request.resource.data.customerPhone is string &&
+        request.resource.data.serviceId is string &&
+        request.resource.data.appointmentDate is string &&
+        request.resource.data.timeSlot is string;
+        
+      // Admins update everything; Staff can only update status & notes on their assigned appointments
+      allow update: if isAdmin() || 
+        (isStaff() && resource.data.assignedStaffId == request.auth.uid &&
+         // Staff cannot reassign or change pricing
+         request.resource.data.assignedStaffId == resource.data.assignedStaffId &&
+         request.resource.data.fee == resource.data.fee);
+         
+      allow delete: if isAdmin();
+    }
+    
+    // CUSTOMERS COLLECTION
+    match /customers/{customerId} {
+      allow read: if isAdmin();
+      allow create: if true; // Created during public/client appointments
+      allow update, delete: if isAdmin();
+    }
+    
+    // REVIEWS COLLECTION
+    match /reviews/{reviewId} {
+      // Public reads approved reviews; Admin reads all
+      allow read: if resource.data.moderationStatus == 'approved' || resource.data.isApproved == true || isAdmin();
+      // Public / clients submit reviews with pending moderation status
+      allow create: if request.resource.data.rating is number &&
+        request.resource.data.rating >= 1 && request.resource.data.rating <= 5 &&
+        (request.resource.data.moderationStatus == 'pending' || request.resource.data.isApproved == false);
+      allow update, delete: if isAdmin();
+    }
+    
+    // CONTACT INQUIRIES
+    match /contactInquiries/{inquiryId} {
+      allow read, update, delete: if isAdmin();
+      allow create: if request.resource.data.name is string &&
+        request.resource.data.email is string &&
+        request.resource.data.message is string;
+    }
+    
+    // BUSINESS SETTINGS
+    match /businessSettings/{settingsId} {
+      allow read: if true; // Public reads clinic hours and info
+      allow write: if isAdmin();
+    }
+  }
+}

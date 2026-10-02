@@ -2,13 +2,21 @@ export type Role = 'customer' | 'staff' | 'admin';
 
 export interface User {
   id: string;
+  uid?: string;
   name: string;
   email: string;
   phone: string;
   role: Role;
   staffId?: string;
+  designation?: string;
+  department?: string;
+  active?: boolean;
   avatarUrl?: string;
+  photoURL?: string;
+  specialties?: string[];
+  bio?: string;
   createdAt: string;
+  updatedAt?: string;
 }
 
 export interface ServiceCategory {

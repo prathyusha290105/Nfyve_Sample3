@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { Star, MessageSquarePlus, Filter, CheckCircle2, ShieldCheck, X } from 'lucide-react';
-import { api } from '../api/client';
+import { submitReviewRecord, fetchReviews as fetchFirestoreReviews } from '../lib/firestore';
 import { Review } from '../types';
 import { useAuth } from '../context/AuthContext';
 import { Link } from 'react-router-dom';
@@ -21,16 +21,16 @@ export const ReviewsPage: React.FC = () => {
   const [submitError, setSubmitError] = useState('');
   const [isSubmitting, setIsSubmitting] = useState(false);
 
-  const fetchReviews = () => {
+  const loadReviewsData = () => {
     setIsLoading(true);
-    api.getReviews()
+    fetchFirestoreReviews(true)
       .then(setReviews)
       .catch(console.error)
       .finally(() => setIsLoading(false));
   };
 
   useEffect(() => {
-    fetchReviews();
+    loadReviewsData();
   }, []);
 
   const categories = [
@@ -57,16 +57,17 @@ export const ReviewsPage: React.FC = () => {
     setSubmitSuccess('');
 
     try {
-      await api.submitReview({
+      await submitReviewRecord({
+        customerName: user?.name || 'Verified Client',
         serviceCategory: categoryName,
         serviceName: serviceName.trim() || 'General Consultation',
         rating,
         reviewText: reviewText.trim(),
       });
-      setSubmitSuccess('Thank you! Your verified feedback has been published.');
+      setSubmitSuccess('Thank you! Your feedback has been submitted to the sanctuary.');
       setReviewText('');
       setServiceName('');
-      fetchReviews();
+      loadReviewsData();
       setTimeout(() => {
         setIsModalOpen(false);
         setSubmitSuccess('');

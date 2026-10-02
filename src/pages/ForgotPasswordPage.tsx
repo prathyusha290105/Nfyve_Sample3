@@ -1,9 +1,10 @@
 import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
 import { ArrowLeft, CheckCircle2, AlertCircle } from 'lucide-react';
-import { api } from '../api/client';
+import { useAuth } from '../context/AuthContext';
 
 export const ForgotPasswordPage: React.FC = () => {
+  const { sendPasswordReset } = useAuth();
   const [email, setEmail] = useState('');
   const [successNotice, setSuccessNotice] = useState('');
   const [errorNotice, setErrorNotice] = useState('');
@@ -18,8 +19,8 @@ export const ForgotPasswordPage: React.FC = () => {
     setSuccessNotice('');
 
     try {
-      const res = await api.forgotPassword(email);
-      setSuccessNotice(res.demoNotice || res.message);
+      await sendPasswordReset(email);
+      setSuccessNotice('Password reset instructions have been dispatched. Please check your inbox.');
     } catch (err: any) {
       setErrorNotice(err.message || 'Error processing request.');
     } finally {

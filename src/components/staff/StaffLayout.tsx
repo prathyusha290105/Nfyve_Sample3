@@ -21,6 +21,7 @@ import {
   Sparkles,
   ShieldAlert
 } from 'lucide-react';
+import { FirebaseSetupNotice } from '../common/FirebaseSetupNotice';
 
 export const StaffLayout: React.FC<{ children: React.ReactNode }> = ({ children }) => {
   const { user, logout } = useAuth();
@@ -301,7 +302,8 @@ export const StaffLayout: React.FC<{ children: React.ReactNode }> = ({ children 
         </aside>
 
         {/* Main Content Viewport */}
-        <main className="flex-1 min-w-0 p-4 sm:p-6 lg:p-8 overflow-y-auto">
+        <main className="flex-1 min-w-0 p-4 sm:p-6 lg:p-8 overflow-y-auto space-y-4">
+          <FirebaseSetupNotice />
           {children}
         </main>
 

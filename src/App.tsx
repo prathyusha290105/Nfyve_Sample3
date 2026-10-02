@@ -42,6 +42,7 @@ import { StaffAppointmentsPage } from './pages/staff/StaffAppointmentsPage';
 import { StaffClientsPage } from './pages/staff/StaffClientsPage';
 import { StaffPerformancePage } from './pages/staff/StaffPerformancePage';
 import { StaffProfilePage } from './pages/staff/StaffProfilePage';
+import { FirebaseSetupNotice } from './components/common/FirebaseSetupNotice';
 
 // Route Guards
 const CustomerProtectedRoute: React.FC = () => {
@@ -112,6 +113,7 @@ const StaffProtectedRoute: React.FC = () => {
 const PublicLayout: React.FC = () => {
   return (
     <div className="min-h-screen flex flex-col bg-[#FAF9F5] text-[#252923]">
+      <FirebaseSetupNotice />
       <Navbar />
       <main className="flex-1">
         <Outlet />

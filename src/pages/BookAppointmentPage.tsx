@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { useSearchParams, useNavigate, Link } from 'react-router-dom';
 import { useAuth } from '../context/AuthContext';
 import { api } from '../api/client';
+import { createBooking } from '../lib/firestore';
 import { Service, ServiceCategory, Staff, Appointment } from '../types';
 import { 
   Calendar as CalendarIcon, 
@@ -11,8 +12,11 @@ import {
   CheckCircle2, 
   AlertCircle, 
   ArrowRight, 
-  ArrowLeft,
-  Sparkles
+  Sparkles,
+  Phone,
+  Mail,
+  Building2,
+  Check
 } from 'lucide-react';
 
 export const BookAppointmentPage: React.FC = () => {
@@ -23,6 +27,11 @@ export const BookAppointmentPage: React.FC = () => {
   const [categories, setCategories] = useState<ServiceCategory[]>([]);
   const [services, setServices] = useState<Service[]>([]);
   const [staffList, setStaffList] = useState<Staff[]>([]);
+
+  // Customer Contact Fields
+  const [customerName, setCustomerName] = useState<string>(user?.name || '');
+  const [customerEmail, setCustomerEmail] = useState<string>(user?.email || '');
+  const [customerPhone, setCustomerPhone] = useState<string>(user?.phone || '+91 ');
 
   // Selection states
   const [selectedCategoryId, setSelectedCategoryId] = useState<string>('');
@@ -43,13 +52,22 @@ export const BookAppointmentPage: React.FC = () => {
   const [bookingError, setBookingError] = useState<string>('');
   const [isSubmitting, setIsSubmitting] = useState<boolean>(false);
 
+  // Sync user profile if user logs in
+  useEffect(() => {
+    if (user) {
+      if (!customerName) setCustomerName(user.name);
+      if (!customerEmail) setCustomerEmail(user.email);
+      if (!customerPhone || customerPhone === '+91 ') setCustomerPhone(user.phone);
+    }
+  }, [user]);
+
   // Load initial data
   useEffect(() => {
     Promise.all([api.getCategories(), api.getServices(), api.getStaff()])
       .then(([cats, srvs, stf]) => {
         setCategories(cats);
         setServices(srvs);
-        setStaffList(stf);
+        setStaffList(stf.filter(s => s.isActive));
 
         const initialSrvId = searchParams.get('serviceId');
         if (initialSrvId) {
@@ -60,6 +78,10 @@ export const BookAppointmentPage: React.FC = () => {
           }
         } else if (cats.length > 0) {
           setSelectedCategoryId(cats[0].id);
+          const firstCatSrvs = srvs.filter(s => s.categoryId === cats[0].id);
+          if (firstCatSrvs.length > 0 && !selectedServiceId) {
+            setSelectedServiceId(firstCatSrvs[0].id);
+          }
         }
       })
       .catch(console.error);
@@ -93,13 +115,14 @@ export const BookAppointmentPage: React.FC = () => {
 
   const handleBooking = async (e: React.FormEvent) => {
     e.preventDefault();
-    if (!user) {
-      navigate(`/login?redirect=${encodeURIComponent('/book-appointment?serviceId=' + selectedServiceId)}`);
+
+    if (!customerName.trim() || !customerEmail.trim() || !customerPhone.trim()) {
+      setBookingError('Please enter your full name, email address, and contact phone number.');
       return;
     }
 
     if (!selectedServiceId || !appointmentDate || !timeSlot) {
-      setBookingError('Please choose your service, date, and available time slot.');
+      setBookingError('Please select your preferred treatment, date, and an available consultation time slot.');
       return;
     }
 
@@ -107,59 +130,66 @@ export const BookAppointmentPage: React.FC = () => {
     setBookingError('');
 
     try {
-      const res = await api.createAppointment({
+      // Use Firestore transactional/atomic booking method
+      const created = await createBooking({
+        customerName: customerName.trim(),
+        customerEmail: customerEmail.trim().toLowerCase(),
+        customerPhone: customerPhone.trim(),
         serviceId: selectedServiceId,
         staffId: selectedStaffId || undefined,
         appointmentDate,
         timeSlot,
         notes: notes.trim(),
+        fee: selectedService?.priceInr,
       });
-      setConfirmedBooking(res.appointment);
+
+      setConfirmedBooking(created);
     } catch (err: any) {
-      setBookingError(err.message || 'Slot reservation failed.');
+      setBookingError(err.message || 'Slot reservation failed. The selected specialist or slot may already be reserved.');
     } finally {
       setIsSubmitting(false);
     }
   };
 
-  // If already confirmed, render success screen
+  // If already confirmed, render high-end success screen
   if (confirmedBooking) {
     return (
       <div className="max-w-2xl mx-auto px-4 py-16 text-center space-y-6">
-        <div className="w-16 h-16 rounded-full bg-emerald-100 text-[#244B3A] flex items-center justify-center mx-auto">
+        <div className="w-16 h-16 rounded-full bg-emerald-100 text-[#214D3B] flex items-center justify-center mx-auto border-2 border-[#D4AF37]/50 shadow-sm">
           <CheckCircle2 className="w-9 h-9" />
         </div>
 
         <div className="space-y-2">
-          <span className="text-xs font-semibold uppercase tracking-widest text-[#244B3A]">
-            Booking Request Confirmed
+          <span className="text-xs font-semibold uppercase tracking-widest text-[#214D3B] bg-[#F0EEE5] px-3 py-1 rounded-full border border-[#E7E5DC]">
+            Booking Confirmed & Recorded in Firestore
           </span>
-          <h1 className="font-serif text-3xl sm:text-4xl text-[#252923] font-medium">
+          <h1 className="font-serif text-3xl sm:text-4xl text-[#214D3B] font-bold">
             We Look Forward to Welcoming You
           </h1>
-          <p className="text-xs sm:text-sm text-[#777A70] max-w-md mx-auto">
-            Your appointment has been registered in our Begumpet sanctuary scheduling system.
+          <p className="text-xs sm:text-sm text-[#585B53] max-w-md mx-auto">
+            Your appointment has been registered in the Begumpet sanctuary clinical schedule.
           </p>
         </div>
 
         {/* Reference Dossier Card */}
-        <div className="bg-white border border-[#DDD9CE] rounded-2xl p-6 sm:p-8 text-left space-y-4 shadow-xs">
+        <div className="bg-white border border-[#DDD9CE] rounded-2xl p-6 sm:p-8 text-left space-y-4 shadow-sm">
           <div className="flex items-center justify-between border-b border-[#F0EEE5] pb-3">
             <div>
-              <span className="text-[11px] text-[#777A70] uppercase font-semibold">Reference ID</span>
-              <p className="text-sm font-semibold text-[#244B3A] font-mono tabular-nums">
+              <span className="text-[11px] text-[#777A70] uppercase font-semibold">Unique Booking Reference</span>
+              <p className="text-base font-bold text-[#214D3B] font-mono tabular-nums">
                 {confirmedBooking.bookingRef}
               </p>
             </div>
-            <span className="px-2.5 py-1 text-xs font-semibold bg-emerald-50 text-emerald-800 rounded-md">
+            <span className="px-3 py-1 text-xs font-bold bg-emerald-100 text-emerald-800 rounded-full uppercase tracking-wider">
               {confirmedBooking.status.toUpperCase()}
             </span>
           </div>
 
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 text-xs">
             <div>
-              <span className="text-[#777A70]">Service</span>
-              <p className="font-medium text-[#252923]">{confirmedBooking.serviceName}</p>
+              <span className="text-[#777A70]">Service Protocol</span>
+              <p className="font-semibold text-sm text-[#252923]">{confirmedBooking.serviceName}</p>
+              <p className="text-[11px] text-[#2E6B50]">{confirmedBooking.categoryName}</p>
             </div>
             <div>
               <span className="text-[#777A70]">Scheduled Date & Slot</span>
@@ -168,32 +198,39 @@ export const BookAppointmentPage: React.FC = () => {
               </p>
             </div>
             <div>
-              <span className="text-[#777A70]">Client</span>
+              <span className="text-[#777A70]">Client Details</span>
               <p className="font-medium text-[#252923]">{confirmedBooking.customerName}</p>
-              <p className="text-[#777A70] text-[11px]">{confirmedBooking.customerPhone}</p>
+              <p className="text-[#777A70] text-[11px]">{confirmedBooking.customerPhone} · {confirmedBooking.customerEmail}</p>
             </div>
             <div>
               <span className="text-[#777A70]">Assigned Specialist</span>
-              <p className="font-medium text-[#252923]">{confirmedBooking.staffName || 'Sanctuary Clinical Staff'}</p>
+              <p className="font-medium text-[#252923]">{confirmedBooking.staffName || 'Sanctuary Clinical Specialist'}</p>
             </div>
             <div>
               <span className="text-[#777A70]">Treatment Fee</span>
-              <p className="font-semibold text-[#244B3A] font-serif text-base">
+              <p className="font-bold text-[#214D3B] font-serif text-lg">
                 ₹{confirmedBooking.amountInr.toLocaleString('en-IN')}
               </p>
-              <span className="text-[10px] text-[#777A70]">(Payable at clinic desk or prepaid)</span>
+              <span className="text-[10px] text-[#777A70]">(Payable at clinic desk upon arrival)</span>
             </div>
             <div>
               <span className="text-[#777A70]">Sanctuary Address</span>
-              <p className="font-medium text-[#252923]">4th Floor, Kura Towers, Begumpet</p>
+              <p className="font-medium text-[#252923]">4th Floor, Kura Towers, Begumpet, Hyderabad</p>
             </div>
           </div>
+
+          {confirmedBooking.notes && (
+            <div className="p-3 bg-[#FAF9F5] rounded-xl border border-[#E7E5DC] text-xs">
+              <span className="font-semibold text-[#214D3B]">Intake Notes:</span>
+              <p className="text-[#585B53] mt-0.5">{confirmedBooking.notes}</p>
+            </div>
+          )}
         </div>
 
         <div className="flex flex-col sm:flex-row items-center justify-center gap-3 pt-4">
           <Link
             to="/account/appointments"
-            className="w-full sm:w-auto px-6 py-3 text-xs font-semibold uppercase tracking-wider text-white bg-[#244B3A] hover:bg-[#1a372a] rounded-lg transition-smooth"
+            className="w-full sm:w-auto px-6 py-3 text-xs font-semibold uppercase tracking-wider text-white bg-[#214D3B] hover:bg-[#1a3e2f] rounded-xl transition-smooth shadow-xs"
           >
             View in My Appointments
           </Link>
@@ -202,7 +239,7 @@ export const BookAppointmentPage: React.FC = () => {
               setConfirmedBooking(null);
               setTimeSlot('');
             }}
-            className="w-full sm:w-auto px-6 py-3 text-xs font-semibold uppercase tracking-wider text-[#244B3A] border border-[#244B3A] rounded-lg transition-smooth"
+            className="w-full sm:w-auto px-6 py-3 text-xs font-semibold uppercase tracking-wider text-[#214D3B] border border-[#214D3B] rounded-xl hover:bg-[#F0EEE5] transition-smooth"
           >
             Book Another Treatment
           </button>
@@ -216,14 +253,14 @@ export const BookAppointmentPage: React.FC = () => {
       
       {/* Header */}
       <div className="max-w-3xl space-y-2">
-        <div className="text-xs font-semibold uppercase tracking-wider text-[#244B3A]">
-          Online Scheduling
+        <div className="text-xs font-semibold uppercase tracking-wider text-[#214D3B]">
+          Online Scheduling & Consultation Intake
         </div>
-        <h1 className="font-serif text-3xl sm:text-4xl text-[#244B3A] font-medium tracking-tight">
+        <h1 className="font-serif text-3xl sm:text-4xl text-[#214D3B] font-bold tracking-tight">
           Reserve Your Appointment at NFYVE
         </h1>
         <p className="text-xs sm:text-sm text-[#585B53] leading-relaxed">
-          Select your service, choose an available time slot, and confirm your visit. Our clinical team coordinates your intake directly.
+          Select your discipline, choose an available time slot, and confirm your visit. Our clinical concierge coordinates your protocol directly.
         </p>
       </div>
 
@@ -235,24 +272,81 @@ export const BookAppointmentPage: React.FC = () => {
       )}
 
       {/* Booking Form Layout */}
-      <form onSubmit={handleBooking} className="grid grid-cols-1 lg:grid-cols-12 gap-10">
+      <form onSubmit={handleBooking} className="grid grid-cols-1 lg:grid-cols-12 gap-8">
         
         {/* Left Column: Form Controls */}
-        <div className="lg:col-span-7 space-y-8">
+        <div className="lg:col-span-7 space-y-6">
           
-          {/* Step 1: Category & Service */}
-          <div className="bg-white p-6 rounded-xl border border-[#E7E5DC] space-y-4">
+          {/* Step 1: Customer Details */}
+          <div className="bg-white p-6 rounded-2xl border border-[#E7E5DC] shadow-xs space-y-4">
             <div className="flex items-center gap-2">
-              <span className="w-6 h-6 rounded-full bg-[#244B3A] text-white text-xs flex items-center justify-center font-semibold">1</span>
-              <h3 className="font-serif text-lg font-medium text-[#252923]">
-                Select Clinical Discipline & Service
+              <span className="w-6 h-6 rounded-full bg-[#214D3B] text-white text-xs flex items-center justify-center font-bold">1</span>
+              <h3 className="font-serif text-lg font-bold text-[#214D3B]">
+                Your Contact Information
+              </h3>
+            </div>
+
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 text-xs">
+              <div className="sm:col-span-2">
+                <label className="block font-medium text-[#252923] mb-1">Full Legal Name *</label>
+                <div className="relative">
+                  <User className="w-3.5 h-3.5 text-[#777A70] absolute left-3 top-3" />
+                  <input
+                    type="text"
+                    required
+                    placeholder="e.g. Radhika Sharma"
+                    value={customerName}
+                    onChange={(e) => setCustomerName(e.target.value)}
+                    className="w-full pl-9 pr-3 py-2.5 bg-[#FAF9F5] border border-[#DDD9CE] rounded-lg text-xs text-[#252923] focus:outline-none focus:border-[#214D3B]"
+                  />
+                </div>
+              </div>
+
+              <div>
+                <label className="block font-medium text-[#252923] mb-1">Email Address *</label>
+                <div className="relative">
+                  <Mail className="w-3.5 h-3.5 text-[#777A70] absolute left-3 top-3" />
+                  <input
+                    type="email"
+                    required
+                    placeholder="name@example.com"
+                    value={customerEmail}
+                    onChange={(e) => setCustomerEmail(e.target.value)}
+                    className="w-full pl-9 pr-3 py-2.5 bg-[#FAF9F5] border border-[#DDD9CE] rounded-lg text-xs text-[#252923] focus:outline-none focus:border-[#214D3B]"
+                  />
+                </div>
+              </div>
+
+              <div>
+                <label className="block font-medium text-[#252923] mb-1">Phone Number *</label>
+                <div className="relative">
+                  <Phone className="w-3.5 h-3.5 text-[#777A70] absolute left-3 top-3" />
+                  <input
+                    type="tel"
+                    required
+                    placeholder="+91 90000 23050"
+                    value={customerPhone}
+                    onChange={(e) => setCustomerPhone(e.target.value)}
+                    className="w-full pl-9 pr-3 py-2.5 bg-[#FAF9F5] border border-[#DDD9CE] rounded-lg text-xs text-[#252923] focus:outline-none focus:border-[#214D3B]"
+                  />
+                </div>
+              </div>
+            </div>
+          </div>
+
+          {/* Step 2: Category & Service */}
+          <div className="bg-white p-6 rounded-2xl border border-[#E7E5DC] shadow-xs space-y-4">
+            <div className="flex items-center gap-2">
+              <span className="w-6 h-6 rounded-full bg-[#214D3B] text-white text-xs flex items-center justify-center font-bold">2</span>
+              <h3 className="font-serif text-lg font-bold text-[#214D3B]">
+                Select Wellness Discipline & Service
               </h3>
             </div>
 
             {/* Category selection */}
             <div>
               <label className="block text-xs font-medium text-[#585B53] mb-1.5">
-                Core Discipline
+                Core Discipline / Pillar
               </label>
               <select
                 value={selectedCategoryId}
@@ -261,7 +355,7 @@ export const BookAppointmentPage: React.FC = () => {
                   const matchingSrv = services.find((s) => s.categoryId === e.target.value);
                   if (matchingSrv) setSelectedServiceId(matchingSrv.id);
                 }}
-                className="w-full bg-[#FAF9F5] border border-[#DDD9CE] rounded-lg p-2.5 text-xs text-[#252923] focus:outline-none focus:border-[#244B3A]"
+                className="w-full bg-[#FAF9F5] border border-[#DDD9CE] rounded-lg p-2.5 text-xs text-[#252923] focus:outline-none focus:border-[#214D3B]"
               >
                 {categories.map((c) => (
                   <option key={c.id} value={c.id}>
@@ -274,12 +368,12 @@ export const BookAppointmentPage: React.FC = () => {
             {/* Specific Service */}
             <div>
               <label className="block text-xs font-medium text-[#585B53] mb-1.5">
-                Specific Treatment
+                Specific Treatment Protocol
               </label>
               <select
                 value={selectedServiceId}
                 onChange={(e) => setSelectedServiceId(e.target.value)}
-                className="w-full bg-[#FAF9F5] border border-[#DDD9CE] rounded-lg p-2.5 text-xs text-[#252923] focus:outline-none focus:border-[#244B3A]"
+                className="w-full bg-[#FAF9F5] border border-[#DDD9CE] rounded-lg p-2.5 text-xs text-[#252923] focus:outline-none focus:border-[#214D3B]"
               >
                 {categoryServices.map((s) => (
                   <option key={s.id} value={s.id}>
@@ -290,11 +384,11 @@ export const BookAppointmentPage: React.FC = () => {
             </div>
           </div>
 
-          {/* Step 2: Date & Available Slots */}
-          <div className="bg-white p-6 rounded-xl border border-[#E7E5DC] space-y-4">
+          {/* Step 3: Date & Available Slots */}
+          <div className="bg-white p-6 rounded-2xl border border-[#E7E5DC] shadow-xs space-y-4">
             <div className="flex items-center gap-2">
-              <span className="w-6 h-6 rounded-full bg-[#244B3A] text-white text-xs flex items-center justify-center font-semibold">2</span>
-              <h3 className="font-serif text-lg font-medium text-[#252923]">
+              <span className="w-6 h-6 rounded-full bg-[#214D3B] text-white text-xs flex items-center justify-center font-bold">3</span>
+              <h3 className="font-serif text-lg font-bold text-[#214D3B]">
                 Preferred Date & Available Time Slot
               </h3>
             </div>
@@ -310,18 +404,18 @@ export const BookAppointmentPage: React.FC = () => {
                   min={new Date().toISOString().split('T')[0]}
                   value={appointmentDate}
                   onChange={(e) => setAppointmentDate(e.target.value)}
-                  className="w-full bg-[#FAF9F5] border border-[#DDD9CE] rounded-lg p-2.5 text-xs text-[#252923] focus:outline-none focus:border-[#244B3A]"
+                  className="w-full bg-[#FAF9F5] border border-[#DDD9CE] rounded-lg p-2.5 text-xs text-[#252923] focus:outline-none focus:border-[#214D3B]"
                 />
               </div>
 
               <div>
                 <label className="block text-xs font-medium text-[#585B53] mb-1.5">
-                  Assigned Specialist (Optional)
+                  Preferred Specialist (Optional)
                 </label>
                 <select
                   value={selectedStaffId}
                   onChange={(e) => setSelectedStaffId(e.target.value)}
-                  className="w-full bg-[#FAF9F5] border border-[#DDD9CE] rounded-lg p-2.5 text-xs text-[#252923] focus:outline-none focus:border-[#244B3A]"
+                  className="w-full bg-[#FAF9F5] border border-[#DDD9CE] rounded-lg p-2.5 text-xs text-[#252923] focus:outline-none focus:border-[#214D3B]"
                 >
                   <option value="">Any Available Specialist</option>
                   {staffList.map((st) => (
@@ -341,7 +435,7 @@ export const BookAppointmentPage: React.FC = () => {
 
               {isLoadingSlots ? (
                 <div className="py-6 text-center text-xs text-[#777A70]">
-                  Verifying clinic slot calendar...
+                  Checking clinic slot calendar...
                 </div>
               ) : availableSlots.length === 0 ? (
                 <div className="py-6 text-center text-xs text-[#777A70] bg-[#FAF9F5] rounded-lg">
@@ -355,9 +449,9 @@ export const BookAppointmentPage: React.FC = () => {
                       type="button"
                       disabled={!s.isAvailable}
                       onClick={() => setTimeSlot(s.slot)}
-                      className={`p-2.5 text-xs font-medium rounded-lg border text-center transition-smooth tabular-nums ${
+                      className={`p-2.5 text-xs font-semibold rounded-lg border text-center transition-all tabular-nums ${
                         timeSlot === s.slot
-                          ? 'bg-[#244B3A] text-white border-[#244B3A] shadow-xs'
+                          ? 'bg-[#214D3B] text-white border-[#214D3B] shadow-xs'
                           : s.isAvailable
                           ? 'bg-[#FAF9F5] hover:bg-[#F0EEE5] text-[#252923] border-[#DDD9CE]'
                           : 'bg-gray-100 text-gray-400 border-gray-200 cursor-not-allowed line-through'
@@ -371,32 +465,32 @@ export const BookAppointmentPage: React.FC = () => {
             </div>
           </div>
 
-          {/* Step 3: Special Notes */}
-          <div className="bg-white p-6 rounded-xl border border-[#E7E5DC] space-y-4">
+          {/* Step 4: Special Notes */}
+          <div className="bg-white p-6 rounded-2xl border border-[#E7E5DC] shadow-xs space-y-4">
             <div className="flex items-center gap-2">
-              <span className="w-6 h-6 rounded-full bg-[#244B3A] text-white text-xs flex items-center justify-center font-semibold">3</span>
-              <h3 className="font-serif text-lg font-medium text-[#252923]">
-                Clinical Notes or Requests
+              <span className="w-6 h-6 rounded-full bg-[#214D3B] text-white text-xs flex items-center justify-center font-bold">4</span>
+              <h3 className="font-serif text-lg font-bold text-[#214D3B]">
+                Intake Notes or Medical Requests
               </h3>
             </div>
 
             <div>
               <textarea
                 rows={3}
-                placeholder="Mention any skin allergies, past injuries, or specific concerns for the treating specialist..."
+                placeholder="Mention any skin sensitivities, allergies, past injuries, or specific concerns for the treating practitioner..."
                 value={notes}
                 onChange={(e) => setNotes(e.target.value)}
-                className="w-full bg-[#FAF9F5] border border-[#DDD9CE] rounded-lg p-2.5 text-xs text-[#252923] focus:outline-none focus:border-[#244B3A]"
+                className="w-full bg-[#FAF9F5] border border-[#DDD9CE] rounded-lg p-2.5 text-xs text-[#252923] focus:outline-none focus:border-[#214D3B]"
               />
             </div>
           </div>
 
         </div>
 
-        {/* Right Column: Summary Card & Authenticated Confirmation */}
+        {/* Right Column: Summary Card & Instant Confirmation */}
         <div className="lg:col-span-5 space-y-6">
           <div className="bg-white p-6 sm:p-8 rounded-2xl border border-[#E7E5DC] shadow-sm space-y-5 sticky top-24">
-            <h3 className="font-serif text-xl font-medium text-[#244B3A] border-b border-[#F0EEE5] pb-3">
+            <h3 className="font-serif text-xl font-bold text-[#214D3B] border-b border-[#F0EEE5] pb-3">
               Booking Overview
             </h3>
 
@@ -407,7 +501,7 @@ export const BookAppointmentPage: React.FC = () => {
                   <p className="font-semibold text-sm text-[#252923] mt-0.5">
                     {selectedService.name}
                   </p>
-                  <p className="text-[11px] text-[#777A70]">{selectedService.categoryName}</p>
+                  <p className="text-[11px] text-[#2E6B50] font-medium">{selectedService.categoryName}</p>
                 </div>
 
                 <div className="grid grid-cols-2 gap-2 py-2 border-y border-[#F0EEE5]">
@@ -424,54 +518,38 @@ export const BookAppointmentPage: React.FC = () => {
                 </div>
 
                 <div className="flex justify-between items-center py-2">
-                  <span className="text-[#777A70]">Consultation / Fee</span>
-                  <span className="font-serif text-2xl font-semibold text-[#244B3A]">
+                  <span className="text-[#777A70]">Consultation Fee</span>
+                  <span className="font-serif text-2xl font-bold text-[#214D3B]">
                     ₹{selectedService.priceInr.toLocaleString('en-IN')}
                   </span>
                 </div>
               </div>
             ) : (
-              <p className="text-xs text-[#777A70]">Please choose a service to see fee details.</p>
+              <p className="text-xs text-[#777A70]">Please choose a service to view fee details.</p>
             )}
 
-            {/* Authentication status reminder */}
-            {!user ? (
-              <div className="p-4 bg-[#F0EEE5] border border-[#DDD9CE] rounded-xl space-y-3">
-                <div className="flex items-start gap-2 text-xs text-[#585B53]">
-                  <ShieldCheck className="w-4 h-4 text-[#244B3A] shrink-0 mt-0.5" />
-                  <span>
-                    To protect health dossiers, please sign in or register before confirming your appointment.
-                  </span>
-                </div>
-                <Link
-                  to={`/login?redirect=${encodeURIComponent('/book-appointment?serviceId=' + selectedServiceId)}`}
-                  className="block text-center w-full py-2.5 bg-[#244B3A] text-white text-xs font-semibold uppercase tracking-wider rounded-lg hover:bg-[#1a372a] transition-smooth"
-                >
-                  Sign In to Complete Booking
-                </Link>
-              </div>
-            ) : (
-              <div className="space-y-4">
-                <div className="p-3 bg-[#FAF9F5] border border-[#DDD9CE] rounded-lg text-xs space-y-1">
-                  <p className="text-[#777A70]">Booking under client profile:</p>
-                  <p className="font-semibold text-[#252923]">{user.name}</p>
-                  <p className="text-[11px] text-[#777A70]">{user.email} · {user.phone}</p>
-                </div>
+            <button
+              type="submit"
+              disabled={isSubmitting || !timeSlot || !customerName || !customerPhone}
+              className="w-full py-3.5 bg-[#214D3B] hover:bg-[#1a3e2f] text-white font-bold uppercase tracking-wider text-xs rounded-xl shadow-xs transition-smooth disabled:opacity-50 flex items-center justify-center gap-2"
+            >
+              <span>{isSubmitting ? 'Reserving in Firestore...' : 'Confirm Appointment'}</span>
+              <ArrowRight className="w-4 h-4 text-[#D4AF37]" />
+            </button>
 
-                <button
-                  type="submit"
-                  disabled={isSubmitting || !timeSlot}
-                  className="w-full py-3.5 bg-[#244B3A] hover:bg-[#1a372a] text-white font-semibold uppercase tracking-wider text-xs rounded-lg shadow-sm transition-smooth disabled:opacity-50 flex items-center justify-center gap-2"
-                >
-                  <span>{isSubmitting ? 'Reserving...' : 'Confirm Appointment'}</span>
-                  <ArrowRight className="w-4 h-4" />
-                </button>
-              </div>
-            )}
-
-            <div className="text-[11px] text-[#777A70] leading-relaxed space-y-1 pt-2 border-t border-[#F0EEE5]">
-              <p>• Zero cancellation penalty up to 12 hours prior to slot.</p>
-              <p>• Valet parking included at Kura Towers, Begumpet.</p>
+            <div className="text-[11px] text-[#777A70] leading-relaxed space-y-1 pt-3 border-t border-[#F0EEE5]">
+              <p className="flex items-center gap-1.5">
+                <Check className="w-3.5 h-3.5 text-emerald-600 shrink-0" />
+                <span>Zero cancellation penalty up to 12 hours prior to slot.</span>
+              </p>
+              <p className="flex items-center gap-1.5">
+                <Check className="w-3.5 h-3.5 text-emerald-600 shrink-0" />
+                <span>Valet parking included at Kura Towers, Begumpet.</span>
+              </p>
+              <p className="flex items-center gap-1.5">
+                <Check className="w-3.5 h-3.5 text-emerald-600 shrink-0" />
+                <span>Saved directly to Cloud Firestore appointment register.</span>
+              </p>
             </div>
           </div>
         </div>
