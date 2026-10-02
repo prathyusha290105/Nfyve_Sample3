@@ -29,10 +29,19 @@ import { AdminOverviewPage } from './pages/admin/AdminOverviewPage';
 import { AdminAnalyticsPage } from './pages/admin/AdminAnalyticsPage';
 import { AdminAppointmentsPage } from './pages/admin/AdminAppointmentsPage';
 import { AdminCustomersPage } from './pages/admin/AdminCustomersPage';
+import { AdminStaffPage } from './pages/admin/AdminStaffPage';
 import { AdminServicesPage } from './pages/admin/AdminServicesPage';
 import { AdminInquiriesPage } from './pages/admin/AdminInquiriesPage';
 import { AdminReviewsPage } from './pages/admin/AdminReviewsPage';
 import { AdminSettingsPage } from './pages/admin/AdminSettingsPage';
+
+// Staff components & pages
+import { StaffLayout } from './components/staff/StaffLayout';
+import { StaffDashboardPage } from './pages/staff/StaffDashboardPage';
+import { StaffAppointmentsPage } from './pages/staff/StaffAppointmentsPage';
+import { StaffClientsPage } from './pages/staff/StaffClientsPage';
+import { StaffPerformancePage } from './pages/staff/StaffPerformancePage';
+import { StaffProfilePage } from './pages/staff/StaffProfilePage';
 
 // Route Guards
 const CustomerProtectedRoute: React.FC = () => {
@@ -60,7 +69,12 @@ const AdminProtectedRoute: React.FC = () => {
     return <Navigate to="/login" replace />;
   }
 
-  if (user.role !== 'admin' && user.role !== 'staff') {
+  // If user is a staff practitioner without full admin rights, redirect to staff panel
+  if (user.role === 'staff') {
+    return <Navigate to="/staff" replace />;
+  }
+
+  if (user.role !== 'admin') {
     return <Navigate to="/account" replace />;
   }
 
@@ -68,6 +82,29 @@ const AdminProtectedRoute: React.FC = () => {
     <AdminLayout>
       <Outlet />
     </AdminLayout>
+  );
+};
+
+const StaffProtectedRoute: React.FC = () => {
+  const { user, isLoading } = useAuth();
+
+  if (isLoading) {
+    return <div className="min-h-screen flex items-center justify-center text-xs text-[#777A70]">Verifying credentials...</div>;
+  }
+
+  if (!user) {
+    return <Navigate to="/login" replace />;
+  }
+
+  // Both staff and admin users can access the staff portal
+  if (user.role !== 'staff' && user.role !== 'admin') {
+    return <Navigate to="/account" replace />;
+  }
+
+  return (
+    <StaffLayout>
+      <Outlet />
+    </StaffLayout>
   );
 };
 
@@ -122,10 +159,20 @@ export default function App() {
             <Route path="analytics" element={<AdminAnalyticsPage />} />
             <Route path="appointments" element={<AdminAppointmentsPage />} />
             <Route path="customers" element={<AdminCustomersPage />} />
+            <Route path="staff" element={<AdminStaffPage />} />
             <Route path="services" element={<AdminServicesPage />} />
             <Route path="inquiries" element={<AdminInquiriesPage />} />
             <Route path="reviews" element={<AdminReviewsPage />} />
             <Route path="settings" element={<AdminSettingsPage />} />
+          </Route>
+
+          {/* Staff Protected routes */}
+          <Route path="/staff" element={<StaffProtectedRoute />}>
+            <Route index element={<StaffDashboardPage />} />
+            <Route path="appointments" element={<StaffAppointmentsPage />} />
+            <Route path="clients" element={<StaffClientsPage />} />
+            <Route path="performance" element={<StaffPerformancePage />} />
+            <Route path="profile" element={<StaffProfilePage />} />
           </Route>
 
           {/* Fallback */}

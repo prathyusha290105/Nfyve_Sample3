@@ -28,8 +28,10 @@ export const LoginPage: React.FC = () => {
 
     try {
       const loggedUser = await login(email, password, mode);
-      if (loggedUser.role === 'admin' || loggedUser.role === 'staff') {
+      if (loggedUser.role === 'admin') {
         navigate('/admin');
+      } else if (loggedUser.role === 'staff') {
+        navigate('/staff');
       } else {
         navigate(redirectUrl || '/account');
       }
@@ -54,7 +56,21 @@ export const LoginPage: React.FC = () => {
     setErrorMsg('');
   };
 
-  const fillStaffDemo = () => {
+  const fillStaffAnanya = () => {
+    setMode('staff_admin');
+    setEmail('dr.ananya@nfyve.com');
+    setPassword('Staff@NFYVE2026');
+    setErrorMsg('');
+  };
+
+  const fillStaffVikram = () => {
+    setMode('staff_admin');
+    setEmail('vikram.singh@nfyve.com');
+    setPassword('Staff@NFYVE2026');
+    setErrorMsg('');
+  };
+
+  const fillStaffRohan = () => {
     setMode('staff_admin');
     setEmail('staff@nfyve.com');
     setPassword('Staff@NFYVE2026');
@@ -184,16 +200,30 @@ export const LoginPage: React.FC = () => {
             <button
               type="button"
               onClick={fillAdminDemo}
-              className="px-2.5 py-1 text-[11px] bg-white border border-[#DDD9CE] rounded hover:border-[#244B3A] text-[#252923] transition-colors"
+              className="px-2.5 py-1 text-[11px] bg-white border border-[#DDD9CE] rounded hover:border-[#244B3A] text-[#252923] transition-colors font-medium"
             >
-              Demo Admin
+              Demo Admin (Priya)
             </button>
             <button
               type="button"
-              onClick={fillStaffDemo}
+              onClick={fillStaffAnanya}
               className="px-2.5 py-1 text-[11px] bg-white border border-[#DDD9CE] rounded hover:border-[#244B3A] text-[#252923] transition-colors"
             >
-              Demo Staff
+              Staff: Dr. Ananya (Aesthetics)
+            </button>
+            <button
+              type="button"
+              onClick={fillStaffVikram}
+              className="px-2.5 py-1 text-[11px] bg-white border border-[#DDD9CE] rounded hover:border-[#244B3A] text-[#252923] transition-colors"
+            >
+              Staff: Vikram (Fitness)
+            </button>
+            <button
+              type="button"
+              onClick={fillStaffRohan}
+              className="px-2.5 py-1 text-[11px] bg-white border border-[#DDD9CE] rounded hover:border-[#244B3A] text-[#252923] transition-colors"
+            >
+              Staff: Rohan (Concierge)
             </button>
           </div>
         </div>

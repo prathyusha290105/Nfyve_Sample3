@@ -6,6 +6,8 @@ export interface User {
   email: string;
   phone: string;
   role: Role;
+  staffId?: string;
+  avatarUrl?: string;
   createdAt: string;
 }
 
@@ -36,14 +38,17 @@ export interface Service {
 
 export interface Staff {
   id: string;
+  userId?: string;
   name: string;
   email: string;
   phone: string;
   roleTitle: string;
-  specialty: string;
+  specialty?: string;
+  specialties: string[];
   bio: string;
   avatarUrl?: string;
   isActive: boolean;
+  createdAt?: string;
 }
 
 export type AppointmentStatus = 'pending' | 'confirmed' | 'completed' | 'cancelled' | 'no-show';
@@ -85,6 +90,7 @@ export interface ContactInquiry {
 export interface Review {
   id: string;
   userId?: string;
+  staffId?: string;
   customerName: string;
   serviceCategory: string;
   serviceName: string;
@@ -131,9 +137,66 @@ export interface AnalyticsSummary {
   cancelledBookings: number;
   averageBookingValue: number;
   totalCustomers: number;
+  activeStaffCount: number;
   pendingPayments: number;
   paidPayments: number;
   revenueByPeriod: { date: string; label: string; revenue: number; bookings: number }[];
   revenueByCategory: { category: string; revenue: number; bookings: number }[];
   statusDistribution: { status: string; count: number }[];
+  topServices: { name: string; category: string; bookings: number; revenue: number }[];
+  topStaff: { id: string; name: string; roleTitle: string; bookings: number; revenue: number }[];
+  comparison: {
+    revenueChangePct: number;
+    bookingsChangePct: number;
+    completedChangePct: number;
+    customerChangePct: number;
+  };
 }
+
+export interface SystemNotification {
+  id: string;
+  title: string;
+  message: string;
+  time: string;
+  read: boolean;
+  type: 'booking' | 'payment' | 'system' | 'cancellation';
+  link?: string;
+}
+
+export interface StaffDashboardData {
+  staff: Staff;
+  metrics: {
+    todayCount: number;
+    upcomingCount: number;
+    completedCount: number;
+    pendingCount: number;
+    cancelledCount: number;
+    personalRevenue: number;
+  };
+  todaySchedule: Appointment[];
+  nextUpcoming: Appointment | null;
+  recentCompleted: Appointment[];
+  statusDistribution: { status: string; count: number }[];
+  upcomingDays: { date: string; dayLabel: string; count: number }[];
+  notifications: SystemNotification[];
+}
+
+export interface StaffPerformanceData {
+  staff: Staff;
+  period: DateFilterPeriod;
+  totalCompleted: number;
+  completionRate: number;
+  personalRevenue: number;
+  totalAssigned: number;
+  avgDailyAppointments: number;
+  servicesByCategory: { category: string; count: number; revenue: number }[];
+  trendOverTime: { label: string; date: string; completed: number; revenue: number }[];
+  ratingAverage: number;
+  feedbackCount: number;
+  reviews: Review[];
+  comparisonVsPrevious: {
+    revenueDiffPct: number;
+    completedDiffPct: number;
+  };
+}
+

@@ -8,7 +8,10 @@ import {
   Review, 
   BusinessSettings, 
   AnalyticsSummary, 
-  DateFilterPeriod 
+  DateFilterPeriod,
+  StaffDashboardData,
+  StaffPerformanceData,
+  SystemNotification
 } from '../types';
 
 const TOKEN_KEY = 'nfyve_auth_token';
@@ -84,6 +87,13 @@ export const api = {
       body: JSON.stringify(payload),
     }),
 
+  // Notifications
+  getNotifications: () => request<SystemNotification[]>('/notifications'),
+  markNotificationRead: (id: string) =>
+    request<{ success: boolean }>(`/notifications/${id}/read`, {
+      method: 'PATCH',
+    }),
+
   // Public
   getCategories: () => request<ServiceCategory[]>('/categories'),
   getServices: () => request<Service[]>('/services'),
@@ -133,7 +143,57 @@ export const api = {
       method: 'PATCH',
     }),
 
-  // Admin
+  // ================= STAFF PERSONALIZED APIS =================
+  getStaffMe: () => request<{ staff: Staff; user: User }>('/staff/me'),
+
+  getStaffDashboard: (period: DateFilterPeriod = 'this_month', startDate?: string, endDate?: string) => {
+    const params = new URLSearchParams({ period });
+    if (startDate) params.append('startDate', startDate);
+    if (endDate) params.append('endDate', endDate);
+    return request<StaffDashboardData>(`/staff/dashboard?${params.toString()}`);
+  },
+
+  getStaffAppointments: (filters?: {
+    dateFilter?: string;
+    status?: string;
+    search?: string;
+    startDate?: string;
+    endDate?: string;
+  }) => {
+    const params = new URLSearchParams();
+    if (filters?.dateFilter) params.append('dateFilter', filters.dateFilter);
+    if (filters?.status) params.append('status', filters.status);
+    if (filters?.search) params.append('search', filters.search);
+    if (filters?.startDate) params.append('startDate', filters.startDate);
+    if (filters?.endDate) params.append('endDate', filters.endDate);
+    return request<Appointment[]>(`/staff/appointments?${params.toString()}`);
+  },
+
+  completeStaffAppointment: (id: string) =>
+    request<{ message: string; appointment: Appointment }>(`/staff/appointments/${id}/complete`, {
+      method: 'PATCH',
+    }),
+
+  updateStaffAppointmentNotes: (id: string, notes: string) =>
+    request<{ message: string; appointment: Appointment }>(`/staff/appointments/${id}/notes`, {
+      method: 'PATCH',
+      body: JSON.stringify({ notes }),
+    }),
+
+  getStaffPerformance: (period: DateFilterPeriod = 'this_month', startDate?: string, endDate?: string) => {
+    const params = new URLSearchParams({ period });
+    if (startDate) params.append('startDate', startDate);
+    if (endDate) params.append('endDate', endDate);
+    return request<StaffPerformanceData>(`/staff/performance?${params.toString()}`);
+  },
+
+  updateStaffProfile: (payload: { name?: string; phone?: string; bio?: string; currentPassword?: string; newPassword?: string }) =>
+    request<{ message: string; staff: Staff }>('/staff/profile', {
+      method: 'PUT',
+      body: JSON.stringify(payload),
+    }),
+
+  // ================= ADMIN APIS =================
   getAdminMetrics: (period: DateFilterPeriod, startDate?: string, endDate?: string) => {
     const params = new URLSearchParams({ period });
     if (startDate) params.append('startDate', startDate);
@@ -154,6 +214,7 @@ export const api = {
     search?: string;
     startDate?: string;
     endDate?: string;
+    staffId?: string;
   }) => {
     const params = new URLSearchParams();
     if (filters?.status) params.append('status', filters.status);
@@ -161,6 +222,7 @@ export const api = {
     if (filters?.search) params.append('search', filters.search);
     if (filters?.startDate) params.append('startDate', filters.startDate);
     if (filters?.endDate) params.append('endDate', filters.endDate);
+    if (filters?.staffId) params.append('staffId', filters.staffId);
     return request<Appointment[]>(`/admin/appointments?${params.toString()}`);
   },
 
@@ -168,6 +230,18 @@ export const api = {
     request<{ message: string; appointment: Appointment }>(`/admin/appointments/${id}/status`, {
       method: 'PATCH',
       body: JSON.stringify(payload),
+    }),
+
+  reassignAppointment: (id: string, staffId: string) =>
+    request<{ message: string; appointment: Appointment }>(`/admin/appointments/${id}/reassign`, {
+      method: 'PATCH',
+      body: JSON.stringify({ staffId }),
+    }),
+
+  rescheduleAppointment: (id: string, appointmentDate: string, timeSlot: string) =>
+    request<{ message: string; appointment: Appointment }>(`/admin/appointments/${id}/reschedule`, {
+      method: 'PATCH',
+      body: JSON.stringify({ appointmentDate, timeSlot }),
     }),
 
   createWalkInBooking: (payload: any) =>
@@ -178,6 +252,27 @@ export const api = {
 
   getAdminCustomers: () => request<any[]>('/admin/customers'),
   getAdminCustomerDetails: (id: string) => request<{ customer: User; appointments: Appointment[] }>(`/admin/customers/${id}`),
+
+  getAdminStaff: () => request<(Staff & { totalAssigned: number; completedCount: number; totalRevenueGenerated: number })[]>('/admin/staff'),
+  createAdminStaff: (payload: { name: string; email: string; phone: string; roleTitle: string; specialties: string[]; bio: string; password?: string }) =>
+    request<{ message: string; staff: Staff }>('/admin/staff', {
+      method: 'POST',
+      body: JSON.stringify(payload),
+    }),
+  updateAdminStaff: (id: string, payload: Partial<Staff>) =>
+    request<{ message: string; staff: Staff }>(`/admin/staff/${id}`, {
+      method: 'PUT',
+      body: JSON.stringify(payload),
+    }),
+  toggleAdminStaffStatus: (id: string) =>
+    request<{ message: string; staff: Staff }>(`/admin/staff/${id}/toggle`, {
+      method: 'PATCH',
+    }),
+  resetAdminStaffPassword: (id: string, newPassword: string) =>
+    request<{ message: string }>(`/admin/staff/${id}/reset-password`, {
+      method: 'POST',
+      body: JSON.stringify({ newPassword }),
+    }),
 
   createService: (payload: any) =>
     request<{ message: string; service: Service }>('/admin/services', {

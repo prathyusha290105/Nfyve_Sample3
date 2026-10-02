@@ -1,7 +1,7 @@
 import { Router, Request, Response, NextFunction } from 'express';
 import bcrypt from 'bcryptjs';
 import { db } from './db';
-import { User, Appointment, Review, ContactInquiry, Service } from '../types';
+import { User, Appointment, Review, ContactInquiry, Service, DateFilterPeriod } from '../types';
 
 export const apiRouter = Router();
 
@@ -50,7 +50,7 @@ export function requireRole(allowedRoles: string[]) {
   return (req: AuthenticatedRequest, res: Response, next: NextFunction) => {
     requireAuth(req, res, () => {
       if (!req.user || !allowedRoles.includes(req.user.role)) {
-        return res.status(403).json({ error: 'Access forbidden: Insufficient permissions.' });
+        return res.status(403).json({ error: 'Access forbidden: Insufficient permissions for this resource.' });
       }
       next();
     });
@@ -101,9 +101,9 @@ apiRouter.post('/auth/register', (req, res) => {
   });
 });
 
-// Login (Supports customer mode and staff/admin mode)
+// Login (Supports customer mode and staff_admin mode)
 apiRouter.post('/auth/login', (req, res) => {
-  const { email, password, mode } = req.body; // mode: 'customer' | 'staff_admin'
+  const { email, password, mode } = req.body;
 
   if (!email || !password) {
     return res.status(400).json({ error: 'Email and password are required.' });
@@ -120,18 +120,24 @@ apiRouter.post('/auth/login', (req, res) => {
   }
 
   // Enforce mode separation as requested in prompt:
-  // Staff/Admin login mode requires staff or admin role
   if (mode === 'staff_admin' && user.role === 'customer') {
     return res.status(403).json({
       error: 'This account does not have staff or administrative privileges. Please use the Customer Login.',
     });
   }
 
-  // Customer login mode requires customer role
   if (mode === 'customer' && user.role !== 'customer') {
     return res.status(403).json({
       error: 'Staff and Administrator accounts must sign in using the Staff / Admin Login option.',
     });
+  }
+
+  // If staff member, link staffId if missing
+  if (user.role === 'staff' && !user.staffId) {
+    const staff = db.getStaffByEmail(user.email);
+    if (staff) {
+      user.staffId = staff.id;
+    }
   }
 
   const token = generateToken(user.id, user.role);
@@ -164,7 +170,6 @@ apiRouter.post('/auth/logout', (req, res) => {
 apiRouter.post('/auth/forgot-password', (req, res) => {
   const { email } = req.body;
   const user = db.getUserByEmail(email || '');
-  // Always return success message for security
   res.json({
     message: 'If an account with that email exists, password reset instructions have been dispatched.',
     demoNotice: user ? `In demonstration mode: You can log in using email: ${email} and password: Customer@123 or reset using code NFYVE-RESET-2026.` : undefined
@@ -197,6 +202,31 @@ apiRouter.put('/auth/profile', requireAuth, (req: AuthenticatedRequest, res) => 
   });
   const { passwordHash: _, ...safeUser } = updated as any;
   res.json({ user: safeUser });
+});
+
+// Notifications
+apiRouter.get('/notifications', requireAuth, (req: AuthenticatedRequest, res) => {
+  const allNotifs = db.getNotifications();
+  if (req.user!.role === 'staff') {
+    const staff = db.getStaffByUserId(req.user!.id);
+    const staffName = staff?.name.toLowerCase() || '';
+    const filtered = allNotifs.filter(n => 
+      n.type === 'booking' || 
+      n.message.toLowerCase().includes(staffName) ||
+      n.title.toLowerCase().includes('schedule')
+    );
+    return res.json(filtered);
+  }
+  res.json(allNotifs);
+});
+
+apiRouter.patch('/notifications/:id/read', requireAuth, (req, res) => {
+  const notifs = db.getNotifications();
+  const n = notifs.find(item => item.id === req.params.id);
+  if (n) {
+    n.read = true;
+  }
+  res.json({ success: true });
 });
 
 // ================= PUBLIC DATA ROUTES =================
@@ -245,7 +275,7 @@ apiRouter.post('/reviews', requireAuth, (req: AuthenticatedRequest, res) => {
     rating: Math.min(5, Math.max(1, Number(rating))),
     reviewText: reviewText.trim(),
     reviewDate: new Date().toISOString().split('T')[0],
-    isApproved: true, // auto-approve for demonstration, admin can un-approve
+    isApproved: true,
     isSample: false,
   };
 
@@ -280,7 +310,7 @@ apiRouter.post('/inquiries', (req, res) => {
   res.status(201).json({ message: 'Your inquiry has been submitted. Our concierge team will reach out shortly.', inquiry });
 });
 
-// ================= APPOINTMENTS =================
+// ================= APPOINTMENTS (CUSTOMER / PUBLIC) =================
 
 // Available Slots
 apiRouter.get('/appointments/available-slots', (req, res) => {
@@ -355,7 +385,6 @@ apiRouter.patch('/appointments/:id/cancel', requireAuth, (req: AuthenticatedRequ
     return res.status(404).json({ error: 'Appointment not found.' });
   }
 
-  // Customer can only cancel their own appointment
   if (req.user!.role === 'customer' && apt.userId !== req.user!.id) {
     return res.status(403).json({ error: 'Unauthorized to modify this appointment.' });
   }
@@ -372,8 +401,7 @@ apiRouter.patch('/appointments/:id/cancel', requireAuth, (req: AuthenticatedRequ
   res.json({ message: 'Appointment has been cancelled.', appointment: updated });
 });
 
-// ================= CUSTOMER SUPPORT CHATBOT =================
-
+// Customer Support Chatbot
 apiRouter.post('/chat', (req, res) => {
   const { message } = req.body;
   if (!message) {
@@ -426,10 +454,185 @@ apiRouter.post('/chat', (req, res) => {
   res.json({ reply, quickActions });
 });
 
-// ================= ADMIN & STAFF PROTECTED ROUTES =================
+// ================= PERSONALIZED STAFF PANEL ROUTES (/api/staff/*) =================
 
-// Admin Metrics (Calculated dynamically from database records)
-apiRouter.get('/admin/metrics', requireRole(['admin', 'staff']), (req, res) => {
+// Helper to resolve current authenticated staff member
+function getStaffForUser(user: User) {
+  if (user.staffId) {
+    const staff = db.getStaffById(user.staffId);
+    if (staff) return staff;
+  }
+  return db.getStaffByEmail(user.email);
+}
+
+// Staff Profile
+apiRouter.get('/staff/me', requireRole(['staff']), (req: AuthenticatedRequest, res) => {
+  const staff = getStaffForUser(req.user!);
+  if (!staff) {
+    return res.status(404).json({ error: 'Staff profile not found.' });
+  }
+  res.json({ staff, user: req.user });
+});
+
+// Staff Personalized Dashboard
+apiRouter.get('/staff/dashboard', requireRole(['staff']), (req: AuthenticatedRequest, res) => {
+  const staff = getStaffForUser(req.user!);
+  if (!staff) {
+    return res.status(404).json({ error: 'Staff profile not associated with this account.' });
+  }
+
+  const { period, startDate, endDate } = req.query;
+  try {
+    const dashboardData = db.getStaffDashboard(
+      staff.id,
+      (period as DateFilterPeriod) || 'this_month',
+      startDate ? String(startDate) : undefined,
+      endDate ? String(endDate) : undefined
+    );
+    res.json(dashboardData);
+  } catch (err: any) {
+    res.status(500).json({ error: err.message || 'Error generating staff dashboard.' });
+  }
+});
+
+// Staff My Appointments (Strictly scoped to logged-in staff member)
+apiRouter.get('/staff/appointments', requireRole(['staff']), (req: AuthenticatedRequest, res) => {
+  const staff = getStaffForUser(req.user!);
+  if (!staff) {
+    return res.status(404).json({ error: 'Staff profile not found.' });
+  }
+
+  const { status, dateFilter, search, startDate, endDate } = req.query;
+  const todayStr = '2026-10-02';
+
+  let start = startDate ? String(startDate) : undefined;
+  let end = endDate ? String(endDate) : undefined;
+
+  if (dateFilter === 'today') {
+    start = todayStr;
+    end = todayStr;
+  } else if (dateFilter === 'tomorrow') {
+    const tomorrow = new Date('2026-10-02T12:00:00Z');
+    tomorrow.setDate(tomorrow.getDate() + 1);
+    start = tomorrow.toISOString().split('T')[0];
+    end = start;
+  } else if (dateFilter === 'this_week') {
+    const range = db.calculateDateRange('this_week');
+    start = range.startStr;
+    end = range.endStr;
+  } else if (dateFilter === 'this_month') {
+    const range = db.calculateDateRange('this_month');
+    start = range.startStr;
+    end = range.endStr;
+  }
+
+  const appointments = db.getAppointments({
+    staffId: staff.id,
+    status: status ? String(status) : undefined,
+    search: search ? String(search) : undefined,
+    startDate: start,
+    endDate: end,
+  });
+
+  res.json(appointments);
+});
+
+// Staff Mark Appointment Completed
+apiRouter.patch('/staff/appointments/:id/complete', requireRole(['staff']), (req: AuthenticatedRequest, res) => {
+  const staff = getStaffForUser(req.user!);
+  if (!staff) return res.status(404).json({ error: 'Staff profile not found' });
+
+  const apt = db.getAppointmentById(req.params.id);
+  if (!apt) return res.status(404).json({ error: 'Appointment not found' });
+
+  // Security check: staff member can only complete appointments assigned to them!
+  if (apt.staffId !== staff.id) {
+    return res.status(403).json({ error: 'Unauthorized: This appointment is assigned to another practitioner.' });
+  }
+
+  const updated = db.updateAppointment(apt.id, {
+    status: 'completed',
+    paymentStatus: 'paid', // Mark collected
+  });
+
+  res.json({ message: 'Appointment marked as completed.', appointment: updated });
+});
+
+// Staff Update Treatment Notes
+apiRouter.patch('/staff/appointments/:id/notes', requireRole(['staff']), (req: AuthenticatedRequest, res) => {
+  const staff = getStaffForUser(req.user!);
+  if (!staff) return res.status(404).json({ error: 'Staff profile not found' });
+
+  const apt = db.getAppointmentById(req.params.id);
+  if (!apt) return res.status(404).json({ error: 'Appointment not found' });
+
+  if (apt.staffId !== staff.id) {
+    return res.status(403).json({ error: 'Unauthorized: This appointment is assigned to another practitioner.' });
+  }
+
+  const { notes } = req.body;
+  const updated = db.updateAppointment(apt.id, { notes: String(notes).trim() });
+  res.json({ message: 'Treatment notes updated.', appointment: updated });
+});
+
+// Staff Personal Performance Analytics
+apiRouter.get('/staff/performance', requireRole(['staff']), (req: AuthenticatedRequest, res) => {
+  const staff = getStaffForUser(req.user!);
+  if (!staff) return res.status(404).json({ error: 'Staff profile not found' });
+
+  const { period, startDate, endDate } = req.query;
+  try {
+    const perf = db.getStaffPerformance(
+      staff.id,
+      (period as DateFilterPeriod) || 'this_month',
+      startDate ? String(startDate) : undefined,
+      endDate ? String(endDate) : undefined
+    );
+    res.json(perf);
+  } catch (err: any) {
+    res.status(500).json({ error: err.message || 'Error generating performance metrics.' });
+  }
+});
+
+// Staff Account Settings & Password Update
+apiRouter.put('/staff/profile', requireRole(['staff']), (req: AuthenticatedRequest, res) => {
+  const staff = getStaffForUser(req.user!);
+  if (!staff) return res.status(404).json({ error: 'Staff profile not found' });
+
+  const { name, phone, bio, currentPassword, newPassword } = req.body;
+
+  // Handle password change if requested
+  if (newPassword) {
+    if (!currentPassword) {
+      return res.status(400).json({ error: 'Current password is required to set a new password.' });
+    }
+    const fullUser = db.getUserById(req.user!.id) as any;
+    const isMatch = bcrypt.compareSync(currentPassword, fullUser.passwordHash);
+    if (!isMatch) {
+      return res.status(400).json({ error: 'Current password does not match.' });
+    }
+    if (newPassword.length < 6) {
+      return res.status(400).json({ error: 'New password must be at least 6 characters.' });
+    }
+    const salt = bcrypt.genSaltSync(10);
+    const passwordHash = bcrypt.hashSync(newPassword, salt);
+    db.updateUser(req.user!.id, { passwordHash } as any);
+  }
+
+  // Update staff details
+  const updatedStaff = db.updateStaffMember(staff.id, {
+    name: name?.trim() || staff.name,
+    phone: phone?.trim() || staff.phone,
+    bio: bio?.trim() || staff.bio,
+  });
+
+  res.json({ message: 'Profile details saved successfully.', staff: updatedStaff });
+});
+
+// ================= ADMIN PROTECTED ROUTES (/api/admin/*) =================
+
+// Admin Metrics (Calculated dynamically with comparison vs previous period)
+apiRouter.get('/admin/metrics', requireRole(['admin']), (req, res) => {
   const { period, startDate, endDate } = req.query;
   const analytics = db.getAnalytics(
     (period as any) || 'this_month',
@@ -439,8 +642,8 @@ apiRouter.get('/admin/metrics', requireRole(['admin', 'staff']), (req, res) => {
   res.json(analytics);
 });
 
-// Admin Analytics (Full breakdown for Recharts)
-apiRouter.get('/admin/analytics', requireRole(['admin', 'staff']), (req, res) => {
+// Admin Analytics
+apiRouter.get('/admin/analytics', requireRole(['admin']), (req, res) => {
   const { period, startDate, endDate } = req.query;
   const analytics = db.getAnalytics(
     (period as any) || 'this_month',
@@ -451,20 +654,21 @@ apiRouter.get('/admin/analytics', requireRole(['admin', 'staff']), (req, res) =>
 });
 
 // Admin Appointments Management Table
-apiRouter.get('/admin/appointments', requireRole(['admin', 'staff']), (req, res) => {
-  const { status, categoryId, search, startDate, endDate } = req.query;
+apiRouter.get('/admin/appointments', requireRole(['admin']), (req, res) => {
+  const { status, categoryId, search, startDate, endDate, staffId } = req.query;
   const list = db.getAppointments({
     status: status ? (String(status) as any) : undefined,
     categoryId: categoryId ? String(categoryId) : undefined,
     search: search ? String(search) : undefined,
     startDate: startDate ? String(startDate) : undefined,
     endDate: endDate ? String(endDate) : undefined,
+    staffId: staffId ? String(staffId) : undefined,
   });
   res.json(list);
 });
 
-// Admin Status Updates (Confirm, Complete, Cancel, No-Show, Payment)
-apiRouter.patch('/admin/appointments/:id/status', requireRole(['admin', 'staff']), (req, res) => {
+// Admin Status Updates
+apiRouter.patch('/admin/appointments/:id/status', requireRole(['admin']), (req, res) => {
   const { status, paymentStatus, staffId, notes } = req.body;
   const apt = db.getAppointmentById(req.params.id);
   if (!apt) {
@@ -485,8 +689,40 @@ apiRouter.patch('/admin/appointments/:id/status', requireRole(['admin', 'staff']
   res.json({ message: 'Appointment updated successfully.', appointment: updated });
 });
 
+// Admin Reassign Staff
+apiRouter.patch('/admin/appointments/:id/reassign', requireRole(['admin']), (req, res) => {
+  const { staffId } = req.body;
+  if (!staffId) return res.status(400).json({ error: 'Staff ID is required.' });
+
+  const staff = db.getStaffById(staffId);
+  if (!staff) return res.status(404).json({ error: 'Selected staff member not found.' });
+
+  const updated = db.updateAppointment(req.params.id, {
+    staffId: staff.id,
+    staffName: staff.name,
+  });
+
+  res.json({ message: `Appointment reassigned to ${staff.name}.`, appointment: updated });
+});
+
+// Admin Reschedule Appointment
+apiRouter.patch('/admin/appointments/:id/reschedule', requireRole(['admin']), (req, res) => {
+  const { appointmentDate, timeSlot } = req.body;
+  if (!appointmentDate || !timeSlot) {
+    return res.status(400).json({ error: 'Date and time slot are required.' });
+  }
+
+  const updated = db.updateAppointment(req.params.id, {
+    appointmentDate,
+    timeSlot,
+    status: 'confirmed',
+  });
+
+  res.json({ message: 'Appointment rescheduled successfully.', appointment: updated });
+});
+
 // Admin Walk-In / Phone Booking Creation
-apiRouter.post('/admin/appointments/walkin', requireRole(['admin', 'staff']), (req, res) => {
+apiRouter.post('/admin/appointments/walkin', requireRole(['admin']), (req, res) => {
   const { customerName, customerEmail, customerPhone, serviceId, staffId, appointmentDate, timeSlot, paymentStatus, notes } = req.body;
 
   if (!customerName || !customerPhone || !serviceId || !appointmentDate || !timeSlot) {
@@ -501,7 +737,6 @@ apiRouter.post('/admin/appointments/walkin', requireRole(['admin', 'staff']), (r
   const staff = staffId ? db.getStaffById(staffId) : undefined;
   const bookingNum = Math.floor(1000 + Math.random() * 9000);
 
-  // Check or create customer
   let cust = db.getUserByEmail(customerEmail || '');
   let custId = cust ? cust.id : `usr-walkin-${Date.now()}`;
 
@@ -536,7 +771,7 @@ apiRouter.post('/admin/appointments/walkin', requireRole(['admin', 'staff']), (r
 });
 
 // Customer Database Management
-apiRouter.get('/admin/customers', requireRole(['admin', 'staff']), (req, res) => {
+apiRouter.get('/admin/customers', requireRole(['admin']), (req, res) => {
   const customers = db.getAllCustomers();
   const allAppointments = db.getAppointments();
 
@@ -547,6 +782,15 @@ apiRouter.get('/admin/customers', requireRole(['admin', 'staff']), (req, res) =>
       .reduce((sum, a) => sum + a.amountInr, 0);
 
     const lastBooking = userApts[0]?.appointmentDate || 'None';
+    const completedApts = userApts.filter(a => a.status === 'completed');
+    const upcomingApts = userApts.filter(a => a.appointmentDate >= '2026-10-02' && a.status !== 'cancelled');
+
+    // Preferred services
+    const srvCount: Record<string, number> = {};
+    userApts.forEach(a => {
+      srvCount[a.serviceName] = (srvCount[a.serviceName] || 0) + 1;
+    });
+    const preferredService = Object.keys(srvCount).sort((a, b) => srvCount[b] - srvCount[a])[0] || 'Hydra-Infusion Facial';
 
     return {
       id: c.id,
@@ -555,16 +799,18 @@ apiRouter.get('/admin/customers', requireRole(['admin', 'staff']), (req, res) =>
       phone: c.phone,
       registrationDate: c.createdAt.split('T')[0],
       totalBookings: userApts.length,
-      completedBookings: userApts.filter(a => a.status === 'completed').length,
+      completedBookings: completedApts.length,
+      upcomingCount: upcomingApts.length,
       totalSpendInr: totalSpend,
       lastBooking,
+      preferredService,
     };
   });
 
   res.json(customerData);
 });
 
-apiRouter.get('/admin/customers/:id', requireRole(['admin', 'staff']), (req, res) => {
+apiRouter.get('/admin/customers/:id', requireRole(['admin']), (req, res) => {
   const customer = db.getUserById(req.params.id);
   if (!customer) {
     return res.status(404).json({ error: 'Customer not found.' });
@@ -572,6 +818,74 @@ apiRouter.get('/admin/customers/:id', requireRole(['admin', 'staff']), (req, res
   const appointments = db.getAppointments({ userId: customer.id });
   const { passwordHash: _, ...safeCustomer } = customer as any;
   res.json({ customer: safeCustomer, appointments });
+});
+
+// Admin Staff Management (CRUD + Performance summary)
+apiRouter.get('/admin/staff', requireRole(['admin']), (req, res) => {
+  const staff = db.getStaff(false);
+  const appointments = db.getAppointments();
+
+  const enriched = staff.map(s => {
+    const staffApts = appointments.filter(a => a.staffId === s.id);
+    const completedApts = staffApts.filter(a => a.status === 'completed');
+    const revenue = completedApts.reduce((sum, a) => sum + a.amountInr, 0);
+
+    return {
+      ...s,
+      totalAssigned: staffApts.length,
+      completedCount: completedApts.length,
+      totalRevenueGenerated: revenue,
+    };
+  });
+
+  res.json(enriched);
+});
+
+apiRouter.post('/admin/staff', requireRole(['admin']), (req, res) => {
+  const { name, email, phone, roleTitle, specialties, bio, password } = req.body;
+  if (!name || !email || !roleTitle) {
+    return res.status(400).json({ error: 'Name, email, and role title are required.' });
+  }
+
+  try {
+    const newStaff = db.createStaffMember({
+      name,
+      email,
+      phone: phone || '+91 9000000000',
+      roleTitle,
+      specialties: Array.isArray(specialties) && specialties.length > 0 ? specialties : [roleTitle],
+      bio: bio || '',
+      password,
+    });
+    res.status(201).json({ message: 'Staff member created successfully.', staff: newStaff });
+  } catch (err: any) {
+    res.status(400).json({ error: err.message || 'Error creating staff member.' });
+  }
+});
+
+apiRouter.put('/admin/staff/:id', requireRole(['admin']), (req, res) => {
+  const updated = db.updateStaffMember(req.params.id, req.body);
+  if (!updated) return res.status(404).json({ error: 'Staff member not found.' });
+  res.json({ message: 'Staff profile updated.', staff: updated });
+});
+
+apiRouter.patch('/admin/staff/:id/toggle', requireRole(['admin']), (req, res) => {
+  const updated = db.toggleStaffStatus(req.params.id);
+  if (!updated) return res.status(404).json({ error: 'Staff member not found.' });
+  res.json({ message: `Staff status set to ${updated.isActive ? 'Active' : 'Inactive'}.`, staff: updated });
+});
+
+apiRouter.post('/admin/staff/:id/reset-password', requireRole(['admin']), (req, res) => {
+  const { newPassword } = req.body;
+  if (!newPassword || newPassword.length < 6) {
+    return res.status(400).json({ error: 'Password must be at least 6 characters.' });
+  }
+  try {
+    db.resetStaffPassword(req.params.id, newPassword);
+    res.json({ message: 'Staff access password reset successfully.' });
+  } catch (err: any) {
+    res.status(400).json({ error: err.message || 'Error resetting password.' });
+  }
 });
 
 // Services Management (Admin only)
@@ -618,12 +932,12 @@ apiRouter.delete('/admin/services/:id', requireRole(['admin']), (req, res) => {
   res.json({ message: 'Service removed.' });
 });
 
-// Inquiries Management
-apiRouter.get('/admin/inquiries', requireRole(['admin', 'staff']), (req, res) => {
+// Inquiries Management (Admin only)
+apiRouter.get('/admin/inquiries', requireRole(['admin']), (req, res) => {
   res.json(db.getInquiries());
 });
 
-apiRouter.patch('/admin/inquiries/:id/status', requireRole(['admin', 'staff']), (req, res) => {
+apiRouter.patch('/admin/inquiries/:id/status', requireRole(['admin']), (req, res) => {
   const { status } = req.body;
   const updated = db.updateInquiryStatus(req.params.id, status);
   if (!updated) {
@@ -632,12 +946,12 @@ apiRouter.patch('/admin/inquiries/:id/status', requireRole(['admin', 'staff']), 
   res.json(updated);
 });
 
-// Review Moderation
-apiRouter.get('/admin/reviews', requireRole(['admin', 'staff']), (req, res) => {
+// Review Moderation (Admin only)
+apiRouter.get('/admin/reviews', requireRole(['admin']), (req, res) => {
   res.json(db.getReviews(false));
 });
 
-apiRouter.patch('/admin/reviews/:id/approve', requireRole(['admin', 'staff']), (req, res) => {
+apiRouter.patch('/admin/reviews/:id/approve', requireRole(['admin']), (req, res) => {
   const { isApproved } = req.body;
   const updated = db.approveReview(req.params.id, Boolean(isApproved));
   if (!updated) {
@@ -646,7 +960,7 @@ apiRouter.patch('/admin/reviews/:id/approve', requireRole(['admin', 'staff']), (
   res.json(updated);
 });
 
-// Settings Update
+// Settings Update (Admin only)
 apiRouter.put('/admin/settings', requireRole(['admin']), (req, res) => {
   const updated = db.updateSettings(req.body);
   res.json({ message: 'Settings saved.', settings: updated });

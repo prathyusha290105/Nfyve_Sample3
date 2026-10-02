@@ -119,6 +119,15 @@ export const Navbar: React.FC = () => {
                           My Appointments
                         </Link>
                       </>
+                    ) : user.role === 'staff' ? (
+                      <Link
+                        to="/staff"
+                        onClick={() => setUserDropdownOpen(false)}
+                        className="flex items-center gap-2 px-4 py-2 text-xs font-semibold text-[#244B3A] hover:bg-[#FAF9F5]"
+                      >
+                        <LayoutDashboard className="w-3.5 h-3.5 text-[#244B3A]" />
+                        Staff Workspace
+                      </Link>
                     ) : (
                       <Link
                         to="/admin"
@@ -126,7 +135,7 @@ export const Navbar: React.FC = () => {
                         className="flex items-center gap-2 px-4 py-2 text-xs font-semibold text-[#244B3A] hover:bg-[#FAF9F5]"
                       >
                         <LayoutDashboard className="w-3.5 h-3.5 text-[#244B3A]" />
-                        Staff / Admin Portal
+                        Admin Console
                       </Link>
                     )}
 
@@ -219,13 +228,21 @@ export const Navbar: React.FC = () => {
                       My Appointments
                     </Link>
                   </>
+                ) : user.role === 'staff' ? (
+                  <Link
+                    to="/staff"
+                    onClick={() => setMobileMenuOpen(false)}
+                    className="block px-3 py-2 text-xs font-semibold text-[#244B3A] bg-[#F0EEE5] rounded-md"
+                  >
+                    Open Staff Workspace
+                  </Link>
                 ) : (
                   <Link
                     to="/admin"
                     onClick={() => setMobileMenuOpen(false)}
                     className="block px-3 py-2 text-xs font-semibold text-[#244B3A] bg-[#F0EEE5] rounded-md"
                   >
-                    Open Staff / Admin Dashboard
+                    Open Admin Console
                   </Link>
                 )}
                 <button

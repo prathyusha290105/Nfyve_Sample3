@@ -5,27 +5,24 @@ import { api } from '../../api/client';
 import { SystemNotification } from '../../types';
 import { 
   LayoutDashboard, 
-  CalendarCheck, 
+  Calendar, 
   Users, 
-  Sparkles, 
   TrendingUp, 
-  Inbox, 
-  Star, 
-  Settings, 
+  UserCheck, 
   LogOut, 
   ExternalLink,
   Menu,
   X,
   Bell,
   CheckCircle2,
-  UserCheck,
   ChevronDown,
   Building2,
-  ShieldCheck,
-  Clock
+  Clock,
+  Sparkles,
+  ShieldAlert
 } from 'lucide-react';
 
-export const AdminLayout: React.FC<{ children: React.ReactNode }> = ({ children }) => {
+export const StaffLayout: React.FC<{ children: React.ReactNode }> = ({ children }) => {
   const { user, logout } = useAuth();
   const location = useLocation();
   const navigate = useNavigate();
@@ -47,35 +44,16 @@ export const AdminLayout: React.FC<{ children: React.ReactNode }> = ({ children 
     setNotifications(prev => prev.map(n => ({ ...n, read: true })));
   };
 
-  const navSections = [
-    {
-      title: 'Analytics & Overview',
-      items: [
-        { name: 'Dashboard Overview', path: '/admin', icon: <LayoutDashboard className="w-4 h-4" /> },
-        { name: 'Sales & Revenue Analytics', path: '/admin/analytics', icon: <TrendingUp className="w-4 h-4" /> },
-      ]
-    },
-    {
-      title: 'Sanctuary Operations',
-      items: [
-        { name: 'Appointments Register', path: '/admin/appointments', icon: <CalendarCheck className="w-4 h-4" /> },
-        { name: 'Customer Dossiers', path: '/admin/customers', icon: <Users className="w-4 h-4" /> },
-        { name: 'Staff Management', path: '/admin/staff', icon: <UserCheck className="w-4 h-4" /> },
-        { name: 'Services & Pricing', path: '/admin/services', icon: <Sparkles className="w-4 h-4" /> },
-      ]
-    },
-    {
-      title: 'Governance & Inbox',
-      items: [
-        { name: 'Contact Inquiries', path: '/admin/inquiries', icon: <Inbox className="w-4 h-4" /> },
-        { name: 'Review Moderation', path: '/admin/reviews', icon: <Star className="w-4 h-4" /> },
-        { name: 'Sanctuary Settings', path: '/admin/settings', icon: <Settings className="w-4 h-4" /> },
-      ]
-    }
+  const navItems = [
+    { name: 'My Daily Overview', path: '/staff', icon: <LayoutDashboard className="w-4 h-4" /> },
+    { name: 'My Schedule & Consultations', path: '/staff/appointments', icon: <Calendar className="w-4 h-4" /> },
+    { name: 'My Client Dossiers', path: '/staff/clients', icon: <Users className="w-4 h-4" /> },
+    { name: 'My Performance & Ratings', path: '/staff/performance', icon: <TrendingUp className="w-4 h-4" /> },
+    { name: 'My Profile & Hours', path: '/staff/profile', icon: <UserCheck className="w-4 h-4" /> },
   ];
 
   const isActive = (path: string) => {
-    if (path === '/admin') return location.pathname === '/admin';
+    if (path === '/staff') return location.pathname === '/staff';
     return location.pathname.startsWith(path);
   };
 
@@ -87,7 +65,7 @@ export const AdminLayout: React.FC<{ children: React.ReactNode }> = ({ children 
   return (
     <div className="min-h-screen bg-[#F8F7F2] flex flex-col">
       
-      {/* Top Navigation Bar in Deep Forest Green with Gold Accents */}
+      {/* Top Header in Deep Forest Green #214D3B with Gold Accents */}
       <header className="sticky top-0 z-50 bg-[#214D3B] text-white shadow-md border-b border-[#1b3e30]">
         <div className="max-w-[1700px] mx-auto px-4 sm:px-6 lg:px-8">
           <div className="flex items-center justify-between h-16">
@@ -102,9 +80,9 @@ export const AdminLayout: React.FC<{ children: React.ReactNode }> = ({ children 
                 {sidebarOpen ? <X className="w-5 h-5" /> : <Menu className="w-5 h-5" />}
               </button>
 
-              <Link to="/admin" className="flex items-center gap-2 group">
+              <Link to="/staff" className="flex items-center gap-2 group">
                 <span className="font-serif text-xl sm:text-2xl font-bold tracking-tight text-white">
-                  NFYVE <span className="font-sans text-[10px] tracking-widest text-[#D4AF37] uppercase font-semibold">· ADMIN PORTAL</span>
+                  NFYVE <span className="font-sans text-[10px] tracking-widest text-[#D4AF37] uppercase font-semibold">· PRACTITIONER PORTAL</span>
                 </span>
               </Link>
             </div>
@@ -118,10 +96,21 @@ export const AdminLayout: React.FC<{ children: React.ReactNode }> = ({ children 
                 className="hidden md:inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-medium text-white/90 hover:text-white bg-[#285d47] hover:bg-[#307056] border border-white/15 transition-smooth"
               >
                 <ExternalLink className="w-3.5 h-3.5 text-[#D4AF37]" />
-                <span>Public Sanctuary</span>
+                <span>Public Website</span>
               </Link>
 
-              {/* Notification icon with unread badge */}
+              {/* If user is also an Admin, allow switching to full admin view */}
+              {user?.role === 'admin' && (
+                <Link
+                  to="/admin"
+                  className="hidden sm:inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-medium bg-[#D4AF37] text-[#214D3B] font-bold hover:bg-[#c29e2f] transition-smooth"
+                >
+                  <Sparkles className="w-3.5 h-3.5" />
+                  <span>Admin Console</span>
+                </Link>
+              )}
+
+              {/* Notification icon */}
               <div className="relative">
                 <button
                   onClick={() => {
@@ -143,7 +132,7 @@ export const AdminLayout: React.FC<{ children: React.ReactNode }> = ({ children 
                     <div className="px-4 py-2.5 border-b border-[#F0EEE5] flex items-center justify-between">
                       <div className="flex items-center gap-1.5">
                         <span className="font-serif text-sm font-semibold text-[#214D3B]">
-                          Sanctuary Alerts
+                          Schedule Updates
                         </span>
                         {unreadCount > 0 && (
                           <span className="px-1.5 py-0.5 text-[10px] font-semibold bg-[#214D3B] text-white rounded">
@@ -156,7 +145,7 @@ export const AdminLayout: React.FC<{ children: React.ReactNode }> = ({ children 
                           onClick={markAllRead}
                           className="text-[11px] text-[#2E6B50] font-medium hover:underline"
                         >
-                          Mark all as read
+                          Mark all read
                         </button>
                       )}
                     </div>
@@ -172,15 +161,6 @@ export const AdminLayout: React.FC<{ children: React.ReactNode }> = ({ children 
                             <span className="text-[10px] text-[#777A70] whitespace-nowrap">{notif.time}</span>
                           </div>
                           <p className="text-[#585B53] text-[11px] mt-0.5 leading-relaxed">{notif.message}</p>
-                          {notif.link && (
-                            <Link
-                              to={notif.link}
-                              onClick={() => setNotificationsOpen(false)}
-                              className="inline-block mt-1 text-[11px] font-semibold text-[#2E6B50] hover:underline"
-                            >
-                              Review Details →
-                            </Link>
-                          )}
                         </div>
                       ))}
                     </div>
@@ -198,14 +178,14 @@ export const AdminLayout: React.FC<{ children: React.ReactNode }> = ({ children 
                   className="flex items-center gap-2.5 p-1.5 rounded-lg hover:bg-[#2c654e] transition-colors"
                 >
                   <div className="w-8 h-8 rounded-full bg-[#D4AF37] text-[#214D3B] font-serif font-bold text-xs flex items-center justify-center shadow-xs">
-                    {user?.name.charAt(0) || 'A'}
+                    {user?.name.charAt(0) || 'S'}
                   </div>
                   <div className="hidden sm:block text-left">
                     <p className="text-xs font-semibold text-white leading-tight truncate max-w-[120px]">
                       {user?.name.split(' ')[0]}
                     </p>
                     <p className="text-[10px] text-[#D4AF37] font-medium uppercase tracking-wider">
-                      Administrator
+                      Specialist
                     </p>
                   </div>
                   <ChevronDown className="w-3.5 h-3.5 text-white/80" />
@@ -217,26 +197,17 @@ export const AdminLayout: React.FC<{ children: React.ReactNode }> = ({ children 
                       <p className="text-xs font-semibold text-[#214D3B] truncate">{user?.name}</p>
                       <p className="text-[11px] text-[#777A70] truncate">{user?.email}</p>
                       <span className="inline-block mt-1 text-[10px] font-semibold uppercase tracking-wider text-[#D4AF37] bg-[#214D3B] px-2 py-0.5 rounded">
-                        Full Administrator
+                        Practitioner Role
                       </span>
                     </div>
 
                     <Link
-                      to="/admin/settings"
+                      to="/staff/profile"
                       onClick={() => setProfileDropdownOpen(false)}
                       className="flex items-center gap-2.5 px-4 py-2 text-xs text-[#252923] hover:bg-[#F8F7F2]"
                     >
-                      <Settings className="w-3.5 h-3.5 text-[#2E6B50]" />
-                      <span>Account & Sanctuary Settings</span>
-                    </Link>
-
-                    <Link
-                      to="/staff"
-                      onClick={() => setProfileDropdownOpen(false)}
-                      className="flex items-center gap-2.5 px-4 py-2 text-xs text-[#214D3B] font-semibold hover:bg-[#F8F7F2]"
-                    >
-                      <UserCheck className="w-3.5 h-3.5 text-[#D4AF37]" />
-                      <span>Switch to Practitioner Portal</span>
+                      <UserCheck className="w-3.5 h-3.5 text-[#2E6B50]" />
+                      <span>My Profile & Availability</span>
                     </Link>
 
                     <Link
@@ -245,8 +216,19 @@ export const AdminLayout: React.FC<{ children: React.ReactNode }> = ({ children 
                       className="flex items-center gap-2.5 px-4 py-2 text-xs text-[#252923] hover:bg-[#F8F7F2]"
                     >
                       <ExternalLink className="w-3.5 h-3.5 text-[#2E6B50]" />
-                      <span>View Public Website</span>
+                      <span>View Public Sanctuary</span>
                     </Link>
+
+                    {user?.role === 'admin' && (
+                      <Link
+                        to="/admin"
+                        onClick={() => setProfileDropdownOpen(false)}
+                        className="flex items-center gap-2.5 px-4 py-2 text-xs text-[#214D3B] font-semibold hover:bg-[#F8F7F2]"
+                      >
+                        <Sparkles className="w-3.5 h-3.5 text-[#D4AF37]" />
+                        <span>Switch to Full Admin View</span>
+                      </Link>
+                    )}
 
                     <div className="border-t border-[#F0EEE5] mt-1 pt-1">
                       <button
@@ -276,45 +258,44 @@ export const AdminLayout: React.FC<{ children: React.ReactNode }> = ({ children 
             sidebarOpen ? 'translate-x-0 shadow-2xl' : '-translate-x-full'
           }`}
         >
-          <div className="p-4 space-y-6 flex-1 overflow-y-auto">
-            {navSections.map((sec, secIdx) => (
-              <div key={secIdx} className="space-y-1">
-                <p className="px-3 text-[10px] font-bold uppercase tracking-wider text-[#777A70] mb-2">
-                  {sec.title}
-                </p>
-                {sec.items.map((item) => (
-                  <Link
-                    key={item.path}
-                    to={item.path}
-                    onClick={() => setSidebarOpen(false)}
-                    className={`flex items-center gap-3 px-3 py-2.5 rounded-lg text-xs font-medium transition-smooth ${
-                      isActive(item.path)
-                        ? 'bg-[#214D3B] text-white shadow-sm font-semibold'
-                        : 'text-[#484B43] hover:bg-[#F0EEE5] hover:text-[#214D3B]'
-                    }`}
-                  >
-                    <span className={isActive(item.path) ? 'text-[#D4AF37]' : 'text-[#2E6B50]'}>
-                      {item.icon}
-                    </span>
-                    <span className="truncate">{item.name}</span>
-                  </Link>
-                ))}
-              </div>
-            ))}
+          <div className="p-4 space-y-4 flex-1 overflow-y-auto">
+            <p className="px-3 text-[10px] font-bold uppercase tracking-wider text-[#777A70]">
+              Practitioner Navigation
+            </p>
+
+            <div className="space-y-1">
+              {navItems.map((item) => (
+                <Link
+                  key={item.path}
+                  to={item.path}
+                  onClick={() => setSidebarOpen(false)}
+                  className={`flex items-center gap-3 px-3 py-2.5 rounded-lg text-xs font-medium transition-smooth ${
+                    isActive(item.path)
+                      ? 'bg-[#214D3B] text-white shadow-sm font-semibold'
+                      : 'text-[#484B43] hover:bg-[#F0EEE5] hover:text-[#214D3B]'
+                  }`}
+                >
+                  <span className={isActive(item.path) ? 'text-[#D4AF37]' : 'text-[#2E6B50]'}>
+                    {item.icon}
+                  </span>
+                  <span className="truncate">{item.name}</span>
+                </Link>
+              ))}
+            </div>
           </div>
 
-          {/* Sidebar bottom location card */}
+          {/* Sidebar Location & Shift Card */}
           <div className="p-4 border-t border-[#F0EEE5] bg-[#F8F7F2] m-3 rounded-xl border border-[#E7E5DC]">
             <div className="flex items-center gap-2 text-xs font-semibold text-[#214D3B]">
               <Building2 className="w-3.5 h-3.5 text-[#2E6B50]" />
-              <span>Begumpet Sanctuary</span>
+              <span>Begumpet Clinical Suite</span>
             </div>
             <p className="text-[11px] text-[#777A70] mt-0.5">
-              4th Floor, Kura Towers · Hyderabad
+              Kura Towers, 4th Floor · Hyderabad
             </p>
             <div className="flex items-center gap-1.5 mt-2 text-[10px] text-emerald-800 font-medium">
               <span className="w-2 h-2 rounded-full bg-emerald-500 animate-pulse" />
-              <span>Operational Systems Online</span>
+              <span>Active on Shift Today</span>
             </div>
           </div>
         </aside>

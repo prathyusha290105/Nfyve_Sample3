@@ -16,7 +16,8 @@
       "phone": "+91 9000023055",
       "role": "staff",
       "passwordHash": "$2b$10$zvFKQNd26v/uj6EzXY4EB.t9bGnEeGER.UauzNOU/k9SaxrMI9Eai",
-      "createdAt": "2025-01-05T09:00:00Z"
+      "createdAt": "2025-01-05T09:00:00Z",
+      "staffId": "st-5"
     },
     {
       "id": "usr-cust-1",
@@ -53,6 +54,46 @@
       "role": "customer",
       "passwordHash": "$2b$10$zvFKQNd26v/uj6EzXY4EB.vNxA4MercLUW.1SzxkSKlfzYILds7gy",
       "createdAt": "2025-06-20T16:00:00Z"
+    },
+    {
+      "id": "usr-staff-ananya",
+      "name": "Dr. Ananya Reddy",
+      "email": "dr.ananya@nfyve.com",
+      "phone": "+91 9000023051",
+      "role": "staff",
+      "staffId": "st-1",
+      "passwordHash": "$2b$10$dqIyxPgLv3NTxugaVxbw9.1KYdgJ5v9EfqaD.wOeFv8BcMVKeOqY2",
+      "createdAt": "2025-01-05T09:00:00Z"
+    },
+    {
+      "id": "usr-staff-vikram",
+      "name": "Coach Vikram Singh",
+      "email": "vikram.singh@nfyve.com",
+      "phone": "+91 9000023052",
+      "role": "staff",
+      "staffId": "st-2",
+      "passwordHash": "$2b$10$dqIyxPgLv3NTxugaVxbw9.1KYdgJ5v9EfqaD.wOeFv8BcMVKeOqY2",
+      "createdAt": "2025-01-05T09:00:00Z"
+    },
+    {
+      "id": "usr-staff-kavita",
+      "name": "Kavita Nair, RD",
+      "email": "kavita.nair@nfyve.com",
+      "phone": "+91 9000023053",
+      "role": "staff",
+      "staffId": "st-3",
+      "passwordHash": "$2b$10$dqIyxPgLv3NTxugaVxbw9.1KYdgJ5v9EfqaD.wOeFv8BcMVKeOqY2",
+      "createdAt": "2025-01-05T09:00:00Z"
+    },
+    {
+      "id": "usr-staff-sameer",
+      "name": "Sameer Khan",
+      "email": "sameer.khan@nfyve.com",
+      "phone": "+91 9000023054",
+      "role": "staff",
+      "staffId": "st-4",
+      "passwordHash": "$2b$10$dqIyxPgLv3NTxugaVxbw9.1KYdgJ5v9EfqaD.wOeFv8BcMVKeOqY2",
+      "createdAt": "2025-01-05T09:00:00Z"
     }
   ],
   "categories": [
@@ -350,7 +391,12 @@
       "roleTitle": "Chief Aesthetics Physician",
       "specialty": "Clinical Dermatology & Laser Rejuvenation",
       "bio": "Over 12 years of specialized practice in medical aesthetics, focused on non-surgical facial harmony and skin barrier rehabilitation.",
-      "isActive": true
+      "isActive": true,
+      "specialties": [
+        "Clinical Aesthetics & Skin Health",
+        "Laser Photorejuvenation",
+        "Medical Micro-Needling"
+      ]
     },
     {
       "id": "st-2",
@@ -360,7 +406,12 @@
       "roleTitle": "Head of Fitness & Movement",
       "specialty": "Functional Strength & Corrective Biomechanics",
       "bio": "Former national athlete and certified CSCS coach dedicated to sustainable joint-friendly strength building.",
-      "isActive": true
+      "isActive": true,
+      "specialties": [
+        "Fitness & Gym",
+        "Kinetic Posture Assessment",
+        "Personal Athletic Coaching"
+      ]
     },
     {
       "id": "st-3",
@@ -370,7 +421,12 @@
       "roleTitle": "Lead Clinical Nutritionist",
       "specialty": "Metabolic Health & Functional Meal Design",
       "bio": "Specialist in endocrine nutrition, sustainable fat loss, and customized gut-health restoration protocols.",
-      "isActive": true
+      "isActive": true,
+      "specialties": [
+        "Nutri Food & Personalized Nutrition",
+        "Medical Weight Loss",
+        "Metabolic Assessments"
+      ]
     },
     {
       "id": "st-4",
@@ -380,7 +436,29 @@
       "roleTitle": "Master Hair & Scalp Specialist",
       "specialty": "Trichology Rituals & Precision Styling",
       "bio": "International salon veteran bringing bespoke European cutting craft and organic scalp restorative techniques.",
-      "isActive": true
+      "isActive": true,
+      "specialties": [
+        "Salon, Hair & Beauty",
+        "Botanical Scalp Health",
+        "Precision Styling"
+      ]
+    },
+    {
+      "id": "st-5",
+      "userId": "usr-staff-1",
+      "name": "Rohan Mehra",
+      "email": "staff@nfyve.com",
+      "phone": "+91 9000023055",
+      "roleTitle": "Clinic Concierge & Operations",
+      "specialty": "Integrated Transformation Logistics",
+      "specialties": [
+        "Integrated Wellness Programs",
+        "Consultation Triage",
+        "Sanctuary Concierge"
+      ],
+      "bio": "Over 8 years managing premier hospitality and luxury wellness centers across Hyderabad.",
+      "isActive": true,
+      "createdAt": "2025-01-06T09:00:00Z"
     }
   ],
   "appointments": [
@@ -3438,5 +3516,41 @@
     },
     "cancellationPolicy": "Appointments may be cancelled or rescheduled up to 12 hours prior to the scheduled slot with zero cancellation penalty. Late cancellations can be rescheduled through our concierge team."
   },
-  "chatMessages": []
+  "chatMessages": [],
+  "notifications": [
+    {
+      "id": "notif-1",
+      "title": "New Booking Reserved",
+      "message": "NF-2026-1002 booked by Priya Sharma for Hydra-Infusion Clinical Facial.",
+      "time": "10 mins ago",
+      "read": false,
+      "type": "booking",
+      "link": "/admin/appointments?search=NF-2026-1002"
+    },
+    {
+      "id": "notif-2",
+      "title": "Desk Payment Received",
+      "message": "₹4,500 collected from Priya Sharma for completed dermatological session.",
+      "time": "1 hour ago",
+      "read": false,
+      "type": "payment"
+    },
+    {
+      "id": "notif-3",
+      "title": "Consultation Assigned",
+      "message": "Coach Vikram Singh assigned to personal training movement screen.",
+      "time": "3 hours ago",
+      "read": true,
+      "type": "system"
+    },
+    {
+      "id": "notif-4",
+      "title": "Client Inquiry",
+      "message": "Kishore Kumar submitted an inquiry regarding executive wellness days.",
+      "time": "5 hours ago",
+      "read": false,
+      "type": "system",
+      "link": "/admin/inquiries"
+    }
+  ]
 }
