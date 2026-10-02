@@ -1,0 +1,6 @@
+{
+  "name": "NFYVE – The Change",
+  "description": "Premium integrated wellness and transformation centre in Begumpet, Hyderabad, Telangana. Combining clinical aesthetics, medical weight loss, fitness gym, salon beauty, nutrition, and wellness programs.",
+  "requestFramePermissions": [],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}
