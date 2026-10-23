@@ -46,7 +46,7 @@ VITE_FIREBASE_APP_ID="1:123456789012:web:abcdef123456"
 # Optional Gemini AI Assistant & Server Configuration
 GEMINI_API_KEY="MY_GEMINI_API_KEY"
 APP_URL="MY_APP_URL"
-PORT=3000
+PORT=3001
 JWT_SECRET="nfyve-the-change-secret-key-2026"
 ```
 
@@ -233,7 +233,7 @@ For instant local testing and inspection, the application includes pre-configure
 # Install dependencies
 npm install
 
-# Start local full-stack server (Port 3000)
+# Start local full-stack server (Port 3001)
 npm run dev
 
 # Check TypeScript types and lint

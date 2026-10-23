@@ -64,7 +64,7 @@ export const CustomerAccountPage: React.FC = () => {
       await api.cancelAppointment(id);
       setActionMsg('Appointment cancelled.');
       loadAppointments();
-      setTimeout(() => setActionMsg(''), 3000);
+      setTimeout(() => setActionMsg(''), 3001);
     } catch (err: any) {
       alert(err.message || 'Cancellation failed.');
     }

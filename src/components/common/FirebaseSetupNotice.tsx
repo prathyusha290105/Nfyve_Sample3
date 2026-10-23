@@ -23,7 +23,7 @@ VITE_FIREBASE_APP_ID="your-app-id"`;
   const handleCopy = () => {
     navigator.clipboard.writeText(envSnippet);
     setCopied(true);
-    setTimeout(() => setCopied(false), 3000);
+    setTimeout(() => setCopied(false), 3001);
   };
 
   return (
