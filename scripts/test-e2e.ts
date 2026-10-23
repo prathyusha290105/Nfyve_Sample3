@@ -83,7 +83,10 @@ async function runTestSuite() {
   try {
     const cust = db.getCustomers()[0];
     testCustomerId = cust.id;
-    const date = `2026-11-${String((parseInt(testIdSuffix, 10) % 25) + 1).padStart(2, '0')}`;
+    const uniqueRunNum = Date.now();
+    const day = String((uniqueRunNum % 28) + 1).padStart(2, '0');
+    const month = String(((uniqueRunNum >> 4) % 12) + 1).padStart(2, '0');
+    const date = `2029-${month}-${day}`;
     const timeSlot = '02:30 PM - 03:30 PM';
     const room = 'Skin / Hair';
     const staffId = 'st-1';
@@ -503,7 +506,10 @@ async function runTestSuite() {
   // TEST J: Appointment conflicts (Room and Staff overlap prevention)
   // -------------------------------------------------------------
   try {
-    const conflictDate = `2026-12-${String((parseInt(testIdSuffix, 10) % 25) + 1).padStart(2, '0')}`;
+    const uniqueConflictNum = Date.now() + 1000;
+    const conflictDay = String((uniqueConflictNum % 28) + 1).padStart(2, '0');
+    const conflictMonth = String(((uniqueConflictNum >> 4) % 12) + 1).padStart(2, '0');
+    const conflictDate = `2030-${conflictMonth}-${conflictDay}`;
     const conflictTimeSlot = '10:00 AM - 11:00 AM';
     const conflictRoom = 'Slim-1';
     const conflictStaff = 'st-2'; // Coach Vikram Singh
