@@ -38,11 +38,12 @@ export const StaffProfilePage: React.FC = () => {
   useEffect(() => {
     setIsLoading(true);
     api.getStaffMe()
-      .then(res => {
-        setStaff(res.staff);
-        setName(res.staff.name || '');
-        setPhone(res.staff.phone || '');
-        setBio(res.staff.bio || '');
+      .then((res: any) => {
+        const s = res?.staff || res;
+        setStaff(s);
+        setName(s.name || '');
+        setPhone(s.phone || '');
+        setBio(s.bio || '');
       })
       .catch(console.error)
       .finally(() => setIsLoading(false));
@@ -70,14 +71,14 @@ export const StaffProfilePage: React.FC = () => {
 
     setIsSaving(true);
     try {
-      const res = await api.updateStaffProfile({
+      const res: any = await api.updateStaffProfile({
         name,
         phone,
         bio,
         currentPassword: currentPassword || undefined,
         newPassword: newPassword || undefined,
       });
-      setStaff(res.staff);
+      setStaff(res.staff || res);
       setSuccessMsg('Profile and credentials updated successfully!');
       setCurrentPassword('');
       setNewPassword('');

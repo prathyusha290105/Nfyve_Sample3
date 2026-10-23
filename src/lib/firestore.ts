@@ -324,7 +324,7 @@ export async function submitReviewRecord(payload: {
     reviewText: payload.reviewText,
   });
 
-  return res.review;
+  return (res as any)?.review || res;
 }
 
 /**

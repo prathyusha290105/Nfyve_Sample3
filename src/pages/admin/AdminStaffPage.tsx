@@ -145,7 +145,7 @@ export const AdminStaffPage: React.FC = () => {
         roleTitle: formData.roleTitle.trim(),
         specialties: formData.specialties,
         bio: formData.bio.trim(),
-        password: formData.password || undefined,
+        ...((formData.password ? { password: formData.password } : {}) as any),
       });
       setIsAddModalOpen(false);
       loadStaff();

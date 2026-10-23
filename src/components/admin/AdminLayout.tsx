@@ -22,7 +22,8 @@ import {
   ChevronDown,
   Building2,
   ShieldCheck,
-  Clock
+  Clock,
+  Headphones
 } from 'lucide-react';
 import { FirebaseSetupNotice } from '../common/FirebaseSetupNotice';
 
@@ -60,6 +61,8 @@ export const AdminLayout: React.FC<{ children: React.ReactNode }> = ({ children 
       title: 'Sanctuary Operations',
       items: [
         { name: 'Appointments Register', path: '/admin/appointments', icon: <CalendarCheck className="w-4 h-4" /> },
+        { name: 'Front Desk Console', path: '/front-desk', icon: <Building2 className="w-4 h-4" /> },
+        { name: 'Call Center Console', path: '/call-center', icon: <Headphones className="w-4 h-4" /> },
         { name: 'Customer Dossiers', path: '/admin/customers', icon: <Users className="w-4 h-4" /> },
         { name: 'Staff Management', path: '/admin/staff', icon: <UserCheck className="w-4 h-4" /> },
         { name: 'Services & Pricing', path: '/admin/services', icon: <Sparkles className="w-4 h-4" /> },

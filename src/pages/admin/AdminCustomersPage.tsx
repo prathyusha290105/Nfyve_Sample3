@@ -29,7 +29,21 @@ export const AdminCustomersPage: React.FC = () => {
   const loadCustomers = () => {
     setIsLoading(true);
     api.getAdminCustomers()
-      .then(setCustomers)
+      .then((data: any) => {
+        const mapped: CustomerSummary[] = (data || []).map((c: any) => ({
+          id: c.id,
+          name: c.name,
+          email: c.email || '',
+          phone: c.phone || '',
+          registrationDate: c.createdAt || c.registrationDate || new Date().toISOString(),
+          totalBookings: c.totalBookings || c.completedTreatments || 0,
+          completedBookings: c.completedBookings || c.completedTreatments || 0,
+          totalSpendInr: c.totalSpendInr || 0,
+          lastBooking: c.lastBooking || c.updatedAt || 'Recent',
+          preferredService: c.interestedServiceName || c.preferredService
+        }));
+        setCustomers(mapped);
+      })
       .catch(console.error)
       .finally(() => setIsLoading(false));
   };

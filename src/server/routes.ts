@@ -1,11 +1,21 @@
 import { Router, Request, Response, NextFunction } from 'express';
 import bcrypt from 'bcryptjs';
 import { db } from './db';
-import { User, Appointment, Review, ContactInquiry, Service, DateFilterPeriod } from '../types';
+import { 
+  User, 
+  Appointment, 
+  Review, 
+  ContactInquiry, 
+  Service, 
+  DateFilterPeriod,
+  RoomId,
+  AppointmentStatus,
+  ROOMS
+} from '../types';
 
 export const apiRouter = Router();
 
-// In-memory token storage (Simple & robust for sessions)
+// In-memory token storage (Simple & robust for active sessions)
 const SESSIONS: Map<string, { userId: string; role: string; expiresAt: number }> = new Map();
 
 function generateToken(userId: string, role: string): string {
@@ -119,25 +129,19 @@ apiRouter.post('/auth/login', (req, res) => {
     return res.status(401).json({ error: 'Invalid email or password.' });
   }
 
-  // Enforce mode separation as requested in prompt:
-  if (mode === 'staff_admin' && user.role === 'customer') {
+  const isInternalRole = ['admin', 'staff', 'call_center', 'front_desk', 'manager'].includes(user.role);
+
+  // Enforce mode separation:
+  if (mode === 'staff_admin' && !isInternalRole) {
     return res.status(403).json({
-      error: 'This account does not have staff or administrative privileges. Please use the Customer Login.',
+      error: 'This account does not have staff or operational privileges. Please use the Customer Login.',
     });
   }
 
-  if (mode === 'customer' && user.role !== 'customer') {
+  if (mode === 'customer' && isInternalRole) {
     return res.status(403).json({
-      error: 'Staff and Administrator accounts must sign in using the Staff / Admin Login option.',
+      error: 'Operational and Staff accounts must sign in using the Staff / Console Login option.',
     });
-  }
-
-  // If staff member, link staffId if missing
-  if (user.role === 'staff' && !user.staffId) {
-    const staff = db.getStaffByEmail(user.email);
-    if (staff) {
-      user.staffId = staff.id;
-    }
   }
 
   const token = generateToken(user.id, user.role);
@@ -207,16 +211,6 @@ apiRouter.put('/auth/profile', requireAuth, (req: AuthenticatedRequest, res) => 
 // Notifications
 apiRouter.get('/notifications', requireAuth, (req: AuthenticatedRequest, res) => {
   const allNotifs = db.getNotifications();
-  if (req.user!.role === 'staff') {
-    const staff = db.getStaffByUserId(req.user!.id);
-    const staffName = staff?.name.toLowerCase() || '';
-    const filtered = allNotifs.filter(n => 
-      n.type === 'booking' || 
-      n.message.toLowerCase().includes(staffName) ||
-      n.title.toLowerCase().includes('schedule')
-    );
-    return res.json(filtered);
-  }
   res.json(allNotifs);
 });
 
@@ -229,739 +223,503 @@ apiRouter.patch('/notifications/:id/read', requireAuth, (req, res) => {
   res.json({ success: true });
 });
 
-// ================= PUBLIC DATA ROUTES =================
-
-// Categories
-apiRouter.get('/categories', (req, res) => {
-  res.json(db.getCategories());
+// ================= ROOMS & SHARED SCHEDULING RESOURCES =================
+apiRouter.get('/rooms', (req, res) => {
+  res.json(db.getRooms());
 });
 
-// Services
-apiRouter.get('/services', (req, res) => {
-  res.json(db.getServices(true));
+// ================= CUSTOMERS & PROSPECTS (CALL CENTER / FRONT DESK / ADMIN) =================
+apiRouter.get('/customers', requireRole(['admin', 'call_center', 'front_desk', 'manager']), (req, res) => {
+  const { search, status, source } = req.query;
+  const customers = db.getCustomers({
+    search: search ? String(search) : undefined,
+    status: status ? String(status) : undefined,
+    source: source ? String(source) : undefined,
+  });
+  res.json(customers);
 });
 
-apiRouter.get('/services/:slug', (req, res) => {
-  const service = db.getServiceBySlug(req.params.slug);
-  if (!service) {
-    return res.status(404).json({ error: 'Service not found.' });
+apiRouter.get('/customers/search-phone', requireRole(['admin', 'call_center', 'front_desk', 'manager']), (req, res) => {
+  const phone = req.query.phone ? String(req.query.phone) : '';
+  if (!phone) {
+    return res.status(400).json({ error: 'Phone parameter required' });
   }
-  res.json(service);
+  const customer = db.getCustomerByPhone(phone);
+  res.json({ exists: Boolean(customer), customer });
 });
 
-// Staff
-apiRouter.get('/staff', (req, res) => {
-  res.json(db.getStaff(true));
-});
-
-// Reviews
-apiRouter.get('/reviews', (req, res) => {
-  res.json(db.getReviews(true));
-});
-
-// Submit Review (Authenticated Customer)
-apiRouter.post('/reviews', requireAuth, (req: AuthenticatedRequest, res) => {
-  const { serviceCategory, serviceName, rating, reviewText } = req.body;
-  if (!rating || !reviewText) {
-    return res.status(400).json({ error: 'Rating and review comment are required.' });
+apiRouter.get('/customers/:id', requireRole(['admin', 'call_center', 'front_desk', 'manager', 'staff']), (req, res) => {
+  const data360 = db.getCustomer360(req.params.id);
+  if (!data360) {
+    return res.status(404).json({ error: 'Customer not found.' });
   }
-
-  const review: Review = {
-    id: `rev-${Date.now()}`,
-    userId: req.user!.id,
-    customerName: req.user!.name,
-    serviceCategory: serviceCategory || 'Integrated Wellness',
-    serviceName: serviceName || 'General Treatment',
-    rating: Math.min(5, Math.max(1, Number(rating))),
-    reviewText: reviewText.trim(),
-    reviewDate: new Date().toISOString().split('T')[0],
-    isApproved: true,
-    isSample: false,
-  };
-
-  db.createReview(review);
-  res.status(201).json({ message: 'Thank you for your review!', review });
+  res.json(data360);
 });
 
-// Settings
-apiRouter.get('/settings', (req, res) => {
-  res.json(db.getSettings());
-});
-
-// Contact Inquiries
-apiRouter.post('/inquiries', (req, res) => {
-  const { name, email, phone, subject, message } = req.body;
-  if (!name || !email || !message) {
-    return res.status(400).json({ error: 'Name, email, and message are required.' });
-  }
-
-  const inquiry: ContactInquiry = {
-    id: `inq-${Date.now()}`,
-    name: name.trim(),
-    email: email.trim(),
-    phone: phone ? phone.trim() : '',
-    subject: subject ? subject.trim() : 'General Inquiry',
-    message: message.trim(),
-    status: 'unread',
-    createdAt: new Date().toISOString(),
-  };
-
-  db.createInquiry(inquiry);
-  res.status(201).json({ message: 'Your inquiry has been submitted. Our concierge team will reach out shortly.', inquiry });
-});
-
-// ================= APPOINTMENTS (CUSTOMER / PUBLIC) =================
-
-// Available Slots
-apiRouter.get('/appointments/available-slots', (req, res) => {
-  const { date, serviceId, staffId } = req.query;
-  if (!date || !serviceId) {
-    return res.status(400).json({ error: 'Date and serviceId query parameters are required.' });
-  }
-
-  const slots = db.getAvailableSlots(String(date), String(serviceId), staffId ? String(staffId) : undefined);
-  res.json(slots);
-});
-
-// Create Appointment (Customer authenticated or Staff)
-apiRouter.post('/appointments', requireAuth, (req: AuthenticatedRequest, res) => {
-  const { serviceId, staffId, appointmentDate, timeSlot, notes } = req.body;
-
-  if (!serviceId || !appointmentDate || !timeSlot) {
-    return res.status(400).json({ error: 'Service, date, and time slot are required.' });
-  }
-
-  const service = db.getServiceById(serviceId);
-  if (!service) {
-    return res.status(404).json({ error: 'Specified service does not exist.' });
-  }
-
-  const staff = staffId ? db.getStaffById(staffId) : undefined;
-  const bookingNum = Math.floor(1000 + Math.random() * 9000);
-
-  const appointment: Appointment = {
-    id: `apt-${Date.now()}`,
-    bookingRef: `NF-2026-${bookingNum}`,
-    userId: req.user!.id,
-    customerName: req.user!.name,
-    customerEmail: req.user!.email,
-    customerPhone: req.user!.phone,
-    serviceId: service.id,
-    serviceName: service.name,
-    categoryName: service.categoryName || 'Integrated Wellness',
-    staffId: staff?.id,
-    staffName: staff?.name || 'Assigned Specialist',
-    appointmentDate,
-    timeSlot,
-    status: 'pending',
-    paymentStatus: 'pending',
-    amountInr: service.priceInr,
-    notes: notes ? notes.trim() : undefined,
-    createdAt: new Date().toISOString(),
-    updatedAt: new Date().toISOString(),
-  };
-
+apiRouter.post('/customers', requireRole(['admin', 'call_center', 'front_desk', 'manager']), (req: AuthenticatedRequest, res) => {
   try {
-    const created = db.createAppointment(appointment);
-    res.status(201).json({
-      message: 'Appointment successfully requested! Our concierge will confirm your slot.',
-      appointment: created,
-    });
+    const actorName = req.user?.name || 'Staff Member';
+    const customer = db.createCustomer(req.body, actorName);
+    res.status(201).json({ message: 'Customer record created successfully.', customer });
   } catch (err: any) {
-    res.status(409).json({ error: err.message || 'Slot is no longer available. Please choose another time.' });
+    res.status(409).json({ error: err.message || 'Failed to create customer.' });
   }
 });
 
-// My Appointments (Customer)
-apiRouter.get('/appointments/my', requireAuth, (req: AuthenticatedRequest, res) => {
-  const list = db.getAppointments({ userId: req.user!.id });
+apiRouter.put('/customers/:id', requireRole(['admin', 'call_center', 'front_desk', 'manager']), (req: AuthenticatedRequest, res) => {
+  const actorName = req.user?.name || 'Staff Member';
+  const updated = db.updateCustomer(req.params.id, req.body, actorName);
+  if (!updated) {
+    return res.status(404).json({ error: 'Customer not found.' });
+  }
+  res.json({ message: 'Customer updated successfully.', customer: updated });
+});
+
+// ================= CALL LOGS (CALL CENTER / ADMIN) =================
+apiRouter.get('/call-logs', requireRole(['admin', 'call_center', 'front_desk', 'manager']), (req, res) => {
+  const customerId = req.query.customerId ? String(req.query.customerId) : undefined;
+  const logs = db.getCallLogs(customerId);
+  res.json(logs);
+});
+
+apiRouter.post('/call-logs', requireRole(['admin', 'call_center']), (req: AuthenticatedRequest, res) => {
+  const { customerId, customerName, customerPhone, outcome, remarks, nextAction, followUpDate } = req.body;
+  if (!customerId || !outcome) {
+    return res.status(400).json({ error: 'Customer and call outcome are required.' });
+  }
+
+  const newLog = db.createCallLog({
+    customerId,
+    customerName: customerName || 'Client',
+    customerPhone: customerPhone || '+91 9000023050',
+    employeeId: req.user!.id,
+    employeeName: req.user!.name,
+    dateTime: new Date().toISOString(),
+    outcome,
+    remarks: remarks || '',
+    nextAction,
+    followUpDate
+  });
+
+  res.status(201).json({ message: 'Call log saved successfully.', callLog: newLog });
+});
+
+// ================= FOLLOW-UPS & CALLBACK QUEUE =================
+apiRouter.get('/follow-ups', requireRole(['admin', 'call_center', 'front_desk', 'manager']), (req, res) => {
+  const { status, period, employeeId, todayDate } = req.query;
+  const list = db.getFollowUps({
+    status: status ? String(status) : undefined,
+    period: period ? String(period) : undefined,
+    employeeId: employeeId ? String(employeeId) : undefined,
+    todayDate: todayDate ? String(todayDate) : undefined
+  });
   res.json(list);
 });
 
-// Customer Cancel Appointment
-apiRouter.patch('/appointments/:id/cancel', requireAuth, (req: AuthenticatedRequest, res) => {
-  const apt = db.getAppointmentById(req.params.id);
-  if (!apt) {
-    return res.status(404).json({ error: 'Appointment not found.' });
+apiRouter.post('/follow-ups', requireRole(['admin', 'call_center', 'front_desk', 'manager']), (req: AuthenticatedRequest, res) => {
+  const { customerId, customerName, customerPhone, type, dueDate, dueTime, reason } = req.body;
+  if (!customerId || !dueDate || !reason) {
+    return res.status(400).json({ error: 'Customer, due date, and reason are required.' });
   }
 
-  if (req.user!.role === 'customer' && apt.userId !== req.user!.id) {
-    return res.status(403).json({ error: 'Unauthorized to modify this appointment.' });
-  }
-
-  if (apt.status === 'completed' || apt.status === 'cancelled') {
-    return res.status(400).json({ error: `Cannot cancel an appointment that is already ${apt.status}.` });
-  }
-
-  const updated = db.updateAppointment(apt.id, {
-    status: 'cancelled',
-    paymentStatus: apt.paymentStatus === 'paid' ? 'refunded' : 'pending',
+  const item = db.createFollowUp({
+    customerId,
+    customerName: customerName || 'Client',
+    customerPhone: customerPhone || '+91 9000023050',
+    type: type || 'prospect',
+    dueDate,
+    dueTime: dueTime || '11:00 AM',
+    assignedEmployeeId: req.user!.id,
+    assignedEmployeeName: req.user!.name,
+    reason,
+    status: 'pending'
   });
 
-  res.json({ message: 'Appointment has been cancelled.', appointment: updated });
+  res.status(201).json({ message: 'Follow-up task scheduled.', followUp: item });
 });
 
-// Customer Support Chatbot
-apiRouter.post('/chat', (req, res) => {
-  const { message } = req.body;
-  if (!message) {
-    return res.status(400).json({ error: 'Message is required.' });
+apiRouter.patch('/follow-ups/:id', requireRole(['admin', 'call_center', 'front_desk', 'manager']), (req: AuthenticatedRequest, res) => {
+  const actorName = req.user?.name || 'Staff Member';
+  const updated = db.updateFollowUp(req.params.id, req.body, actorName);
+  if (!updated) {
+    return res.status(404).json({ error: 'Follow-up not found.' });
   }
+  res.json({ message: 'Follow-up updated.', followUp: updated });
+});
 
-  const text = message.toLowerCase();
-  let reply = '';
-  let quickActions: { label: string; action: string; url?: string }[] = [];
+// ================= APPOINTMENTS WITH OVERLAP PREVENTION =================
+apiRouter.get('/appointments/my', requireAuth, (req: AuthenticatedRequest, res) => {
+  const userId = req.user?.id || '';
+  const userEmail = (req.user?.email || '').toLowerCase();
+  const userPhone = (req.user?.phone || '').replace(/\D/g, '');
+  const all = db.getAppointments();
+  const mine = all.filter(a => 
+    (a.userId && a.userId === userId) ||
+    (a.customerEmail && a.customerEmail.toLowerCase() === userEmail) ||
+    (userPhone && a.customerPhone && a.customerPhone.replace(/\D/g, '') === userPhone)
+  );
+  res.json(mine);
+});
 
-  if (text.includes('book') || text.includes('appointment') || text.includes('reserve') || text.includes('schedule')) {
-    reply = 'You can book a consultation or treatment online seamlessly. Choose your preferred service, date, and specialist, and confirm your slot in under a minute.';
-    quickActions = [
-      { label: 'Book Appointment Now', action: 'navigate', url: '/book-appointment' },
-      { label: 'View All Services', action: 'navigate', url: '/services' }
-    ];
-  } else if (text.includes('hour') || text.includes('timing') || text.includes('open') || text.includes('time')) {
-    reply = 'NFYVE – The Change is open 7 days a week:\n• Weekdays: 7:00 AM – 9:00 PM\n• Saturdays: 8:00 AM – 8:00 PM\n• Sundays: 8:00 AM – 6:00 PM';
-    quickActions = [
-      { label: 'Book A Morning Slot', action: 'navigate', url: '/book-appointment' },
-      { label: 'Contact Us', action: 'navigate', url: '/contact' }
-    ];
-  } else if (text.includes('where') || text.includes('location') || text.includes('address') || text.includes('begumpet') || text.includes('reach')) {
-    reply = 'We are centrally located in Hyderabad at:\n4th Floor, Kura Towers, Begumpet, Hyderabad, Telangana 500016.\nValet parking and elevator access are readily available.';
-    quickActions = [
-      { label: 'View Map & Directions', action: 'navigate', url: '/contact' },
-      { label: 'Call +91 9000023050', action: 'call', url: 'tel:+919000023050' }
-    ];
-  } else if (text.includes('service') || text.includes('treatment') || text.includes('offer') || text.includes('skin') || text.includes('gym') || text.includes('diet') || text.includes('hair')) {
-    reply = 'NFYVE integrates six core pillars under one sanctuary roof:\n1. Clinical Aesthetics & Skin Health\n2. Medical Weight Loss & Body Contouring\n3. Fitness & Gym\n4. Salon, Hair & Beauty\n5. Nutri Food & Personalized Nutrition\n6. 360° Integrated Wellness Programs';
-    quickActions = [
-      { label: 'Explore All 6 Pillars', action: 'navigate', url: '/services' },
-      { label: 'Book Consultation', action: 'navigate', url: '/book-appointment' }
-    ];
-  } else if (text.includes('price') || text.includes('cost') || text.includes('fee')) {
-    reply = 'Our service fees are transparently listed for each treatment—from ₹1,800 for movement screens and ₹4,500 for Hydra-Infusion facials, up to our bespoke 360° transformations. No hidden fees.';
-    quickActions = [
-      { label: 'View Price List', action: 'navigate', url: '/services' },
-      { label: 'Speak with Specialist', action: 'navigate', url: '/contact' }
-    ];
-  } else {
-    reply = 'Thank you for reaching out to NFYVE – The Change! I can assist you with service details, scheduling an appointment, opening hours, or directions to our Begumpet sanctuary.';
-    quickActions = [
-      { label: 'Book Appointment', action: 'navigate', url: '/book-appointment' },
-      { label: 'Browse Services', action: 'navigate', url: '/services' },
-      { label: 'View Location', action: 'navigate', url: '/contact' }
-    ];
+apiRouter.post('/chat', (req, res) => {
+  const msg = (req.body.message || '').toLowerCase();
+  let reply = 'Welcome to NFYVE – The Change sanctuary in Begumpet, Hyderabad. How may our concierge assist your journey today?';
+  const quickActions = [
+    { label: 'Direct Call (+91 9000023050)', action: 'navigate', url: 'tel:+919000023050' },
+    { label: 'Explore Services', action: 'navigate', url: '/services' },
+    { label: 'Schedule Consultation', action: 'navigate', url: '/book-appointment' },
+    { label: 'Contact Reception', action: 'navigate', url: '/contact' }
+  ];
+
+  if (msg.includes('book') || msg.includes('appointment') || msg.includes('schedule')) {
+    reply = 'At NFYVE Begumpet, all appointments are scheduled through our dedicated clinical call centre (+91 90000 23050) or front desk to ensure doctor alignment and treatment room reservation.';
+  } else if (msg.includes('price') || msg.includes('cost')) {
+    reply = 'All aesthetic, metabolic, and wellness programs include bespoke physician diagnostics. Our concierge will be delighted to explain treatment packages and pricing.';
+  } else if (msg.includes('location') || msg.includes('address') || msg.includes('where')) {
+    reply = 'We are situated at 1-10-72/2, 2nd Floor, Grand View, Begumpet, Hyderabad, Telangana 500016. Valet parking is available for all visitors.';
   }
 
   res.json({ reply, quickActions });
 });
 
-// ================= PERSONALIZED STAFF PANEL ROUTES (/api/staff/*) =================
-
-// Helper to resolve current authenticated staff member
-function getStaffForUser(user: User) {
-  if (user.staffId) {
-    const staff = db.getStaffById(user.staffId);
-    if (staff) return staff;
+apiRouter.get('/appointments/check-conflict', requireRole(['admin', 'call_center', 'front_desk', 'manager', 'staff']), (req, res) => {
+  const { date, timeSlot, room, staffId, excludeId } = req.query;
+  if (!date || !timeSlot) {
+    return res.status(400).json({ error: 'date and timeSlot query params are required.' });
   }
-  return db.getStaffByEmail(user.email);
-}
 
-// Staff Profile
-apiRouter.get('/staff/me', requireRole(['staff']), (req: AuthenticatedRequest, res) => {
-  const staff = getStaffForUser(req.user!);
-  if (!staff) {
-    return res.status(404).json({ error: 'Staff profile not found.' });
-  }
-  res.json({ staff, user: req.user });
+  const result = db.checkConflict(
+    String(date), 
+    String(timeSlot), 
+    room ? (String(room) as RoomId) : undefined, 
+    staffId ? String(staffId) : undefined,
+    excludeId ? String(excludeId) : undefined
+  );
+  res.json(result);
 });
 
-// Staff Personalized Dashboard
-apiRouter.get('/staff/dashboard', requireRole(['staff']), (req: AuthenticatedRequest, res) => {
-  const staff = getStaffForUser(req.user!);
-  if (!staff) {
-    return res.status(404).json({ error: 'Staff profile not associated with this account.' });
-  }
-
-  const { period, startDate, endDate } = req.query;
-  try {
-    const dashboardData = db.getStaffDashboard(
-      staff.id,
-      (period as DateFilterPeriod) || 'this_month',
-      startDate ? String(startDate) : undefined,
-      endDate ? String(endDate) : undefined
-    );
-    res.json(dashboardData);
-  } catch (err: any) {
-    res.status(500).json({ error: err.message || 'Error generating staff dashboard.' });
-  }
-});
-
-// Staff My Appointments (Strictly scoped to logged-in staff member)
-apiRouter.get('/staff/appointments', requireRole(['staff']), (req: AuthenticatedRequest, res) => {
-  const staff = getStaffForUser(req.user!);
-  if (!staff) {
-    return res.status(404).json({ error: 'Staff profile not found.' });
-  }
-
-  const { status, dateFilter, search, startDate, endDate } = req.query;
-  const todayStr = '2026-10-02';
-
-  let start = startDate ? String(startDate) : undefined;
-  let end = endDate ? String(endDate) : undefined;
-
-  if (dateFilter === 'today') {
-    start = todayStr;
-    end = todayStr;
-  } else if (dateFilter === 'tomorrow') {
-    const tomorrow = new Date('2026-10-02T12:00:00Z');
-    tomorrow.setDate(tomorrow.getDate() + 1);
-    start = tomorrow.toISOString().split('T')[0];
-    end = start;
-  } else if (dateFilter === 'this_week') {
-    const range = db.calculateDateRange('this_week');
-    start = range.startStr;
-    end = range.endStr;
-  } else if (dateFilter === 'this_month') {
-    const range = db.calculateDateRange('this_month');
-    start = range.startStr;
-    end = range.endStr;
+apiRouter.get('/appointments', requireRole(['admin', 'call_center', 'front_desk', 'manager', 'staff']), (req: AuthenticatedRequest, res) => {
+  const { date, room, staffId, status, search } = req.query;
+  
+  // Attending Staff can only view their own appointments unless Admin / FrontDesk
+  let filterStaffId = staffId ? String(staffId) : undefined;
+  if (req.user!.role === 'staff') {
+    filterStaffId = req.user!.staffId || req.user!.id;
   }
 
   const appointments = db.getAppointments({
-    staffId: staff.id,
+    date: date ? String(date) : undefined,
+    room: room ? (String(room) as RoomId) : undefined,
+    staffId: filterStaffId,
     status: status ? String(status) : undefined,
     search: search ? String(search) : undefined,
-    startDate: start,
-    endDate: end,
   });
 
   res.json(appointments);
 });
 
-// Staff Mark Appointment Completed
-apiRouter.patch('/staff/appointments/:id/complete', requireRole(['staff']), (req: AuthenticatedRequest, res) => {
-  const staff = getStaffForUser(req.user!);
-  if (!staff) return res.status(404).json({ error: 'Staff profile not found' });
-
-  const apt = db.getAppointmentById(req.params.id);
-  if (!apt) return res.status(404).json({ error: 'Appointment not found' });
-
-  // Security check: staff member can only complete appointments assigned to them!
-  if (apt.staffId !== staff.id) {
-    return res.status(403).json({ error: 'Unauthorized: This appointment is assigned to another practitioner.' });
-  }
-
-  const updated = db.updateAppointment(apt.id, {
-    status: 'completed',
-    paymentStatus: 'paid', // Mark collected
-  });
-
-  res.json({ message: 'Appointment marked as completed.', appointment: updated });
-});
-
-// Staff Update Treatment Notes
-apiRouter.patch('/staff/appointments/:id/notes', requireRole(['staff']), (req: AuthenticatedRequest, res) => {
-  const staff = getStaffForUser(req.user!);
-  if (!staff) return res.status(404).json({ error: 'Staff profile not found' });
-
-  const apt = db.getAppointmentById(req.params.id);
-  if (!apt) return res.status(404).json({ error: 'Appointment not found' });
-
-  if (apt.staffId !== staff.id) {
-    return res.status(403).json({ error: 'Unauthorized: This appointment is assigned to another practitioner.' });
-  }
-
-  const { notes } = req.body;
-  const updated = db.updateAppointment(apt.id, { notes: String(notes).trim() });
-  res.json({ message: 'Treatment notes updated.', appointment: updated });
-});
-
-// Staff Personal Performance Analytics
-apiRouter.get('/staff/performance', requireRole(['staff']), (req: AuthenticatedRequest, res) => {
-  const staff = getStaffForUser(req.user!);
-  if (!staff) return res.status(404).json({ error: 'Staff profile not found' });
-
-  const { period, startDate, endDate } = req.query;
-  try {
-    const perf = db.getStaffPerformance(
-      staff.id,
-      (period as DateFilterPeriod) || 'this_month',
-      startDate ? String(startDate) : undefined,
-      endDate ? String(endDate) : undefined
-    );
-    res.json(perf);
-  } catch (err: any) {
-    res.status(500).json({ error: err.message || 'Error generating performance metrics.' });
-  }
-});
-
-// Staff Account Settings & Password Update
-apiRouter.put('/staff/profile', requireRole(['staff']), (req: AuthenticatedRequest, res) => {
-  const staff = getStaffForUser(req.user!);
-  if (!staff) return res.status(404).json({ error: 'Staff profile not found' });
-
-  const { name, phone, bio, currentPassword, newPassword } = req.body;
-
-  // Handle password change if requested
-  if (newPassword) {
-    if (!currentPassword) {
-      return res.status(400).json({ error: 'Current password is required to set a new password.' });
-    }
-    const fullUser = db.getUserById(req.user!.id) as any;
-    const isMatch = bcrypt.compareSync(currentPassword, fullUser.passwordHash);
-    if (!isMatch) {
-      return res.status(400).json({ error: 'Current password does not match.' });
-    }
-    if (newPassword.length < 6) {
-      return res.status(400).json({ error: 'New password must be at least 6 characters.' });
-    }
-    const salt = bcrypt.genSaltSync(10);
-    const passwordHash = bcrypt.hashSync(newPassword, salt);
-    db.updateUser(req.user!.id, { passwordHash } as any);
-  }
-
-  // Update staff details
-  const updatedStaff = db.updateStaffMember(staff.id, {
-    name: name?.trim() || staff.name,
-    phone: phone?.trim() || staff.phone,
-    bio: bio?.trim() || staff.bio,
-  });
-
-  res.json({ message: 'Profile details saved successfully.', staff: updatedStaff });
-});
-
-// ================= ADMIN PROTECTED ROUTES (/api/admin/*) =================
-
-// Admin Metrics (Calculated dynamically with comparison vs previous period)
-apiRouter.get('/admin/metrics', requireRole(['admin']), (req, res) => {
-  const { period, startDate, endDate } = req.query;
-  const analytics = db.getAnalytics(
-    (period as any) || 'this_month',
-    startDate ? String(startDate) : undefined,
-    endDate ? String(endDate) : undefined
-  );
-  res.json(analytics);
-});
-
-// Admin Analytics
-apiRouter.get('/admin/analytics', requireRole(['admin']), (req, res) => {
-  const { period, startDate, endDate } = req.query;
-  const analytics = db.getAnalytics(
-    (period as any) || 'this_month',
-    startDate ? String(startDate) : undefined,
-    endDate ? String(endDate) : undefined
-  );
-  res.json(analytics);
-});
-
-// Admin Appointments Management Table
-apiRouter.get('/admin/appointments', requireRole(['admin']), (req, res) => {
-  const { status, categoryId, search, startDate, endDate, staffId } = req.query;
-  const list = db.getAppointments({
-    status: status ? (String(status) as any) : undefined,
-    categoryId: categoryId ? String(categoryId) : undefined,
-    search: search ? String(search) : undefined,
-    startDate: startDate ? String(startDate) : undefined,
-    endDate: endDate ? String(endDate) : undefined,
-    staffId: staffId ? String(staffId) : undefined,
-  });
-  res.json(list);
-});
-
-// Admin Status Updates
-apiRouter.patch('/admin/appointments/:id/status', requireRole(['admin']), (req, res) => {
-  const { status, paymentStatus, staffId, notes } = req.body;
+apiRouter.get('/appointments/:id', requireRole(['admin', 'call_center', 'front_desk', 'manager', 'staff']), (req, res) => {
   const apt = db.getAppointmentById(req.params.id);
   if (!apt) {
     return res.status(404).json({ error: 'Appointment not found.' });
   }
-
-  const updates: Partial<Appointment> = {};
-  if (status) updates.status = status;
-  if (paymentStatus) updates.paymentStatus = paymentStatus;
-  if (staffId) {
-    const st = db.getStaffById(staffId);
-    updates.staffId = staffId;
-    if (st) updates.staffName = st.name;
-  }
-  if (notes !== undefined) updates.notes = notes;
-
-  const updated = db.updateAppointment(apt.id, updates);
-  res.json({ message: 'Appointment updated successfully.', appointment: updated });
+  res.json(apt);
 });
 
-// Admin Reassign Staff
-apiRouter.patch('/admin/appointments/:id/reassign', requireRole(['admin']), (req, res) => {
-  const { staffId } = req.body;
-  if (!staffId) return res.status(400).json({ error: 'Staff ID is required.' });
-
-  const staff = db.getStaffById(staffId);
-  if (!staff) return res.status(404).json({ error: 'Selected staff member not found.' });
-
-  const updated = db.updateAppointment(req.params.id, {
-    staffId: staff.id,
-    staffName: staff.name,
-  });
-
-  res.json({ message: `Appointment reassigned to ${staff.name}.`, appointment: updated });
+apiRouter.post('/appointments', requireRole(['admin', 'call_center', 'front_desk', 'manager']), (req: AuthenticatedRequest, res) => {
+  try {
+    const actor = req.user?.name || 'Staff Member';
+    const created = db.createAppointment(req.body, actor);
+    res.status(201).json({ message: 'Appointment booked successfully.', appointment: created });
+  } catch (err: any) {
+    res.status(409).json({ error: err.message || 'Unable to book appointment due to resource conflict.' });
+  }
 });
 
-// Admin Reschedule Appointment
-apiRouter.patch('/admin/appointments/:id/reschedule', requireRole(['admin']), (req, res) => {
-  const { appointmentDate, timeSlot } = req.body;
-  if (!appointmentDate || !timeSlot) {
-    return res.status(400).json({ error: 'Date and time slot are required.' });
+apiRouter.patch('/appointments/:id/status', requireRole(['admin', 'call_center', 'front_desk', 'manager', 'staff']), (req: AuthenticatedRequest, res) => {
+  const { status, reason } = req.body;
+  if (!status) {
+    return res.status(400).json({ error: 'Status is required.' });
   }
-
-  const updated = db.updateAppointment(req.params.id, {
-    appointmentDate,
-    timeSlot,
-    status: 'confirmed',
-  });
-
-  res.json({ message: 'Appointment rescheduled successfully.', appointment: updated });
-});
-
-// Admin Walk-In / Phone Booking Creation
-apiRouter.post('/admin/appointments/walkin', requireRole(['admin']), (req, res) => {
-  const { customerName, customerEmail, customerPhone, serviceId, staffId, appointmentDate, timeSlot, paymentStatus, notes } = req.body;
-
-  if (!customerName || !customerPhone || !serviceId || !appointmentDate || !timeSlot) {
-    return res.status(400).json({ error: 'Customer name, phone, service, date, and slot are required.' });
-  }
-
-  const service = db.getServiceById(serviceId);
-  if (!service) {
-    return res.status(404).json({ error: 'Service not found.' });
-  }
-
-  const staff = staffId ? db.getStaffById(staffId) : undefined;
-  const bookingNum = Math.floor(1000 + Math.random() * 9000);
-
-  let cust = db.getUserByEmail(customerEmail || '');
-  let custId = cust ? cust.id : `usr-walkin-${Date.now()}`;
-
-  const apt: Appointment = {
-    id: `apt-${Date.now()}`,
-    bookingRef: `NF-2026-${bookingNum}`,
-    userId: custId,
-    customerName: customerName.trim(),
-    customerEmail: customerEmail ? customerEmail.trim() : 'walkin@nfyve.com',
-    customerPhone: customerPhone.trim(),
-    serviceId: service.id,
-    serviceName: service.name,
-    categoryName: service.categoryName || 'General',
-    staffId: staff?.id,
-    staffName: staff?.name || 'Front Desk Assigned',
-    appointmentDate,
-    timeSlot,
-    status: 'confirmed',
-    paymentStatus: paymentStatus || 'paid',
-    amountInr: service.priceInr,
-    notes: notes || 'Walk-in / Phone reservation',
-    createdAt: new Date().toISOString(),
-    updatedAt: new Date().toISOString(),
-  };
 
   try {
-    const created = db.createAppointment(apt);
-    res.status(201).json({ message: 'Walk-in appointment recorded successfully.', appointment: created });
-  } catch (err: any) {
-    res.status(409).json({ error: err.message || 'Slot already booked.' });
-  }
-});
-
-// Customer Database Management
-apiRouter.get('/admin/customers', requireRole(['admin']), (req, res) => {
-  const customers = db.getAllCustomers();
-  const allAppointments = db.getAppointments();
-
-  const customerData = customers.map(c => {
-    const userApts = allAppointments.filter(a => a.userId === c.id);
-    const totalSpend = userApts
-      .filter(a => a.status === 'completed' || a.paymentStatus === 'paid')
-      .reduce((sum, a) => sum + a.amountInr, 0);
-
-    const lastBooking = userApts[0]?.appointmentDate || 'None';
-    const completedApts = userApts.filter(a => a.status === 'completed');
-    const upcomingApts = userApts.filter(a => a.appointmentDate >= '2026-10-02' && a.status !== 'cancelled');
-
-    // Preferred services
-    const srvCount: Record<string, number> = {};
-    userApts.forEach(a => {
-      srvCount[a.serviceName] = (srvCount[a.serviceName] || 0) + 1;
+    const updated = db.updateAppointmentStatus(req.params.id, status as AppointmentStatus, {
+      reason,
+      actor: req.user?.name || 'Staff'
     });
-    const preferredService = Object.keys(srvCount).sort((a, b) => srvCount[b] - srvCount[a])[0] || 'Hydra-Infusion Facial';
 
-    return {
-      id: c.id,
-      name: c.name,
-      email: c.email,
-      phone: c.phone,
-      registrationDate: c.createdAt.split('T')[0],
-      totalBookings: userApts.length,
-      completedBookings: completedApts.length,
-      upcomingCount: upcomingApts.length,
-      totalSpendInr: totalSpend,
-      lastBooking,
-      preferredService,
-    };
-  });
+    if (!updated) {
+      return res.status(404).json({ error: 'Appointment not found.' });
+    }
 
-  res.json(customerData);
-});
-
-apiRouter.get('/admin/customers/:id', requireRole(['admin']), (req, res) => {
-  const customer = db.getUserById(req.params.id);
-  if (!customer) {
-    return res.status(404).json({ error: 'Customer not found.' });
+    res.json({ message: 'Appointment status updated.', appointment: updated });
+  } catch (err: any) {
+    res.status(400).json({ error: err.message || 'Invalid status transition.' });
   }
-  const appointments = db.getAppointments({ userId: customer.id });
-  const { passwordHash: _, ...safeCustomer } = customer as any;
-  res.json({ customer: safeCustomer, appointments });
 });
 
-// Admin Staff Management (CRUD + Performance summary)
-apiRouter.get('/admin/staff', requireRole(['admin']), (req, res) => {
-  const staff = db.getStaff(false);
-  const appointments = db.getAppointments();
-
-  const enriched = staff.map(s => {
-    const staffApts = appointments.filter(a => a.staffId === s.id);
-    const completedApts = staffApts.filter(a => a.status === 'completed');
-    const revenue = completedApts.reduce((sum, a) => sum + a.amountInr, 0);
-
-    return {
-      ...s,
-      totalAssigned: staffApts.length,
-      completedCount: completedApts.length,
-      totalRevenueGenerated: revenue,
-    };
-  });
-
-  res.json(enriched);
-});
-
-apiRouter.post('/admin/staff', requireRole(['admin']), (req, res) => {
-  const { name, email, phone, roleTitle, specialties, bio, password } = req.body;
-  if (!name || !email || !roleTitle) {
-    return res.status(400).json({ error: 'Name, email, and role title are required.' });
+apiRouter.post('/appointments/:id/reschedule', requireRole(['admin', 'call_center', 'front_desk', 'manager']), (req: AuthenticatedRequest, res) => {
+  const { newDate, newTimeSlot, newRoom, newStaffId } = req.body;
+  if (!newDate || !newTimeSlot) {
+    return res.status(400).json({ error: 'newDate and newTimeSlot are required.' });
   }
 
   try {
-    const newStaff = db.createStaffMember({
-      name,
-      email,
-      phone: phone || '+91 9000000000',
-      roleTitle,
-      specialties: Array.isArray(specialties) && specialties.length > 0 ? specialties : [roleTitle],
-      bio: bio || '',
-      password,
-    });
-    res.status(201).json({ message: 'Staff member created successfully.', staff: newStaff });
+    const actor = req.user?.name || 'Staff Member';
+    const rescheduled = db.rescheduleAppointment(req.params.id, newDate, newTimeSlot, newRoom, newStaffId, actor);
+    res.json({ message: 'Appointment successfully rescheduled.', appointment: rescheduled });
   } catch (err: any) {
-    res.status(400).json({ error: err.message || 'Error creating staff member.' });
+    res.status(409).json({ error: err.message || 'Could not reschedule due to resource conflict.' });
   }
 });
 
-apiRouter.put('/admin/staff/:id', requireRole(['admin']), (req, res) => {
-  const updated = db.updateStaffMember(req.params.id, req.body);
-  if (!updated) return res.status(404).json({ error: 'Staff member not found.' });
-  res.json({ message: 'Staff profile updated.', staff: updated });
+// ================= CONSULTATIONS =================
+apiRouter.get('/consultations', requireRole(['admin', 'call_center', 'front_desk', 'manager', 'staff']), (req, res) => {
+  const customerId = req.query.customerId ? String(req.query.customerId) : undefined;
+  const list = db.getConsultations(customerId);
+  res.json(list);
 });
 
-apiRouter.patch('/admin/staff/:id/toggle', requireRole(['admin']), (req, res) => {
-  const updated = db.toggleStaffStatus(req.params.id);
-  if (!updated) return res.status(404).json({ error: 'Staff member not found.' });
-  res.json({ message: `Staff status set to ${updated.isActive ? 'Active' : 'Inactive'}.`, staff: updated });
+apiRouter.post('/consultations', requireRole(['admin', 'front_desk', 'manager', 'staff']), (req: AuthenticatedRequest, res) => {
+  const actor = req.user?.name || 'Staff Member';
+  const newConsultation = db.createConsultation(req.body, actor);
+  res.status(201).json({ message: 'Consultation recorded successfully.', consultation: newConsultation });
 });
 
-apiRouter.post('/admin/staff/:id/reset-password', requireRole(['admin']), (req, res) => {
-  const { newPassword } = req.body;
-  if (!newPassword || newPassword.length < 6) {
-    return res.status(400).json({ error: 'Password must be at least 6 characters.' });
-  }
+// ================= PACKAGES =================
+apiRouter.get('/packages', requireRole(['admin', 'front_desk', 'manager', 'staff']), (req, res) => {
+  const customerId = req.query.customerId ? String(req.query.customerId) : undefined;
+  const list = db.getPackages(customerId);
+  res.json(list);
+});
+
+apiRouter.post('/packages', requireRole(['admin', 'front_desk', 'manager']), (req: AuthenticatedRequest, res) => {
+  const actor = req.user?.name || 'Staff Member';
+  const pkg = db.createPackage(req.body, actor);
+  res.status(201).json({ message: 'Package enrolled successfully.', package: pkg });
+});
+
+// ================= TREATMENT SESSIONS =================
+apiRouter.get('/sessions', requireRole(['admin', 'front_desk', 'manager', 'staff']), (req, res) => {
+  const { packageId, customerId } = req.query;
+  const list = db.getSessions(
+    packageId ? String(packageId) : undefined, 
+    customerId ? String(customerId) : undefined
+  );
+  res.json(list);
+});
+
+apiRouter.post('/sessions', requireRole(['admin', 'front_desk', 'manager']), (req: AuthenticatedRequest, res) => {
+  const actor = req.user?.name || 'Staff Member';
+  const session = db.createSession(req.body, actor);
+  res.status(201).json({ message: 'Treatment session scheduled.', session });
+});
+
+apiRouter.post('/sessions/:id/complete', requireRole(['admin', 'front_desk', 'manager', 'staff']), (req: AuthenticatedRequest, res) => {
   try {
-    db.resetStaffPassword(req.params.id, newPassword);
-    res.json({ message: 'Staff access password reset successfully.' });
+    const actor = req.user?.name || 'Specialist';
+    const completed = db.completeSession(req.params.id, req.body, actor);
+    res.json({ message: 'Session marked as completed. Package updated.', session: completed });
   } catch (err: any) {
-    res.status(400).json({ error: err.message || 'Error resetting password.' });
+    res.status(400).json({ error: err.message || 'Failed to complete session.' });
   }
 });
 
-// Services Management (Admin only)
-apiRouter.post('/admin/services', requireRole(['admin']), (req, res) => {
-  const { name, categoryId, shortDesc, fullDesc, durationMins, priceInr, imageUrl, benefits, precautions } = req.body;
-  if (!name || !categoryId || !priceInr) {
-    return res.status(400).json({ error: 'Name, category, and price are required.' });
-  }
-
-  const slug = name.toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/(^-|-$)+/g, '');
-  const newService: Service = {
-    id: `srv-${Date.now()}`,
-    categoryId,
-    name: name.trim(),
-    slug,
-    shortDesc: shortDesc?.trim() || '',
-    fullDesc: fullDesc?.trim() || '',
-    durationMins: Number(durationMins) || 60,
-    priceInr: Number(priceInr),
-    imageUrl: imageUrl || '/src/assets/images/nfyve_hero_wellness_1790943426252.jpg',
-    benefits: Array.isArray(benefits) ? benefits : [benefits || 'Consultation with specialist'],
-    precautions: Array.isArray(precautions) ? precautions : [],
-    isActive: true,
-    createdAt: new Date().toISOString(),
-  };
-
-  db.createService(newService);
-  res.status(201).json({ message: 'Service created successfully.', service: newService });
+// ================= INVOICES & BILLING =================
+apiRouter.get('/invoices', requireRole(['admin', 'front_desk', 'manager']), (req, res) => {
+  const customerId = req.query.customerId ? String(req.query.customerId) : undefined;
+  const list = db.getInvoices(customerId);
+  res.json(list);
 });
 
-apiRouter.put('/admin/services/:id', requireRole(['admin']), (req, res) => {
-  const updated = db.updateService(req.params.id, req.body);
-  if (!updated) {
-    return res.status(404).json({ error: 'Service not found.' });
-  }
-  res.json({ message: 'Service updated.', service: updated });
+apiRouter.get('/invoices/:id', requireRole(['admin', 'front_desk', 'manager']), (req, res) => {
+  const inv = db.getInvoiceById(req.params.id);
+  if (!inv) return res.status(404).json({ error: 'Invoice not found.' });
+  res.json(inv);
 });
 
-apiRouter.delete('/admin/services/:id', requireRole(['admin']), (req, res) => {
-  const success = db.deleteService(req.params.id);
-  if (!success) {
-    return res.status(404).json({ error: 'Service not found.' });
-  }
-  res.json({ message: 'Service removed.' });
+apiRouter.post('/invoices', requireRole(['admin', 'front_desk']), (req: AuthenticatedRequest, res) => {
+  const actor = req.user?.name || 'Front Desk';
+  const inv = db.createInvoice(req.body, actor);
+  res.status(201).json({ message: 'Invoice created successfully.', invoice: inv });
 });
 
-// Inquiries Management (Admin only)
-apiRouter.get('/admin/inquiries', requireRole(['admin']), (req, res) => {
-  res.json(db.getInquiries());
+// ================= PAYMENTS =================
+apiRouter.get('/payments', requireRole(['admin', 'front_desk', 'manager']), (req, res) => {
+  const { invoiceId, customerId } = req.query;
+  const list = db.getPayments(
+    invoiceId ? String(invoiceId) : undefined,
+    customerId ? String(customerId) : undefined
+  );
+  res.json(list);
 });
 
-apiRouter.patch('/admin/inquiries/:id/status', requireRole(['admin']), (req, res) => {
-  const { status } = req.body;
-  const updated = db.updateInquiryStatus(req.params.id, status);
-  if (!updated) {
-    return res.status(404).json({ error: 'Inquiry not found.' });
-  }
+apiRouter.post('/payments', requireRole(['admin', 'front_desk']), (req: AuthenticatedRequest, res) => {
+  const actor = req.user?.name || 'Front Desk';
+  const payment = db.createPayment(req.body, actor);
+  res.status(201).json({ message: 'Payment recorded successfully.', payment });
+});
+
+// ================= PAYMENT POSTPONEMENTS & FOLLOW-UPS =================
+apiRouter.get('/payment-postponements', requireRole(['admin', 'front_desk', 'manager']), (req, res) => {
+  const { status } = req.query;
+  const list = db.getPaymentFollowUps(status ? String(status) : undefined);
+  res.json(list);
+});
+
+apiRouter.post('/payment-postponements', requireRole(['admin', 'front_desk']), (req: AuthenticatedRequest, res) => {
+  const actor = req.user?.name || 'Front Desk';
+  const postponement = db.createPaymentPostponement(req.body, actor);
+  res.status(201).json({ message: 'Payment postponement recorded.', postponement });
+});
+
+// ================= AUDIT LOGS =================
+apiRouter.get('/audit-logs', requireRole(['admin', 'manager']), (req, res) => {
+  const { recordType, recordId } = req.query;
+  const logs = db.getAuditLogs(
+    recordType ? String(recordType) : undefined,
+    recordId ? String(recordId) : undefined
+  );
+  res.json(logs);
+});
+
+// ================= OPERATIONAL ANALYTICS & KPIS =================
+apiRouter.get('/analytics', requireRole(['admin', 'manager']), (req, res) => {
+  const period = (req.query.period as DateFilterPeriod) || 'this_month';
+  const summary = db.getAnalyticsSummary(period);
+  res.json(summary);
+});
+
+// ================= STAFF DASHBOARD & PERFORMANCE =================
+apiRouter.get('/staff/me', requireRole(['staff', 'admin']), (req: AuthenticatedRequest, res) => {
+  const staffId = req.user?.staffId || req.user?.id || '';
+  const staff = (staffId ? db.getStaffById(staffId) : null) || db.getStaff()[0];
+  res.json({ staff, user: req.user });
+});
+
+apiRouter.patch('/staff/:id/toggle', requireRole(['admin']), (req, res) => {
+  const staff = db.getStaffById(req.params.id);
+  if (!staff) return res.status(404).json({ error: 'Staff member not found.' });
+  const updated = db.updateStaff(req.params.id, { isActive: !staff.isActive });
   res.json(updated);
 });
 
-// Review Moderation (Admin only)
-apiRouter.get('/admin/reviews', requireRole(['admin']), (req, res) => {
+apiRouter.post('/staff/:id/reset-password', requireRole(['admin']), (req, res) => {
+  res.json({ message: 'Temporary reset instructions dispatched.' });
+});
+
+apiRouter.get('/staff/my-dashboard', requireRole(['staff', 'admin']), (req: AuthenticatedRequest, res) => {
+  const staffId = req.user?.staffId || req.user?.id || '';
+  const data = staffId ? db.getStaffDashboardData(staffId) : null;
+  if (!data) {
+    // If admin viewing staff route, fallback to first staff
+    const firstStaff = db.getStaff()[0];
+    if (firstStaff) {
+      return res.json(db.getStaffDashboardData(firstStaff.id));
+    }
+    return res.status(404).json({ error: 'Staff profile not found.' });
+  }
+  res.json(data);
+});
+
+apiRouter.get('/staff/:id/dashboard', requireRole(['admin', 'manager']), (req, res) => {
+  const data = db.getStaffDashboardData(req.params.id);
+  if (!data) return res.status(404).json({ error: 'Staff member not found.' });
+  res.json(data);
+});
+
+// ================= PUBLIC / SHARED CONTENT ROUTES =================
+apiRouter.get('/categories', (req, res) => {
+  res.json(db.getCategories());
+});
+
+apiRouter.get('/services', (req, res) => {
+  res.json(db.getServices(true));
+});
+
+apiRouter.get('/services/:id', (req, res) => {
+  const service = db.getServiceById(req.params.id);
+  if (!service) return res.status(404).json({ error: 'Service not found.' });
+  res.json(service);
+});
+
+apiRouter.post('/services', requireRole(['admin']), (req, res) => {
+  const created = db.createService(req.body);
+  res.status(201).json(created);
+});
+
+apiRouter.put('/services/:id', requireRole(['admin']), (req, res) => {
+  const updated = db.updateService(req.params.id, req.body);
+  if (!updated) return res.status(404).json({ error: 'Service not found.' });
+  res.json(updated);
+});
+
+apiRouter.delete('/services/:id', requireRole(['admin']), (req, res) => {
+  const ok = db.deleteService(req.params.id);
+  if (!ok) return res.status(404).json({ error: 'Service not found.' });
+  res.json({ success: true });
+});
+
+apiRouter.get('/staff', (req, res) => {
+  res.json(db.getStaff(true));
+});
+
+apiRouter.get('/staff/:id', (req, res) => {
+  const stf = db.getStaffById(req.params.id);
+  if (!stf) return res.status(404).json({ error: 'Staff member not found.' });
+  res.json(stf);
+});
+
+apiRouter.post('/staff', requireRole(['admin']), (req, res) => {
+  const created = db.createStaff(req.body);
+  res.status(201).json(created);
+});
+
+apiRouter.put('/staff/:id', requireRole(['admin']), (req, res) => {
+  const updated = db.updateStaff(req.params.id, req.body);
+  if (!updated) return res.status(404).json({ error: 'Staff not found.' });
+  res.json(updated);
+});
+
+apiRouter.get('/reviews', (req, res) => {
+  res.json(db.getReviews(true));
+});
+
+apiRouter.get('/reviews/all', requireRole(['admin']), (req, res) => {
   res.json(db.getReviews(false));
 });
 
-apiRouter.patch('/admin/reviews/:id/approve', requireRole(['admin']), (req, res) => {
-  const { isApproved } = req.body;
-  const updated = db.approveReview(req.params.id, Boolean(isApproved));
-  if (!updated) {
-    return res.status(404).json({ error: 'Review not found.' });
-  }
+apiRouter.post('/reviews', (req, res) => {
+  const review = db.createReview(req.body);
+  res.status(201).json(review);
+});
+
+apiRouter.patch('/reviews/:id/approve', requireRole(['admin']), (req, res) => {
+  const updated = db.approveReview(req.params.id, req.body.isApproved);
+  if (!updated) return res.status(404).json({ error: 'Review not found.' });
   res.json(updated);
 });
 
-// Settings Update (Admin only)
-apiRouter.put('/admin/settings', requireRole(['admin']), (req, res) => {
+apiRouter.get('/inquiries', requireRole(['admin', 'call_center', 'front_desk']), (req, res) => {
+  res.json(db.getInquiries());
+});
+
+apiRouter.post('/inquiries', (req, res) => {
+  const inq = db.createInquiry(req.body);
+  res.status(201).json(inq);
+});
+
+apiRouter.patch('/inquiries/:id/status', requireRole(['admin', 'call_center', 'front_desk']), (req, res) => {
+  const updated = db.updateInquiryStatus(req.params.id, req.body.status);
+  if (!updated) return res.status(404).json({ error: 'Inquiry not found.' });
+  res.json(updated);
+});
+
+apiRouter.get('/settings', (req, res) => {
+  res.json(db.getSettings());
+});
+
+apiRouter.put('/settings', requireRole(['admin']), (req, res) => {
   const updated = db.updateSettings(req.body);
-  res.json({ message: 'Settings saved.', settings: updated });
+  res.json(updated);
 });

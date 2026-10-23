@@ -42,6 +42,26 @@ import { StaffAppointmentsPage } from './pages/staff/StaffAppointmentsPage';
 import { StaffClientsPage } from './pages/staff/StaffClientsPage';
 import { StaffPerformancePage } from './pages/staff/StaffPerformancePage';
 import { StaffProfilePage } from './pages/staff/StaffProfilePage';
+
+// Call Center components & pages
+import { CallCenterLayout } from './components/callcenter/CallCenterLayout';
+import { CallCenterOverviewPage } from './pages/callcenter/CallCenterOverviewPage';
+import { CallCenterProspectsPage } from './pages/callcenter/CallCenterProspectsPage';
+import { CallCenterFollowUpsPage } from './pages/callcenter/CallCenterFollowUpsPage';
+import { CallCenterHistoryPage } from './pages/callcenter/CallCenterHistoryPage';
+import { CallCenterAppointmentsPage } from './pages/callcenter/CallCenterAppointmentsPage';
+
+// Front Desk components & pages
+import { FrontDeskLayout } from './components/frontdesk/FrontDeskLayout';
+import { FrontDeskOverviewPage } from './pages/frontdesk/FrontDeskOverviewPage';
+import { FrontDeskCalendarPage } from './pages/frontdesk/FrontDeskCalendarPage';
+import { FrontDeskWalkInPage } from './pages/frontdesk/FrontDeskWalkInPage';
+import { FrontDeskCheckInQueuePage } from './pages/frontdesk/FrontDeskCheckInQueuePage';
+import { FrontDeskConsultationsPage } from './pages/frontdesk/FrontDeskConsultationsPage';
+import { FrontDeskSessionsPage } from './pages/frontdesk/FrontDeskSessionsPage';
+import { FrontDeskBillingPage } from './pages/frontdesk/FrontDeskBillingPage';
+import { FrontDeskPaymentFollowUpsPage } from './pages/frontdesk/FrontDeskPaymentFollowUpsPage';
+
 import { FirebaseSetupNotice } from './components/common/FirebaseSetupNotice';
 
 // Route Guards
@@ -106,6 +126,50 @@ const StaffProtectedRoute: React.FC = () => {
     <StaffLayout>
       <Outlet />
     </StaffLayout>
+  );
+};
+
+const CallCenterProtectedRoute: React.FC = () => {
+  const { user, isLoading } = useAuth();
+
+  if (isLoading) {
+    return <div className="min-h-screen flex items-center justify-center text-xs text-[#777A70]">Verifying credentials...</div>;
+  }
+
+  if (!user) {
+    return <Navigate to="/login" replace />;
+  }
+
+  if (user.role !== 'call_center' && user.role !== 'admin' && user.role !== 'manager') {
+    return <Navigate to="/account" replace />;
+  }
+
+  return (
+    <CallCenterLayout>
+      <Outlet />
+    </CallCenterLayout>
+  );
+};
+
+const FrontDeskProtectedRoute: React.FC = () => {
+  const { user, isLoading } = useAuth();
+
+  if (isLoading) {
+    return <div className="min-h-screen flex items-center justify-center text-xs text-[#777A70]">Verifying credentials...</div>;
+  }
+
+  if (!user) {
+    return <Navigate to="/login" replace />;
+  }
+
+  if (user.role !== 'front_desk' && user.role !== 'admin' && user.role !== 'manager') {
+    return <Navigate to="/account" replace />;
+  }
+
+  return (
+    <FrontDeskLayout>
+      <Outlet />
+    </FrontDeskLayout>
   );
 };
 
@@ -175,6 +239,27 @@ export default function App() {
             <Route path="clients" element={<StaffClientsPage />} />
             <Route path="performance" element={<StaffPerformancePage />} />
             <Route path="profile" element={<StaffProfilePage />} />
+          </Route>
+
+          {/* Call Center Protected routes */}
+          <Route path="/call-center" element={<CallCenterProtectedRoute />}>
+            <Route index element={<CallCenterOverviewPage />} />
+            <Route path="prospects" element={<CallCenterProspectsPage />} />
+            <Route path="follow-ups" element={<CallCenterFollowUpsPage />} />
+            <Route path="history" element={<CallCenterHistoryPage />} />
+            <Route path="appointments" element={<CallCenterAppointmentsPage />} />
+          </Route>
+
+          {/* Front Desk Protected routes */}
+          <Route path="/front-desk" element={<FrontDeskProtectedRoute />}>
+            <Route index element={<FrontDeskOverviewPage />} />
+            <Route path="calendar" element={<FrontDeskCalendarPage />} />
+            <Route path="walk-in" element={<FrontDeskWalkInPage />} />
+            <Route path="check-in" element={<FrontDeskCheckInQueuePage />} />
+            <Route path="consultations" element={<FrontDeskConsultationsPage />} />
+            <Route path="sessions" element={<FrontDeskSessionsPage />} />
+            <Route path="billing" element={<FrontDeskBillingPage />} />
+            <Route path="payment-follow-ups" element={<FrontDeskPaymentFollowUpsPage />} />
           </Route>
 
           {/* Fallback */}

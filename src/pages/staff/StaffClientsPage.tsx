@@ -44,10 +44,10 @@ export const StaffClientsPage: React.FC = () => {
         const key = a.customerEmail || a.customerPhone || a.customerName;
         if (!map[key]) {
           map[key] = {
-            customerId: a.userId,
-            name: a.customerName,
-            email: a.customerEmail,
-            phone: a.customerPhone,
+            customerId: a.userId || a.customerId || '',
+            name: a.customerName || 'Client',
+            email: a.customerEmail || '',
+            phone: a.customerPhone || '',
             appointments: [],
             totalSessions: 0,
             completedSessions: 0,

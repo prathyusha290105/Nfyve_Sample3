@@ -17,13 +17,13 @@ export const Footer: React.FC = () => {
             </p>
           </div>
           <div className="md:col-span-5 flex flex-col sm:flex-row gap-3 md:justify-end">
-            <Link
-              to="/book-appointment"
-              className="inline-flex items-center justify-center gap-2 px-6 py-3 text-xs font-semibold uppercase tracking-wider text-[#1E3B2E] bg-[#FAF9F5] hover:bg-white rounded-lg shadow-sm transition-smooth whitespace-nowrap"
+            <a
+              href="tel:+919000023050"
+              className="inline-flex items-center justify-center gap-2 px-6 py-3 text-xs font-bold uppercase tracking-wider text-[#1E3B2E] bg-[#FAF9F5] hover:bg-white rounded-lg shadow-sm transition-smooth whitespace-nowrap"
             >
-              <span>Book Appointment</span>
-              <ArrowRight className="w-3.5 h-3.5" />
-            </Link>
+              <Phone className="w-3.5 h-3.5 text-[#1E3B2E]" />
+              <span>Call to Enquire</span>
+            </a>
             <Link
               to="/contact"
               className="inline-flex items-center justify-center px-6 py-3 text-xs font-semibold uppercase tracking-wider text-white border border-[#A8B8A0]/40 hover:border-white rounded-lg transition-smooth whitespace-nowrap"

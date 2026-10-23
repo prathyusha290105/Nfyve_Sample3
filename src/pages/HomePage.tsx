@@ -12,7 +12,8 @@ import {
   Star, 
   Clock, 
   MapPin, 
-  CheckCircle2 
+  CheckCircle2,
+  Phone
 } from 'lucide-react';
 import { 
   HERO_IMAGE, 
@@ -146,13 +147,14 @@ export const HomePage: React.FC = () => {
 
             {/* CTAs */}
             <div className="flex flex-col sm:flex-row items-stretch sm:items-center gap-3 pt-2">
-              <Link
-                to="/book-appointment"
+              <a
+                href="tel:+919000023050"
                 className="inline-flex items-center justify-center gap-2 px-6 py-3.5 text-xs font-semibold uppercase tracking-wider text-white bg-[#244B3A] hover:bg-[#1a372a] rounded-lg shadow-sm hover:shadow-md transition-smooth"
               >
-                <span>Book Appointment</span>
+                <Phone className="w-4 h-4 text-[#A8B8A0]" />
+                <span>Call to Enquire</span>
                 <ArrowRight className="w-4 h-4" />
-              </Link>
+              </a>
               <Link
                 to="/services"
                 className="inline-flex items-center justify-center px-6 py-3.5 text-xs font-semibold uppercase tracking-wider text-[#244B3A] bg-[#F0EEE5] hover:bg-[#E5E2D6] border border-[#DDD9CE] rounded-lg transition-smooth"
@@ -550,17 +552,18 @@ export const HomePage: React.FC = () => {
               Ready to Experience The Change?
             </h2>
             <p className="text-xs sm:text-sm text-[#A8B8A0] leading-relaxed">
-              Schedule your appointment online or contact our Begumpet concierge for guidance on customized wellness programs.
+              Every transformation begins with clinical understanding. Contact our Begumpet concierge at +91 90000 23050 to schedule your private consultation with our aesthetic doctors, fitness specialists, and clinical nutritionists.
             </p>
           </div>
 
           <div className="flex flex-col sm:flex-row items-center justify-center gap-3">
-            <Link
-              to="/book-appointment"
-              className="w-full sm:w-auto px-6 py-3.5 text-xs font-semibold uppercase tracking-wider text-[#244B3A] bg-[#FAF9F5] hover:bg-white rounded-lg shadow-sm transition-smooth whitespace-nowrap"
+            <a
+              href="tel:+919000023050"
+              className="w-full sm:w-auto px-6 py-3.5 text-xs font-semibold uppercase tracking-wider text-[#244B3A] bg-[#FAF9F5] hover:bg-white rounded-lg shadow-sm transition-smooth whitespace-nowrap inline-flex items-center justify-center gap-2"
             >
-              Book Appointment Online
-            </Link>
+              <Phone className="w-4 h-4 text-[#244B3A]" />
+              <span>Call Concierge: +91 9000023050</span>
+            </a>
             <Link
               to="/contact"
               className="w-full sm:w-auto px-6 py-3.5 text-xs font-semibold uppercase tracking-wider text-white border border-[#A8B8A0]/50 hover:border-white rounded-lg transition-smooth whitespace-nowrap"

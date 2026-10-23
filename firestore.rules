@@ -15,18 +15,31 @@ service cloud.firestore {
       return get(/databases/$(database)/documents/users/$(request.auth.uid)).data;
     }
     
+    function getUserRole() {
+      return isAuthenticated() ? 
+        (request.auth.token.role != null ? request.auth.token.role : 
+         (exists(/databases/$(database)/documents/users/$(request.auth.uid)) ? getUserData().role : 'customer')) 
+        : 'public';
+    }
+
     function isAdmin() {
-      return isAuthenticated() && 
-        (request.auth.token.role == 'admin' || 
-         (exists(/databases/$(database)/documents/users/$(request.auth.uid)) && 
-          getUserData().role == 'admin' && getUserData().active == true));
+      return isAuthenticated() && (getUserRole() == 'admin' || (exists(/databases/$(database)/documents/users/$(request.auth.uid)) && getUserData().role == 'admin'));
     }
     
+    function isFrontDesk() {
+      return isAuthenticated() && (isAdmin() || getUserRole() == 'front_desk');
+    }
+
+    function isCallCenter() {
+      return isAuthenticated() && (isAdmin() || getUserRole() == 'call_center');
+    }
+
     function isStaff() {
-      return isAuthenticated() && 
-        (request.auth.token.role == 'staff' || 
-         (exists(/databases/$(database)/documents/users/$(request.auth.uid)) && 
-          getUserData().role == 'staff' && getUserData().active == true));
+      return isAuthenticated() && (isAdmin() || isFrontDesk() || getUserRole() == 'staff');
+    }
+
+    function isOperational() {
+      return isAdmin() || isFrontDesk() || isCallCenter();
     }
 
     // Default deny
@@ -36,77 +49,131 @@ service cloud.firestore {
     
     // USERS COLLECTION
     match /users/{userId} {
-      allow read: if isAdmin() || isUser(userId);
+      allow read: if isOperational() || isUser(userId);
       allow create: if isAdmin() || (isAuthenticated() && request.auth.uid == userId && request.resource.data.role == 'customer');
       allow update: if isAdmin() || 
         (isUser(userId) && 
-         // Staff/customers can update profile details but cannot alter role or active status
          request.resource.data.role == resource.data.role &&
          request.resource.data.active == resource.data.active);
       allow delete: if isAdmin();
     }
     
+    // CUSTOMERS / PROSPECTS COLLECTION
+    match /customers/{customerId} {
+      allow read: if isOperational() || isStaff();
+      allow create, update: if isOperational();
+      allow delete: if isAdmin();
+    }
+
+    // CALL LOGS COLLECTION
+    match /callLogs/{logId} {
+      allow read: if isOperational();
+      allow create: if isCallCenter() || isAdmin();
+      allow update, delete: if isAdmin();
+    }
+
+    // FOLLOW-UPS & CALLBACKS COLLECTION
+    match /followUps/{followUpId} {
+      allow read: if isOperational();
+      allow create, update: if isOperational();
+      allow delete: if isAdmin();
+    }
+    
     // SERVICES COLLECTION
     match /services/{serviceId} {
-      // Anyone can read active services; admins can read all
-      allow read: if resource.data.active == true || isAdmin();
+      allow read: if resource.data.isActive == true || isOperational();
+      allow write: if isAdmin();
+    }
+
+    // ROOMS COLLECTION
+    match /rooms/{roomId} {
+      allow read: if true;
       allow write: if isAdmin();
     }
     
     // APPOINTMENTS COLLECTION
     match /appointments/{appointmentId} {
-      // Admins read all; Staff only reads assigned appointments; Customer reads their own
-      allow read: if isAdmin() || 
-        (isStaff() && resource.data.assignedStaffId == request.auth.uid) ||
+      allow read: if isOperational() || 
+        (isStaff() && (resource.data.staffId == request.auth.uid || resource.data.assignedStaffId == request.auth.uid)) ||
         (isAuthenticated() && resource.data.customerId == request.auth.uid);
         
-      // Validated booking creation
-      allow create: if request.resource.data.bookingReference is string &&
-        request.resource.data.customerName is string &&
-        request.resource.data.customerPhone is string &&
-        request.resource.data.serviceId is string &&
-        request.resource.data.appointmentDate is string &&
-        request.resource.data.timeSlot is string;
+      // Created exclusively by Call Center, Front Desk, or Admin
+      allow create: if isOperational();
         
-      // Admins update everything; Staff can only update status & notes on their assigned appointments
-      allow update: if isAdmin() || 
+      // Front Desk / Admin can update everything; Staff can only update clinical notes and status
+      allow update: if isFrontDesk() ||
         (isStaff() && resource.data.assignedStaffId == request.auth.uid &&
-         // Staff cannot reassign or change pricing
-         request.resource.data.assignedStaffId == resource.data.assignedStaffId &&
-         request.resource.data.fee == resource.data.fee);
+         request.resource.data.fee == resource.data.fee &&
+         request.resource.data.amountInr == resource.data.amountInr);
          
       allow delete: if isAdmin();
     }
-    
-    // CUSTOMERS COLLECTION
-    match /customers/{customerId} {
-      allow read: if isAdmin();
-      allow create: if true; // Created during public/client appointments
+
+    // CONSULTATIONS COLLECTION
+    match /consultations/{consultationId} {
+      allow read: if isOperational() || isStaff();
+      allow create: if isFrontDesk() || isStaff();
+      allow update, delete: if isFrontDesk();
+    }
+
+    // PACKAGES COLLECTION
+    match /packages/{packageId} {
+      allow read: if isOperational() || isStaff();
+      allow create, update: if isFrontDesk();
+      allow delete: if isAdmin();
+    }
+
+    // SESSIONS COLLECTION
+    match /sessions/{sessionId} {
+      allow read: if isOperational() || isStaff();
+      allow create: if isFrontDesk();
+      allow update: if isFrontDesk() || isStaff();
+      allow delete: if isAdmin();
+    }
+
+    // INVOICES & BILLING
+    match /invoices/{invoiceId} {
+      allow read: if isFrontDesk() || isAdmin();
+      allow create, update: if isFrontDesk();
+      allow delete: if isAdmin();
+    }
+
+    // PAYMENTS TRANSACTIONS
+    match /payments/{paymentId} {
+      allow read: if isFrontDesk() || isAdmin();
+      allow create: if isFrontDesk();
       allow update, delete: if isAdmin();
+    }
+
+    // PAYMENT FOLLOW-UPS (POSTPONEMENTS)
+    match /paymentFollowUps/{pfId} {
+      allow read, create, update: if isFrontDesk() || isAdmin();
+      allow delete: if isAdmin();
+    }
+
+    // AUDIT LOGS
+    match /auditLogs/{logId} {
+      allow read: if isAdmin();
+      allow create: if isAuthenticated();
+      allow update, delete: if false; // Immutable audit log
     }
     
     // REVIEWS COLLECTION
     match /reviews/{reviewId} {
-      // Public reads approved reviews; Admin reads all
-      allow read: if resource.data.moderationStatus == 'approved' || resource.data.isApproved == true || isAdmin();
-      // Public / clients submit reviews with pending moderation status
-      allow create: if request.resource.data.rating is number &&
-        request.resource.data.rating >= 1 && request.resource.data.rating <= 5 &&
-        (request.resource.data.moderationStatus == 'pending' || request.resource.data.isApproved == false);
+      allow read: if resource.data.isApproved == true || isAdmin();
+      allow create: if isAuthenticated();
       allow update, delete: if isAdmin();
     }
     
     // CONTACT INQUIRIES
     match /contactInquiries/{inquiryId} {
-      allow read, update, delete: if isAdmin();
-      allow create: if request.resource.data.name is string &&
-        request.resource.data.email is string &&
-        request.resource.data.message is string;
+      allow read, update, delete: if isOperational();
+      allow create: if true;
     }
     
     // BUSINESS SETTINGS
     match /businessSettings/{settingsId} {
-      allow read: if true; // Public reads clinic hours and info
+      allow read: if true;
       allow write: if isAdmin();
     }
   }

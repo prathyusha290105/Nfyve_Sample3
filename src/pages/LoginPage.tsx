@@ -30,6 +30,10 @@ export const LoginPage: React.FC = () => {
       const loggedUser = await login(email, password, mode);
       if (loggedUser.role === 'admin') {
         navigate('/admin');
+      } else if (loggedUser.role === 'call_center') {
+        navigate('/call-center');
+      } else if (loggedUser.role === 'front_desk') {
+        navigate('/front-desk');
       } else if (loggedUser.role === 'staff') {
         navigate('/staff');
       } else {
@@ -53,6 +57,20 @@ export const LoginPage: React.FC = () => {
     setMode('staff_admin');
     setEmail('admin@nfyve.com');
     setPassword('Admin@NFYVE2026');
+    setErrorMsg('');
+  };
+
+  const fillCallCenterDemo = () => {
+    setMode('staff_admin');
+    setEmail('callcenter@nfyve.com');
+    setPassword('CallCenter@NFYVE2026');
+    setErrorMsg('');
+  };
+
+  const fillFrontDeskDemo = () => {
+    setMode('staff_admin');
+    setEmail('frontdesk@nfyve.com');
+    setPassword('FrontDesk@NFYVE2026');
     setErrorMsg('');
   };
 
@@ -200,9 +218,23 @@ export const LoginPage: React.FC = () => {
             <button
               type="button"
               onClick={fillAdminDemo}
-              className="px-2.5 py-1 text-[11px] bg-white border border-[#DDD9CE] rounded hover:border-[#244B3A] text-[#252923] transition-colors font-medium"
+              className="px-2.5 py-1 text-[11px] bg-white border border-[#DDD9CE] rounded hover:border-[#244B3A] text-[#252923] transition-colors font-semibold"
             >
-              Demo Admin (Priya)
+              Admin (Priya)
+            </button>
+            <button
+              type="button"
+              onClick={fillCallCenterDemo}
+              className="px-2.5 py-1 text-[11px] bg-[#E6EEE7] border border-[#244B3A]/30 rounded hover:border-[#244B3A] text-[#1E3B2E] transition-colors font-semibold"
+            >
+              Call Center (Pooja)
+            </button>
+            <button
+              type="button"
+              onClick={fillFrontDeskDemo}
+              className="px-2.5 py-1 text-[11px] bg-[#E6EEE7] border border-[#244B3A]/30 rounded hover:border-[#244B3A] text-[#1E3B2E] transition-colors font-semibold"
+            >
+              Front Desk (Sneha)
             </button>
             <button
               type="button"

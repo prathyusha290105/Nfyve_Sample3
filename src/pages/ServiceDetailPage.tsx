@@ -15,7 +15,7 @@ export const ServiceDetailPage: React.FC = () => {
     setIsLoading(true);
     api.getServiceBySlug(slug)
       .then(setService)
-      .catch((err) => {
+      .catch((err: any) => {
         console.error(err);
         setService(null);
       })

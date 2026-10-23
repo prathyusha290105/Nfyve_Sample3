@@ -55,7 +55,7 @@ export const AdminSettingsPage: React.FC = () => {
 
     try {
       const res = await api.updateSettings(settings);
-      setSettings(res.settings);
+      setSettings((res as any)?.settings || res);
       setSaveMsg('Sanctuary business parameters, operating hours, and cancellation policies updated successfully.');
       setTimeout(() => setSaveMsg(''), 4000);
     } catch (err: any) {

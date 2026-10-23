@@ -104,13 +104,13 @@ export const CustomerAccountPage: React.FC = () => {
         </div>
 
         <div className="flex items-center gap-3">
-          <Link
-            to="/book-appointment"
+          <a
+            href="tel:+919000023050"
             className="inline-flex items-center gap-2 px-5 py-2.5 text-xs font-semibold uppercase tracking-wider text-white bg-[#244B3A] hover:bg-[#1a372a] rounded-lg transition-smooth shadow-xs"
           >
-            <Calendar className="w-3.5 h-3.5" />
-            <span>Book New Service</span>
-          </Link>
+            <Phone className="w-3.5 h-3.5 text-[#A8B8A0]" />
+            <span>Call to Schedule</span>
+          </a>
         </div>
       </div>
 
@@ -172,14 +172,15 @@ export const CustomerAccountPage: React.FC = () => {
               <Calendar className="w-10 h-10 text-[#A8B8A0] mx-auto" />
               <h3 className="font-serif text-xl text-[#252923]">No Appointments Found</h3>
               <p className="text-xs text-[#777A70] max-w-sm mx-auto">
-                You do not have any registered sessions under this filter. Explore our 6 transformation pillars to schedule a visit.
+                You do not have any registered sessions under this filter. Contact our Begumpet concierge to schedule a private consultation.
               </p>
-              <Link
-                to="/book-appointment"
-                className="inline-block mt-2 px-5 py-2 text-xs font-semibold uppercase tracking-wider text-white bg-[#244B3A] rounded-lg"
+              <a
+                href="tel:+919000023050"
+                className="inline-flex items-center gap-2 mt-2 px-5 py-2 text-xs font-semibold uppercase tracking-wider text-white bg-[#244B3A] rounded-lg"
               >
-                Browse & Book
-              </Link>
+                <Phone className="w-3.5 h-3.5" />
+                <span>Call to Schedule: +91 9000023050</span>
+              </a>
             </div>
           ) : (
             <div className="grid grid-cols-1 md:grid-cols-2 gap-6">

@@ -94,6 +94,28 @@
       "staffId": "st-4",
       "passwordHash": "$2b$10$dqIyxPgLv3NTxugaVxbw9.1KYdgJ5v9EfqaD.wOeFv8BcMVKeOqY2",
       "createdAt": "2025-01-05T09:00:00Z"
+    },
+    {
+      "id": "usr-callcenter-1",
+      "name": "Pooja Reddy (Call Center Lead)",
+      "email": "callcenter@nfyve.com",
+      "phone": "+91 9000023056",
+      "role": "call_center",
+      "designation": "Senior Call Center Coordinator",
+      "department": "Client Concierge & Inquiries",
+      "passwordHash": "$2b$10$iiUEvBpf3RLm/1.W9vOPOuioCYDC.dvWHF50OfpsmdmmUnWsEuSpO",
+      "createdAt": "2025-01-02T08:00:00Z"
+    },
+    {
+      "id": "usr-frontdesk-1",
+      "name": "Sneha Rao (Front Desk Executive)",
+      "email": "frontdesk@nfyve.com",
+      "phone": "+91 9000023057",
+      "role": "front_desk",
+      "designation": "Front Desk Hospitality Lead",
+      "department": "Sanctuary Reception & Scheduling",
+      "passwordHash": "$2b$10$iiUEvBpf3RLm/1.W9vOPOuKAm3lyRa7v4GyP6zH0D3Glp9jJV0Yue",
+      "createdAt": "2025-01-02T08:00:00Z"
     }
   ],
   "categories": [
@@ -463,6 +485,148 @@
   ],
   "appointments": [
     {
+      "id": "apt-1791720424268",
+      "bookingRef": "NF-2026-3747",
+      "customerId": "CUST-3747",
+      "userId": "CUST-3747",
+      "customerName": "Client Alpha",
+      "customerEmail": "",
+      "customerPhone": "+91 9000023050",
+      "serviceId": "srv-1",
+      "serviceName": "Clinical Consultation",
+      "categoryName": "General Transformation",
+      "room": "Slim-1",
+      "durationMins": 60,
+      "staffId": "st-2",
+      "staffName": "Coach Vikram Singh",
+      "assignedStaffId": "st-2",
+      "assignedStaffName": "Coach Vikram Singh",
+      "bookingChannel": "Phone Call",
+      "appointmentDate": "2026-12-03",
+      "timeSlot": "10:00 AM - 11:00 AM",
+      "status": "confirmed",
+      "paymentStatus": "pending",
+      "amountInr": 3500,
+      "notes": "",
+      "createdBy": "Front Desk",
+      "createdAt": "2026-10-11T12:07:04.268Z",
+      "updatedAt": "2026-10-11T12:07:04.268Z"
+    },
+    {
+      "id": "apt-1791720424226",
+      "bookingRef": "NF-2026-6009",
+      "customerId": "CUST-1011",
+      "userId": "CUST-1011",
+      "customerName": "Test WalkIn User 3877",
+      "customerEmail": "",
+      "customerPhone": "+91 999993877",
+      "serviceId": "srv-101",
+      "serviceName": "Hydra-Infusion Clinical Facial",
+      "categoryName": "General Transformation",
+      "room": "Skin / Hair",
+      "durationMins": 60,
+      "staffId": "st-1",
+      "staffName": "Dr. Ananya Reddy",
+      "assignedStaffId": "st-1",
+      "assignedStaffName": "Dr. Ananya Reddy",
+      "bookingChannel": "Walk-in",
+      "appointmentDate": "2026-11-03",
+      "timeSlot": "02:30 PM - 03:30 PM",
+      "status": "consultation_completed",
+      "paymentStatus": "pending",
+      "amountInr": 4500,
+      "notes": "Initial clinical patch test scheduled.",
+      "createdBy": "Front Desk",
+      "createdAt": "2026-10-11T12:07:04.226Z",
+      "updatedAt": "2026-10-11T12:07:04.236Z",
+      "checkedInAt": "2026-10-11T12:07:04.231Z"
+    },
+    {
+      "id": "apt-1791720282661",
+      "bookingRef": "NF-2026-1998",
+      "customerId": "CUST-1998",
+      "userId": "CUST-1998",
+      "customerName": "Client Alpha",
+      "customerEmail": "",
+      "customerPhone": "+91 9000023050",
+      "serviceId": "srv-1",
+      "serviceName": "Clinical Consultation",
+      "categoryName": "General Transformation",
+      "room": "Slim-1",
+      "durationMins": 60,
+      "staffId": "st-2",
+      "staffName": "Coach Vikram Singh",
+      "assignedStaffId": "st-2",
+      "assignedStaffName": "Coach Vikram Singh",
+      "bookingChannel": "Phone Call",
+      "appointmentDate": "2026-10-30",
+      "timeSlot": "10:00 AM - 11:00 AM",
+      "status": "confirmed",
+      "paymentStatus": "pending",
+      "amountInr": 3500,
+      "notes": "",
+      "createdBy": "Front Desk",
+      "createdAt": "2026-10-11T12:04:42.661Z",
+      "updatedAt": "2026-10-11T12:04:42.661Z"
+    },
+    {
+      "id": "apt-1791720282603",
+      "bookingRef": "NF-2026-5360",
+      "customerId": "CUST-1007",
+      "userId": "CUST-1007",
+      "customerName": "Test WalkIn User 2198",
+      "customerEmail": "",
+      "customerPhone": "+91 999992198",
+      "serviceId": "srv-101",
+      "serviceName": "Hydra-Infusion Clinical Facial",
+      "categoryName": "General Transformation",
+      "room": "Skin / Hair",
+      "durationMins": 60,
+      "staffId": "st-1",
+      "staffName": "Dr. Ananya Reddy",
+      "assignedStaffId": "st-1",
+      "assignedStaffName": "Dr. Ananya Reddy",
+      "bookingChannel": "Walk-in",
+      "appointmentDate": "2026-10-15",
+      "timeSlot": "02:30 PM - 03:30 PM",
+      "status": "consultation_completed",
+      "paymentStatus": "pending",
+      "amountInr": 4500,
+      "notes": "Initial clinical patch test scheduled.",
+      "createdBy": "Front Desk",
+      "createdAt": "2026-10-11T12:04:42.603Z",
+      "updatedAt": "2026-10-11T12:04:42.613Z",
+      "checkedInAt": "2026-10-11T12:04:42.606Z"
+    },
+    {
+      "id": "apt-1791712610948",
+      "bookingRef": "NF-2026-2716",
+      "customerId": "CUST-2716",
+      "userId": "CUST-2716",
+      "customerName": "Rohit Varma",
+      "customerEmail": "rohit.varma@example.com",
+      "customerPhone": "+91 9988776655",
+      "serviceId": "srv-101",
+      "serviceName": "Hydra-Infusion Medical Glow Facial",
+      "categoryName": "General Transformation",
+      "room": "Skin / Hair",
+      "durationMins": 60,
+      "staffId": "stf-101",
+      "staffName": "Dr. Ananya Rao",
+      "assignedStaffId": "stf-101",
+      "assignedStaffName": "Dr. Ananya Rao",
+      "bookingChannel": "Phone Call",
+      "appointmentDate": "2026-10-12",
+      "timeSlot": "10:30 AM - 11:30 AM",
+      "status": "confirmed",
+      "paymentStatus": "paid",
+      "amountInr": 6500,
+      "notes": "",
+      "createdBy": "Sneha Rao (Front Desk Executive)",
+      "createdAt": "2026-10-11T09:56:50.948Z",
+      "updatedAt": "2026-10-11T09:56:50.948Z"
+    },
+    {
       "id": "apt-1001",
       "bookingRef": "NF-2026-1001",
       "userId": "usr-cust-6",
@@ -481,7 +645,10 @@
       "amountInr": 5500,
       "notes": "Treatment completed as scheduled.",
       "createdAt": "2025-11-21T12:00:00.000Z",
-      "updatedAt": "2025-11-23T12:00:00.000Z"
+      "updatedAt": "2025-11-23T12:00:00.000Z",
+      "room": "Consult 1",
+      "bookingChannel": "Phone Call",
+      "customerId": "usr-cust-6"
     },
     {
       "id": "apt-1002",
@@ -502,7 +669,10 @@
       "amountInr": 28500,
       "notes": "Treatment completed as scheduled.",
       "createdAt": "2025-11-24T12:00:00.000Z",
-      "updatedAt": "2025-11-26T12:00:00.000Z"
+      "updatedAt": "2025-11-26T12:00:00.000Z",
+      "room": "Consult 2",
+      "bookingChannel": "Walk-in",
+      "customerId": "usr-cust-1"
     },
     {
       "id": "apt-1003",
@@ -523,7 +693,10 @@
       "amountInr": 4500,
       "notes": "Treatment completed as scheduled.",
       "createdAt": "2025-10-31T12:00:00.000Z",
-      "updatedAt": "2025-11-02T12:00:00.000Z"
+      "updatedAt": "2025-11-02T12:00:00.000Z",
+      "room": "Slim-1",
+      "bookingChannel": "Phone Call",
+      "customerId": "usr-cust-2"
     },
     {
       "id": "apt-1004",
@@ -544,7 +717,10 @@
       "amountInr": 6800,
       "notes": "Treatment completed as scheduled.",
       "createdAt": "2025-11-03T12:00:00.000Z",
-      "updatedAt": "2025-11-05T12:00:00.000Z"
+      "updatedAt": "2025-11-05T12:00:00.000Z",
+      "room": "Slim-2",
+      "bookingChannel": "Walk-in",
+      "customerId": "usr-cust-3"
     },
     {
       "id": "apt-1005",
@@ -565,7 +741,10 @@
       "amountInr": 8500,
       "notes": "Treatment completed as scheduled.",
       "createdAt": "2025-11-06T12:00:00.000Z",
-      "updatedAt": "2025-11-08T12:00:00.000Z"
+      "updatedAt": "2025-11-08T12:00:00.000Z",
+      "room": "Skin / Hair",
+      "bookingChannel": "Phone Call",
+      "customerId": "usr-cust-4"
     },
     {
       "id": "apt-1006",
@@ -586,7 +765,10 @@
       "amountInr": 3500,
       "notes": "Treatment completed as scheduled.",
       "createdAt": "2025-11-09T12:00:00.000Z",
-      "updatedAt": "2025-11-11T12:00:00.000Z"
+      "updatedAt": "2025-11-11T12:00:00.000Z",
+      "room": "Consult 1",
+      "bookingChannel": "Walk-in",
+      "customerId": "usr-cust-5"
     },
     {
       "id": "apt-1007",
@@ -607,7 +789,10 @@
       "amountInr": 7200,
       "notes": "Treatment completed as scheduled.",
       "createdAt": "2025-11-12T12:00:00.000Z",
-      "updatedAt": "2025-11-14T12:00:00.000Z"
+      "updatedAt": "2025-11-14T12:00:00.000Z",
+      "room": "Consult 2",
+      "bookingChannel": "Phone Call",
+      "customerId": "usr-cust-6"
     },
     {
       "id": "apt-1008",
@@ -628,7 +813,10 @@
       "amountInr": 2000,
       "notes": "Treatment completed as scheduled.",
       "createdAt": "2025-11-15T12:00:00.000Z",
-      "updatedAt": "2025-11-17T12:00:00.000Z"
+      "updatedAt": "2025-11-17T12:00:00.000Z",
+      "room": "Slim-1",
+      "bookingChannel": "Walk-in",
+      "customerId": "usr-cust-1"
     },
     {
       "id": "apt-1009",
@@ -649,7 +837,10 @@
       "amountInr": 1800,
       "notes": "Treatment completed as scheduled.",
       "createdAt": "2025-11-18T12:00:00.000Z",
-      "updatedAt": "2025-11-20T12:00:00.000Z"
+      "updatedAt": "2025-11-20T12:00:00.000Z",
+      "room": "Slim-2",
+      "bookingChannel": "Phone Call",
+      "customerId": "usr-cust-2"
     },
     {
       "id": "apt-1010",
@@ -670,7 +861,10 @@
       "amountInr": 4200,
       "notes": "Treatment completed as scheduled.",
       "createdAt": "2025-11-21T12:00:00.000Z",
-      "updatedAt": "2025-11-23T12:00:00.000Z"
+      "updatedAt": "2025-11-23T12:00:00.000Z",
+      "room": "Skin / Hair",
+      "bookingChannel": "Walk-in",
+      "customerId": "usr-cust-3"
     },
     {
       "id": "apt-1011",
@@ -691,7 +885,10 @@
       "amountInr": 2200,
       "notes": "Treatment completed as scheduled.",
       "createdAt": "2025-12-19T12:00:00.000Z",
-      "updatedAt": "2025-12-21T12:00:00.000Z"
+      "updatedAt": "2025-12-21T12:00:00.000Z",
+      "room": "Consult 1",
+      "bookingChannel": "Phone Call",
+      "customerId": "usr-cust-5"
     },
     {
       "id": "apt-1012",
@@ -712,7 +909,10 @@
       "amountInr": 2500,
       "notes": "Treatment completed as scheduled.",
       "createdAt": "2025-12-22T12:00:00.000Z",
-      "updatedAt": "2025-12-24T12:00:00.000Z"
+      "updatedAt": "2025-12-24T12:00:00.000Z",
+      "room": "Consult 2",
+      "bookingChannel": "Walk-in",
+      "customerId": "usr-cust-6"
     },
     {
       "id": "apt-1013",
@@ -733,7 +933,10 @@
       "amountInr": 5500,
       "notes": "Treatment completed as scheduled.",
       "createdAt": "2025-12-25T12:00:00.000Z",
-      "updatedAt": "2025-12-27T12:00:00.000Z"
+      "updatedAt": "2025-12-27T12:00:00.000Z",
+      "room": "Slim-1",
+      "bookingChannel": "Phone Call",
+      "customerId": "usr-cust-1"
     },
     {
       "id": "apt-1014",
@@ -754,7 +957,10 @@
       "amountInr": 28500,
       "notes": "Treatment completed as scheduled.",
       "createdAt": "2025-12-01T12:00:00.000Z",
-      "updatedAt": "2025-12-03T12:00:00.000Z"
+      "updatedAt": "2025-12-03T12:00:00.000Z",
+      "room": "Slim-2",
+      "bookingChannel": "Walk-in",
+      "customerId": "usr-cust-2"
     },
     {
       "id": "apt-1015",
@@ -775,7 +981,10 @@
       "amountInr": 4500,
       "notes": "Treatment completed as scheduled.",
       "createdAt": "2025-12-04T12:00:00.000Z",
-      "updatedAt": "2025-12-06T12:00:00.000Z"
+      "updatedAt": "2025-12-06T12:00:00.000Z",
+      "room": "Skin / Hair",
+      "bookingChannel": "Phone Call",
+      "customerId": "usr-cust-3"
     },
     {
       "id": "apt-1016",
@@ -796,7 +1005,10 @@
       "amountInr": 6800,
       "notes": "Treatment completed as scheduled.",
       "createdAt": "2025-12-07T12:00:00.000Z",
-      "updatedAt": "2025-12-09T12:00:00.000Z"
+      "updatedAt": "2025-12-09T12:00:00.000Z",
+      "room": "Consult 1",
+      "bookingChannel": "Walk-in",
+      "customerId": "usr-cust-4"
     },
     {
       "id": "apt-1017",
@@ -817,7 +1029,10 @@
       "amountInr": 8500,
       "notes": "Treatment completed as scheduled.",
       "createdAt": "2025-12-10T12:00:00.000Z",
-      "updatedAt": "2025-12-12T12:00:00.000Z"
+      "updatedAt": "2025-12-12T12:00:00.000Z",
+      "room": "Consult 2",
+      "bookingChannel": "Phone Call",
+      "customerId": "usr-cust-5"
     },
     {
       "id": "apt-1018",
@@ -838,7 +1053,10 @@
       "amountInr": 3500,
       "notes": "Treatment completed as scheduled.",
       "createdAt": "2025-12-13T12:00:00.000Z",
-      "updatedAt": "2025-12-15T12:00:00.000Z"
+      "updatedAt": "2025-12-15T12:00:00.000Z",
+      "room": "Slim-1",
+      "bookingChannel": "Walk-in",
+      "customerId": "usr-cust-6"
     },
     {
       "id": "apt-1019",
@@ -859,7 +1077,10 @@
       "amountInr": 1800,
       "notes": "Treatment completed as scheduled.",
       "createdAt": "2026-01-17T12:00:00.000Z",
-      "updatedAt": "2026-01-19T12:00:00.000Z"
+      "updatedAt": "2026-01-19T12:00:00.000Z",
+      "room": "Slim-2",
+      "bookingChannel": "Phone Call",
+      "customerId": "usr-cust-4"
     },
     {
       "id": "apt-1020",
@@ -880,7 +1101,10 @@
       "amountInr": 4200,
       "notes": "Treatment completed as scheduled.",
       "createdAt": "2026-01-20T12:00:00.000Z",
-      "updatedAt": "2026-01-22T12:00:00.000Z"
+      "updatedAt": "2026-01-22T12:00:00.000Z",
+      "room": "Skin / Hair",
+      "bookingChannel": "Walk-in",
+      "customerId": "usr-cust-5"
     },
     {
       "id": "apt-1021",
@@ -901,7 +1125,10 @@
       "amountInr": 2200,
       "notes": "Treatment completed as scheduled.",
       "createdAt": "2026-01-23T12:00:00.000Z",
-      "updatedAt": "2026-01-25T12:00:00.000Z"
+      "updatedAt": "2026-01-25T12:00:00.000Z",
+      "room": "Consult 1",
+      "bookingChannel": "Phone Call",
+      "customerId": "usr-cust-6"
     },
     {
       "id": "apt-1022",
@@ -922,7 +1149,10 @@
       "amountInr": 2500,
       "notes": "Treatment completed as scheduled.",
       "createdAt": "2025-12-30T12:00:00.000Z",
-      "updatedAt": "2026-01-01T12:00:00.000Z"
+      "updatedAt": "2026-01-01T12:00:00.000Z",
+      "room": "Consult 2",
+      "bookingChannel": "Walk-in",
+      "customerId": "usr-cust-1"
     },
     {
       "id": "apt-1023",
@@ -943,7 +1173,10 @@
       "amountInr": 5500,
       "notes": "Treatment completed as scheduled.",
       "createdAt": "2026-01-02T12:00:00.000Z",
-      "updatedAt": "2026-01-04T12:00:00.000Z"
+      "updatedAt": "2026-01-04T12:00:00.000Z",
+      "room": "Slim-1",
+      "bookingChannel": "Phone Call",
+      "customerId": "usr-cust-2"
     },
     {
       "id": "apt-1024",
@@ -964,7 +1197,10 @@
       "amountInr": 28500,
       "notes": "Treatment completed as scheduled.",
       "createdAt": "2026-01-05T12:00:00.000Z",
-      "updatedAt": "2026-01-07T12:00:00.000Z"
+      "updatedAt": "2026-01-07T12:00:00.000Z",
+      "room": "Slim-2",
+      "bookingChannel": "Walk-in",
+      "customerId": "usr-cust-3"
     },
     {
       "id": "apt-1025",
@@ -985,7 +1221,10 @@
       "amountInr": 4500,
       "notes": "Treatment completed as scheduled.",
       "createdAt": "2026-01-08T12:00:00.000Z",
-      "updatedAt": "2026-01-10T12:00:00.000Z"
+      "updatedAt": "2026-01-10T12:00:00.000Z",
+      "room": "Skin / Hair",
+      "bookingChannel": "Phone Call",
+      "customerId": "usr-cust-4"
     },
     {
       "id": "apt-1026",
@@ -1006,7 +1245,10 @@
       "amountInr": 6800,
       "notes": "Treatment completed as scheduled.",
       "createdAt": "2026-01-11T12:00:00.000Z",
-      "updatedAt": "2026-01-13T12:00:00.000Z"
+      "updatedAt": "2026-01-13T12:00:00.000Z",
+      "room": "Consult 1",
+      "bookingChannel": "Walk-in",
+      "customerId": "usr-cust-5"
     },
     {
       "id": "apt-1027",
@@ -1027,7 +1269,10 @@
       "amountInr": 8500,
       "notes": "Treatment completed as scheduled.",
       "createdAt": "2026-01-14T12:00:00.000Z",
-      "updatedAt": "2026-01-16T12:00:00.000Z"
+      "updatedAt": "2026-01-16T12:00:00.000Z",
+      "room": "Consult 2",
+      "bookingChannel": "Phone Call",
+      "customerId": "usr-cust-6"
     },
     {
       "id": "apt-1028",
@@ -1048,7 +1293,10 @@
       "amountInr": 3500,
       "notes": "Treatment completed as scheduled.",
       "createdAt": "2026-01-17T12:00:00.000Z",
-      "updatedAt": "2026-01-19T12:00:00.000Z"
+      "updatedAt": "2026-01-19T12:00:00.000Z",
+      "room": "Slim-1",
+      "bookingChannel": "Walk-in",
+      "customerId": "usr-cust-1"
     },
     {
       "id": "apt-1029",
@@ -1069,7 +1317,10 @@
       "amountInr": 7200,
       "notes": "Treatment completed as scheduled.",
       "createdAt": "2026-01-20T12:00:00.000Z",
-      "updatedAt": "2026-01-22T12:00:00.000Z"
+      "updatedAt": "2026-01-22T12:00:00.000Z",
+      "room": "Slim-2",
+      "bookingChannel": "Phone Call",
+      "customerId": "usr-cust-2"
     },
     {
       "id": "apt-1030",
@@ -1090,7 +1341,10 @@
       "amountInr": 2000,
       "notes": "Treatment completed as scheduled.",
       "createdAt": "2026-01-23T12:00:00.000Z",
-      "updatedAt": "2026-01-25T12:00:00.000Z"
+      "updatedAt": "2026-01-25T12:00:00.000Z",
+      "room": "Skin / Hair",
+      "bookingChannel": "Walk-in",
+      "customerId": "usr-cust-3"
     },
     {
       "id": "apt-1031",
@@ -1111,7 +1365,10 @@
       "amountInr": 1800,
       "notes": "Treatment completed as scheduled.",
       "createdAt": "2025-12-30T12:00:00.000Z",
-      "updatedAt": "2026-01-01T12:00:00.000Z"
+      "updatedAt": "2026-01-01T12:00:00.000Z",
+      "room": "Consult 1",
+      "bookingChannel": "Phone Call",
+      "customerId": "usr-cust-4"
     },
     {
       "id": "apt-1032",
@@ -1132,7 +1389,10 @@
       "amountInr": 4200,
       "notes": "Treatment completed as scheduled.",
       "createdAt": "2026-01-02T12:00:00.000Z",
-      "updatedAt": "2026-01-04T12:00:00.000Z"
+      "updatedAt": "2026-01-04T12:00:00.000Z",
+      "room": "Consult 2",
+      "bookingChannel": "Walk-in",
+      "customerId": "usr-cust-5"
     },
     {
       "id": "apt-1033",
@@ -1153,7 +1413,10 @@
       "amountInr": 2200,
       "notes": "Treatment completed as scheduled.",
       "createdAt": "2026-01-05T12:00:00.000Z",
-      "updatedAt": "2026-01-07T12:00:00.000Z"
+      "updatedAt": "2026-01-07T12:00:00.000Z",
+      "room": "Slim-1",
+      "bookingChannel": "Phone Call",
+      "customerId": "usr-cust-6"
     },
     {
       "id": "apt-1034",
@@ -1174,7 +1437,10 @@
       "amountInr": 2500,
       "notes": "Treatment completed as scheduled.",
       "createdAt": "2026-01-08T12:00:00.000Z",
-      "updatedAt": "2026-01-10T12:00:00.000Z"
+      "updatedAt": "2026-01-10T12:00:00.000Z",
+      "room": "Slim-2",
+      "bookingChannel": "Walk-in",
+      "customerId": "usr-cust-1"
     },
     {
       "id": "apt-1035",
@@ -1195,7 +1461,10 @@
       "amountInr": 7200,
       "notes": "Treatment completed as scheduled.",
       "createdAt": "2026-02-15T12:00:00.000Z",
-      "updatedAt": "2026-02-17T12:00:00.000Z"
+      "updatedAt": "2026-02-17T12:00:00.000Z",
+      "room": "Skin / Hair",
+      "bookingChannel": "Phone Call",
+      "customerId": "usr-cust-3"
     },
     {
       "id": "apt-1036",
@@ -1216,7 +1485,10 @@
       "amountInr": 2000,
       "notes": "Treatment completed as scheduled.",
       "createdAt": "2026-02-18T12:00:00.000Z",
-      "updatedAt": "2026-02-20T12:00:00.000Z"
+      "updatedAt": "2026-02-20T12:00:00.000Z",
+      "room": "Consult 1",
+      "bookingChannel": "Walk-in",
+      "customerId": "usr-cust-4"
     },
     {
       "id": "apt-1037",
@@ -1237,7 +1509,10 @@
       "amountInr": 1800,
       "notes": "Treatment completed as scheduled.",
       "createdAt": "2026-02-21T12:00:00.000Z",
-      "updatedAt": "2026-02-23T12:00:00.000Z"
+      "updatedAt": "2026-02-23T12:00:00.000Z",
+      "room": "Consult 2",
+      "bookingChannel": "Phone Call",
+      "customerId": "usr-cust-5"
     },
     {
       "id": "apt-1038",
@@ -1258,7 +1533,10 @@
       "amountInr": 4200,
       "notes": "Treatment completed as scheduled.",
       "createdAt": "2026-02-24T12:00:00.000Z",
-      "updatedAt": "2026-02-26T12:00:00.000Z"
+      "updatedAt": "2026-02-26T12:00:00.000Z",
+      "room": "Slim-1",
+      "bookingChannel": "Walk-in",
+      "customerId": "usr-cust-6"
     },
     {
       "id": "apt-1039",
@@ -1279,7 +1557,10 @@
       "amountInr": 2200,
       "notes": "Treatment completed as scheduled.",
       "createdAt": "2026-01-31T12:00:00.000Z",
-      "updatedAt": "2026-02-02T12:00:00.000Z"
+      "updatedAt": "2026-02-02T12:00:00.000Z",
+      "room": "Slim-2",
+      "bookingChannel": "Phone Call",
+      "customerId": "usr-cust-1"
     },
     {
       "id": "apt-1040",
@@ -1300,7 +1581,10 @@
       "amountInr": 2500,
       "notes": "Treatment completed as scheduled.",
       "createdAt": "2026-02-03T12:00:00.000Z",
-      "updatedAt": "2026-02-05T12:00:00.000Z"
+      "updatedAt": "2026-02-05T12:00:00.000Z",
+      "room": "Skin / Hair",
+      "bookingChannel": "Walk-in",
+      "customerId": "usr-cust-2"
     },
     {
       "id": "apt-1041",
@@ -1321,7 +1605,10 @@
       "amountInr": 5500,
       "notes": "Treatment completed as scheduled.",
       "createdAt": "2026-02-06T12:00:00.000Z",
-      "updatedAt": "2026-02-08T12:00:00.000Z"
+      "updatedAt": "2026-02-08T12:00:00.000Z",
+      "room": "Consult 1",
+      "bookingChannel": "Phone Call",
+      "customerId": "usr-cust-3"
     },
     {
       "id": "apt-1042",
@@ -1342,7 +1629,10 @@
       "amountInr": 28500,
       "notes": "Treatment completed as scheduled.",
       "createdAt": "2026-02-09T12:00:00.000Z",
-      "updatedAt": "2026-02-11T12:00:00.000Z"
+      "updatedAt": "2026-02-11T12:00:00.000Z",
+      "room": "Consult 2",
+      "bookingChannel": "Walk-in",
+      "customerId": "usr-cust-4"
     },
     {
       "id": "apt-1043",
@@ -1363,7 +1653,10 @@
       "amountInr": 4500,
       "notes": "Treatment completed as scheduled.",
       "createdAt": "2026-02-12T12:00:00.000Z",
-      "updatedAt": "2026-02-14T12:00:00.000Z"
+      "updatedAt": "2026-02-14T12:00:00.000Z",
+      "room": "Slim-1",
+      "bookingChannel": "Phone Call",
+      "customerId": "usr-cust-5"
     },
     {
       "id": "apt-1044",
@@ -1384,7 +1677,10 @@
       "amountInr": 6800,
       "notes": "Treatment completed as scheduled.",
       "createdAt": "2026-02-15T12:00:00.000Z",
-      "updatedAt": "2026-02-17T12:00:00.000Z"
+      "updatedAt": "2026-02-17T12:00:00.000Z",
+      "room": "Slim-2",
+      "bookingChannel": "Walk-in",
+      "customerId": "usr-cust-6"
     },
     {
       "id": "apt-1045",
@@ -1405,7 +1701,10 @@
       "amountInr": 8500,
       "notes": "Treatment completed as scheduled.",
       "createdAt": "2026-02-18T12:00:00.000Z",
-      "updatedAt": "2026-02-20T12:00:00.000Z"
+      "updatedAt": "2026-02-20T12:00:00.000Z",
+      "room": "Skin / Hair",
+      "bookingChannel": "Phone Call",
+      "customerId": "usr-cust-1"
     },
     {
       "id": "apt-1046",
@@ -1426,7 +1725,10 @@
       "amountInr": 3500,
       "notes": "Treatment completed as scheduled.",
       "createdAt": "2026-02-21T12:00:00.000Z",
-      "updatedAt": "2026-02-23T12:00:00.000Z"
+      "updatedAt": "2026-02-23T12:00:00.000Z",
+      "room": "Consult 1",
+      "bookingChannel": "Walk-in",
+      "customerId": "usr-cust-2"
     },
     {
       "id": "apt-1047",
@@ -1447,7 +1749,10 @@
       "amountInr": 7200,
       "notes": "Treatment completed as scheduled.",
       "createdAt": "2026-02-24T12:00:00.000Z",
-      "updatedAt": "2026-02-26T12:00:00.000Z"
+      "updatedAt": "2026-02-26T12:00:00.000Z",
+      "room": "Consult 2",
+      "bookingChannel": "Phone Call",
+      "customerId": "usr-cust-3"
     },
     {
       "id": "apt-1048",
@@ -1468,7 +1773,10 @@
       "amountInr": 2000,
       "notes": "Treatment completed as scheduled.",
       "createdAt": "2026-01-31T12:00:00.000Z",
-      "updatedAt": "2026-02-02T12:00:00.000Z"
+      "updatedAt": "2026-02-02T12:00:00.000Z",
+      "room": "Slim-1",
+      "bookingChannel": "Walk-in",
+      "customerId": "usr-cust-4"
     },
     {
       "id": "apt-1049",
@@ -1489,7 +1797,10 @@
       "amountInr": 8500,
       "notes": "Treatment completed as scheduled.",
       "createdAt": "2026-03-13T12:00:00.000Z",
-      "updatedAt": "2026-03-15T12:00:00.000Z"
+      "updatedAt": "2026-03-15T12:00:00.000Z",
+      "room": "Slim-2",
+      "bookingChannel": "Phone Call",
+      "customerId": "usr-cust-2"
     },
     {
       "id": "apt-1050",
@@ -1510,7 +1821,10 @@
       "amountInr": 3500,
       "notes": "Treatment completed as scheduled.",
       "createdAt": "2026-03-16T12:00:00.000Z",
-      "updatedAt": "2026-03-18T12:00:00.000Z"
+      "updatedAt": "2026-03-18T12:00:00.000Z",
+      "room": "Skin / Hair",
+      "bookingChannel": "Walk-in",
+      "customerId": "usr-cust-3"
     },
     {
       "id": "apt-1051",
@@ -1531,7 +1845,10 @@
       "amountInr": 7200,
       "notes": "Treatment completed as scheduled.",
       "createdAt": "2026-03-19T12:00:00.000Z",
-      "updatedAt": "2026-03-21T12:00:00.000Z"
+      "updatedAt": "2026-03-21T12:00:00.000Z",
+      "room": "Consult 1",
+      "bookingChannel": "Phone Call",
+      "customerId": "usr-cust-4"
     },
     {
       "id": "apt-1052",
@@ -1552,7 +1869,10 @@
       "amountInr": 2000,
       "notes": "Treatment completed as scheduled.",
       "createdAt": "2026-03-22T12:00:00.000Z",
-      "updatedAt": "2026-03-24T12:00:00.000Z"
+      "updatedAt": "2026-03-24T12:00:00.000Z",
+      "room": "Consult 2",
+      "bookingChannel": "Walk-in",
+      "customerId": "usr-cust-5"
     },
     {
       "id": "apt-1053",
@@ -1573,7 +1893,10 @@
       "amountInr": 1800,
       "notes": "Treatment completed as scheduled.",
       "createdAt": "2026-03-25T12:00:00.000Z",
-      "updatedAt": "2026-03-27T12:00:00.000Z"
+      "updatedAt": "2026-03-27T12:00:00.000Z",
+      "room": "Slim-1",
+      "bookingChannel": "Phone Call",
+      "customerId": "usr-cust-6"
     },
     {
       "id": "apt-1054",
@@ -1594,7 +1917,10 @@
       "amountInr": 4200,
       "notes": "Treatment completed as scheduled.",
       "createdAt": "2026-03-01T12:00:00.000Z",
-      "updatedAt": "2026-03-03T12:00:00.000Z"
+      "updatedAt": "2026-03-03T12:00:00.000Z",
+      "room": "Slim-2",
+      "bookingChannel": "Walk-in",
+      "customerId": "usr-cust-1"
     },
     {
       "id": "apt-1055",
@@ -1615,7 +1941,10 @@
       "amountInr": 2200,
       "notes": "Treatment completed as scheduled.",
       "createdAt": "2026-03-04T12:00:00.000Z",
-      "updatedAt": "2026-03-06T12:00:00.000Z"
+      "updatedAt": "2026-03-06T12:00:00.000Z",
+      "room": "Skin / Hair",
+      "bookingChannel": "Phone Call",
+      "customerId": "usr-cust-2"
     },
     {
       "id": "apt-1056",
@@ -1636,7 +1965,10 @@
       "amountInr": 2500,
       "notes": "Treatment completed as scheduled.",
       "createdAt": "2026-03-07T12:00:00.000Z",
-      "updatedAt": "2026-03-09T12:00:00.000Z"
+      "updatedAt": "2026-03-09T12:00:00.000Z",
+      "room": "Consult 1",
+      "bookingChannel": "Walk-in",
+      "customerId": "usr-cust-3"
     },
     {
       "id": "apt-1057",
@@ -1657,7 +1989,10 @@
       "amountInr": 5500,
       "notes": "Treatment completed as scheduled.",
       "createdAt": "2026-03-10T12:00:00.000Z",
-      "updatedAt": "2026-03-12T12:00:00.000Z"
+      "updatedAt": "2026-03-12T12:00:00.000Z",
+      "room": "Consult 2",
+      "bookingChannel": "Phone Call",
+      "customerId": "usr-cust-4"
     },
     {
       "id": "apt-1058",
@@ -1678,7 +2013,10 @@
       "amountInr": 28500,
       "notes": "Treatment completed as scheduled.",
       "createdAt": "2026-03-13T12:00:00.000Z",
-      "updatedAt": "2026-03-15T12:00:00.000Z"
+      "updatedAt": "2026-03-15T12:00:00.000Z",
+      "room": "Slim-1",
+      "bookingChannel": "Walk-in",
+      "customerId": "usr-cust-5"
     },
     {
       "id": "apt-1059",
@@ -1699,7 +2037,10 @@
       "amountInr": 4500,
       "notes": "Treatment completed as scheduled.",
       "createdAt": "2026-03-16T12:00:00.000Z",
-      "updatedAt": "2026-03-18T12:00:00.000Z"
+      "updatedAt": "2026-03-18T12:00:00.000Z",
+      "room": "Slim-2",
+      "bookingChannel": "Phone Call",
+      "customerId": "usr-cust-6"
     },
     {
       "id": "apt-1060",
@@ -1720,7 +2061,10 @@
       "amountInr": 6800,
       "notes": "Treatment completed as scheduled.",
       "createdAt": "2026-03-19T12:00:00.000Z",
-      "updatedAt": "2026-03-21T12:00:00.000Z"
+      "updatedAt": "2026-03-21T12:00:00.000Z",
+      "room": "Skin / Hair",
+      "bookingChannel": "Walk-in",
+      "customerId": "usr-cust-1"
     },
     {
       "id": "apt-1061",
@@ -1741,7 +2085,10 @@
       "amountInr": 4500,
       "notes": "Treatment completed as scheduled.",
       "createdAt": "2026-04-11T12:00:00.000Z",
-      "updatedAt": "2026-04-13T12:00:00.000Z"
+      "updatedAt": "2026-04-13T12:00:00.000Z",
+      "room": "Consult 1",
+      "bookingChannel": "Phone Call",
+      "customerId": "usr-cust-1"
     },
     {
       "id": "apt-1062",
@@ -1762,7 +2109,10 @@
       "amountInr": 6800,
       "notes": "Treatment completed as scheduled.",
       "createdAt": "2026-04-14T12:00:00.000Z",
-      "updatedAt": "2026-04-16T12:00:00.000Z"
+      "updatedAt": "2026-04-16T12:00:00.000Z",
+      "room": "Consult 2",
+      "bookingChannel": "Walk-in",
+      "customerId": "usr-cust-2"
     },
     {
       "id": "apt-1063",
@@ -1783,7 +2133,10 @@
       "amountInr": 8500,
       "notes": "Treatment completed as scheduled.",
       "createdAt": "2026-04-17T12:00:00.000Z",
-      "updatedAt": "2026-04-19T12:00:00.000Z"
+      "updatedAt": "2026-04-19T12:00:00.000Z",
+      "room": "Slim-1",
+      "bookingChannel": "Phone Call",
+      "customerId": "usr-cust-3"
     },
     {
       "id": "apt-1064",
@@ -1804,7 +2157,10 @@
       "amountInr": 3500,
       "notes": "Treatment completed as scheduled.",
       "createdAt": "2026-04-20T12:00:00.000Z",
-      "updatedAt": "2026-04-22T12:00:00.000Z"
+      "updatedAt": "2026-04-22T12:00:00.000Z",
+      "room": "Slim-2",
+      "bookingChannel": "Walk-in",
+      "customerId": "usr-cust-4"
     },
     {
       "id": "apt-1065",
@@ -1825,7 +2181,10 @@
       "amountInr": 7200,
       "notes": "Treatment completed as scheduled.",
       "createdAt": "2026-04-23T12:00:00.000Z",
-      "updatedAt": "2026-04-25T12:00:00.000Z"
+      "updatedAt": "2026-04-25T12:00:00.000Z",
+      "room": "Skin / Hair",
+      "bookingChannel": "Phone Call",
+      "customerId": "usr-cust-5"
     },
     {
       "id": "apt-1066",
@@ -1846,7 +2205,10 @@
       "amountInr": 2000,
       "notes": "Treatment completed as scheduled.",
       "createdAt": "2026-03-30T12:00:00.000Z",
-      "updatedAt": "2026-04-01T12:00:00.000Z"
+      "updatedAt": "2026-04-01T12:00:00.000Z",
+      "room": "Consult 1",
+      "bookingChannel": "Walk-in",
+      "customerId": "usr-cust-6"
     },
     {
       "id": "apt-1067",
@@ -1867,7 +2229,10 @@
       "amountInr": 1800,
       "notes": "Treatment completed as scheduled.",
       "createdAt": "2026-04-02T12:00:00.000Z",
-      "updatedAt": "2026-04-04T12:00:00.000Z"
+      "updatedAt": "2026-04-04T12:00:00.000Z",
+      "room": "Consult 2",
+      "bookingChannel": "Phone Call",
+      "customerId": "usr-cust-1"
     },
     {
       "id": "apt-1068",
@@ -1888,7 +2253,10 @@
       "amountInr": 4200,
       "notes": "Treatment completed as scheduled.",
       "createdAt": "2026-04-05T12:00:00.000Z",
-      "updatedAt": "2026-04-07T12:00:00.000Z"
+      "updatedAt": "2026-04-07T12:00:00.000Z",
+      "room": "Slim-1",
+      "bookingChannel": "Walk-in",
+      "customerId": "usr-cust-2"
     },
     {
       "id": "apt-1069",
@@ -1909,7 +2277,10 @@
       "amountInr": 2200,
       "notes": "Treatment completed as scheduled.",
       "createdAt": "2026-04-08T12:00:00.000Z",
-      "updatedAt": "2026-04-10T12:00:00.000Z"
+      "updatedAt": "2026-04-10T12:00:00.000Z",
+      "room": "Slim-2",
+      "bookingChannel": "Phone Call",
+      "customerId": "usr-cust-3"
     },
     {
       "id": "apt-1070",
@@ -1930,7 +2301,10 @@
       "amountInr": 2500,
       "notes": "Treatment completed as scheduled.",
       "createdAt": "2026-04-11T12:00:00.000Z",
-      "updatedAt": "2026-04-13T12:00:00.000Z"
+      "updatedAt": "2026-04-13T12:00:00.000Z",
+      "room": "Skin / Hair",
+      "bookingChannel": "Walk-in",
+      "customerId": "usr-cust-4"
     },
     {
       "id": "apt-1071",
@@ -1951,7 +2325,10 @@
       "amountInr": 5500,
       "notes": "Treatment completed as scheduled.",
       "createdAt": "2026-05-09T12:00:00.000Z",
-      "updatedAt": "2026-05-11T12:00:00.000Z"
+      "updatedAt": "2026-05-11T12:00:00.000Z",
+      "room": "Consult 1",
+      "bookingChannel": "Phone Call",
+      "customerId": "usr-cust-6"
     },
     {
       "id": "apt-1072",
@@ -1972,7 +2349,10 @@
       "amountInr": 28500,
       "notes": "Treatment completed as scheduled.",
       "createdAt": "2026-05-12T12:00:00.000Z",
-      "updatedAt": "2026-05-14T12:00:00.000Z"
+      "updatedAt": "2026-05-14T12:00:00.000Z",
+      "room": "Consult 2",
+      "bookingChannel": "Walk-in",
+      "customerId": "usr-cust-1"
     },
     {
       "id": "apt-1073",
@@ -1993,7 +2373,10 @@
       "amountInr": 4500,
       "notes": "Treatment completed as scheduled.",
       "createdAt": "2026-05-15T12:00:00.000Z",
-      "updatedAt": "2026-05-17T12:00:00.000Z"
+      "updatedAt": "2026-05-17T12:00:00.000Z",
+      "room": "Slim-1",
+      "bookingChannel": "Phone Call",
+      "customerId": "usr-cust-2"
     },
     {
       "id": "apt-1074",
@@ -2014,7 +2397,10 @@
       "amountInr": 6800,
       "notes": "Treatment completed as scheduled.",
       "createdAt": "2026-05-18T12:00:00.000Z",
-      "updatedAt": "2026-05-20T12:00:00.000Z"
+      "updatedAt": "2026-05-20T12:00:00.000Z",
+      "room": "Slim-2",
+      "bookingChannel": "Walk-in",
+      "customerId": "usr-cust-3"
     },
     {
       "id": "apt-1075",
@@ -2035,7 +2421,10 @@
       "amountInr": 8500,
       "notes": "Treatment completed as scheduled.",
       "createdAt": "2026-05-21T12:00:00.000Z",
-      "updatedAt": "2026-05-23T12:00:00.000Z"
+      "updatedAt": "2026-05-23T12:00:00.000Z",
+      "room": "Skin / Hair",
+      "bookingChannel": "Phone Call",
+      "customerId": "usr-cust-4"
     },
     {
       "id": "apt-1076",
@@ -2056,7 +2445,10 @@
       "amountInr": 3500,
       "notes": "Treatment completed as scheduled.",
       "createdAt": "2026-05-24T12:00:00.000Z",
-      "updatedAt": "2026-05-26T12:00:00.000Z"
+      "updatedAt": "2026-05-26T12:00:00.000Z",
+      "room": "Consult 1",
+      "bookingChannel": "Walk-in",
+      "customerId": "usr-cust-5"
     },
     {
       "id": "apt-1077",
@@ -2077,7 +2469,10 @@
       "amountInr": 7200,
       "notes": "Treatment completed as scheduled.",
       "createdAt": "2026-04-30T12:00:00.000Z",
-      "updatedAt": "2026-05-02T12:00:00.000Z"
+      "updatedAt": "2026-05-02T12:00:00.000Z",
+      "room": "Consult 2",
+      "bookingChannel": "Phone Call",
+      "customerId": "usr-cust-6"
     },
     {
       "id": "apt-1078",
@@ -2098,7 +2493,10 @@
       "amountInr": 2000,
       "notes": "Treatment completed as scheduled.",
       "createdAt": "2026-05-03T12:00:00.000Z",
-      "updatedAt": "2026-05-05T12:00:00.000Z"
+      "updatedAt": "2026-05-05T12:00:00.000Z",
+      "room": "Slim-1",
+      "bookingChannel": "Walk-in",
+      "customerId": "usr-cust-1"
     },
     {
       "id": "apt-1079",
@@ -2119,7 +2517,10 @@
       "amountInr": 2200,
       "notes": "Treatment completed as scheduled.",
       "createdAt": "2026-06-07T12:00:00.000Z",
-      "updatedAt": "2026-06-09T12:00:00.000Z"
+      "updatedAt": "2026-06-09T12:00:00.000Z",
+      "room": "Slim-2",
+      "bookingChannel": "Phone Call",
+      "customerId": "usr-cust-5"
     },
     {
       "id": "apt-1080",
@@ -2140,7 +2541,10 @@
       "amountInr": 2500,
       "notes": "Treatment completed as scheduled.",
       "createdAt": "2026-06-10T12:00:00.000Z",
-      "updatedAt": "2026-06-12T12:00:00.000Z"
+      "updatedAt": "2026-06-12T12:00:00.000Z",
+      "room": "Skin / Hair",
+      "bookingChannel": "Walk-in",
+      "customerId": "usr-cust-6"
     },
     {
       "id": "apt-1081",
@@ -2161,7 +2565,10 @@
       "amountInr": 5500,
       "notes": "Treatment completed as scheduled.",
       "createdAt": "2026-06-13T12:00:00.000Z",
-      "updatedAt": "2026-06-15T12:00:00.000Z"
+      "updatedAt": "2026-06-15T12:00:00.000Z",
+      "room": "Consult 1",
+      "bookingChannel": "Phone Call",
+      "customerId": "usr-cust-1"
     },
     {
       "id": "apt-1082",
@@ -2182,7 +2589,10 @@
       "amountInr": 28500,
       "notes": "Treatment completed as scheduled.",
       "createdAt": "2026-06-16T12:00:00.000Z",
-      "updatedAt": "2026-06-18T12:00:00.000Z"
+      "updatedAt": "2026-06-18T12:00:00.000Z",
+      "room": "Consult 2",
+      "bookingChannel": "Walk-in",
+      "customerId": "usr-cust-2"
     },
     {
       "id": "apt-1083",
@@ -2203,7 +2613,10 @@
       "amountInr": 4500,
       "notes": "Treatment completed as scheduled.",
       "createdAt": "2026-06-19T12:00:00.000Z",
-      "updatedAt": "2026-06-21T12:00:00.000Z"
+      "updatedAt": "2026-06-21T12:00:00.000Z",
+      "room": "Slim-1",
+      "bookingChannel": "Phone Call",
+      "customerId": "usr-cust-3"
     },
     {
       "id": "apt-1084",
@@ -2224,7 +2637,10 @@
       "amountInr": 6800,
       "notes": "Treatment completed as scheduled.",
       "createdAt": "2026-06-22T12:00:00.000Z",
-      "updatedAt": "2026-06-24T12:00:00.000Z"
+      "updatedAt": "2026-06-24T12:00:00.000Z",
+      "room": "Slim-2",
+      "bookingChannel": "Walk-in",
+      "customerId": "usr-cust-4"
     },
     {
       "id": "apt-1085",
@@ -2245,7 +2661,10 @@
       "amountInr": 8500,
       "notes": "Treatment completed as scheduled.",
       "createdAt": "2026-06-25T12:00:00.000Z",
-      "updatedAt": "2026-06-27T12:00:00.000Z"
+      "updatedAt": "2026-06-27T12:00:00.000Z",
+      "room": "Skin / Hair",
+      "bookingChannel": "Phone Call",
+      "customerId": "usr-cust-5"
     },
     {
       "id": "apt-1086",
@@ -2266,7 +2685,10 @@
       "amountInr": 3500,
       "notes": "Treatment completed as scheduled.",
       "createdAt": "2026-06-01T12:00:00.000Z",
-      "updatedAt": "2026-06-03T12:00:00.000Z"
+      "updatedAt": "2026-06-03T12:00:00.000Z",
+      "room": "Consult 1",
+      "bookingChannel": "Walk-in",
+      "customerId": "usr-cust-6"
     },
     {
       "id": "apt-1087",
@@ -2287,7 +2709,10 @@
       "amountInr": 7200,
       "notes": "Treatment completed as scheduled.",
       "createdAt": "2026-06-04T12:00:00.000Z",
-      "updatedAt": "2026-06-06T12:00:00.000Z"
+      "updatedAt": "2026-06-06T12:00:00.000Z",
+      "room": "Consult 2",
+      "bookingChannel": "Phone Call",
+      "customerId": "usr-cust-1"
     },
     {
       "id": "apt-1088",
@@ -2308,7 +2733,10 @@
       "amountInr": 2000,
       "notes": "Treatment completed as scheduled.",
       "createdAt": "2026-06-07T12:00:00.000Z",
-      "updatedAt": "2026-06-09T12:00:00.000Z"
+      "updatedAt": "2026-06-09T12:00:00.000Z",
+      "room": "Slim-1",
+      "bookingChannel": "Walk-in",
+      "customerId": "usr-cust-2"
     },
     {
       "id": "apt-1089",
@@ -2329,7 +2757,10 @@
       "amountInr": 1800,
       "notes": "Treatment completed as scheduled.",
       "createdAt": "2026-06-10T12:00:00.000Z",
-      "updatedAt": "2026-06-12T12:00:00.000Z"
+      "updatedAt": "2026-06-12T12:00:00.000Z",
+      "room": "Slim-2",
+      "bookingChannel": "Phone Call",
+      "customerId": "usr-cust-3"
     },
     {
       "id": "apt-1090",
@@ -2350,7 +2781,10 @@
       "amountInr": 4200,
       "notes": "Treatment completed as scheduled.",
       "createdAt": "2026-06-13T12:00:00.000Z",
-      "updatedAt": "2026-06-15T12:00:00.000Z"
+      "updatedAt": "2026-06-15T12:00:00.000Z",
+      "room": "Skin / Hair",
+      "bookingChannel": "Walk-in",
+      "customerId": "usr-cust-4"
     },
     {
       "id": "apt-1091",
@@ -2371,7 +2805,10 @@
       "amountInr": 2200,
       "notes": "Treatment completed as scheduled.",
       "createdAt": "2026-06-16T12:00:00.000Z",
-      "updatedAt": "2026-06-18T12:00:00.000Z"
+      "updatedAt": "2026-06-18T12:00:00.000Z",
+      "room": "Consult 1",
+      "bookingChannel": "Phone Call",
+      "customerId": "usr-cust-5"
     },
     {
       "id": "apt-1092",
@@ -2392,7 +2829,10 @@
       "amountInr": 2500,
       "notes": "Treatment completed as scheduled.",
       "createdAt": "2026-06-19T12:00:00.000Z",
-      "updatedAt": "2026-06-21T12:00:00.000Z"
+      "updatedAt": "2026-06-21T12:00:00.000Z",
+      "room": "Consult 2",
+      "bookingChannel": "Walk-in",
+      "customerId": "usr-cust-6"
     },
     {
       "id": "apt-1093",
@@ -2413,7 +2853,10 @@
       "amountInr": 5500,
       "notes": "Treatment completed as scheduled.",
       "createdAt": "2026-06-22T12:00:00.000Z",
-      "updatedAt": "2026-06-24T12:00:00.000Z"
+      "updatedAt": "2026-06-24T12:00:00.000Z",
+      "room": "Slim-1",
+      "bookingChannel": "Phone Call",
+      "customerId": "usr-cust-1"
     },
     {
       "id": "apt-1094",
@@ -2434,7 +2877,10 @@
       "amountInr": 28500,
       "notes": "Treatment completed as scheduled.",
       "createdAt": "2026-06-25T12:00:00.000Z",
-      "updatedAt": "2026-06-27T12:00:00.000Z"
+      "updatedAt": "2026-06-27T12:00:00.000Z",
+      "room": "Slim-2",
+      "bookingChannel": "Walk-in",
+      "customerId": "usr-cust-2"
     },
     {
       "id": "apt-1095",
@@ -2455,7 +2901,10 @@
       "amountInr": 1800,
       "notes": "Treatment completed as scheduled.",
       "createdAt": "2026-07-05T12:00:00.000Z",
-      "updatedAt": "2026-07-07T12:00:00.000Z"
+      "updatedAt": "2026-07-07T12:00:00.000Z",
+      "room": "Skin / Hair",
+      "bookingChannel": "Phone Call",
+      "customerId": "usr-cust-4"
     },
     {
       "id": "apt-1096",
@@ -2476,7 +2925,10 @@
       "amountInr": 4200,
       "notes": "Treatment completed as scheduled.",
       "createdAt": "2026-07-08T12:00:00.000Z",
-      "updatedAt": "2026-07-10T12:00:00.000Z"
+      "updatedAt": "2026-07-10T12:00:00.000Z",
+      "room": "Consult 1",
+      "bookingChannel": "Walk-in",
+      "customerId": "usr-cust-5"
     },
     {
       "id": "apt-1097",
@@ -2497,7 +2949,10 @@
       "amountInr": 2200,
       "notes": "Treatment completed as scheduled.",
       "createdAt": "2026-07-11T12:00:00.000Z",
-      "updatedAt": "2026-07-13T12:00:00.000Z"
+      "updatedAt": "2026-07-13T12:00:00.000Z",
+      "room": "Consult 2",
+      "bookingChannel": "Phone Call",
+      "customerId": "usr-cust-6"
     },
     {
       "id": "apt-1098",
@@ -2518,7 +2973,10 @@
       "amountInr": 2500,
       "notes": "Treatment completed as scheduled.",
       "createdAt": "2026-07-14T12:00:00.000Z",
-      "updatedAt": "2026-07-16T12:00:00.000Z"
+      "updatedAt": "2026-07-16T12:00:00.000Z",
+      "room": "Slim-1",
+      "bookingChannel": "Walk-in",
+      "customerId": "usr-cust-1"
     },
     {
       "id": "apt-1099",
@@ -2539,7 +2997,10 @@
       "amountInr": 5500,
       "notes": "Treatment completed as scheduled.",
       "createdAt": "2026-07-17T12:00:00.000Z",
-      "updatedAt": "2026-07-19T12:00:00.000Z"
+      "updatedAt": "2026-07-19T12:00:00.000Z",
+      "room": "Slim-2",
+      "bookingChannel": "Phone Call",
+      "customerId": "usr-cust-2"
     },
     {
       "id": "apt-1100",
@@ -2560,7 +3021,10 @@
       "amountInr": 28500,
       "notes": "Treatment completed as scheduled.",
       "createdAt": "2026-07-20T12:00:00.000Z",
-      "updatedAt": "2026-07-22T12:00:00.000Z"
+      "updatedAt": "2026-07-22T12:00:00.000Z",
+      "room": "Skin / Hair",
+      "bookingChannel": "Walk-in",
+      "customerId": "usr-cust-3"
     },
     {
       "id": "apt-1101",
@@ -2581,7 +3045,10 @@
       "amountInr": 4500,
       "notes": "Treatment completed as scheduled.",
       "createdAt": "2026-07-23T12:00:00.000Z",
-      "updatedAt": "2026-07-25T12:00:00.000Z"
+      "updatedAt": "2026-07-25T12:00:00.000Z",
+      "room": "Consult 1",
+      "bookingChannel": "Phone Call",
+      "customerId": "usr-cust-4"
     },
     {
       "id": "apt-1102",
@@ -2602,7 +3069,10 @@
       "amountInr": 6800,
       "notes": "Treatment completed as scheduled.",
       "createdAt": "2026-06-29T12:00:00.000Z",
-      "updatedAt": "2026-07-01T12:00:00.000Z"
+      "updatedAt": "2026-07-01T12:00:00.000Z",
+      "room": "Consult 2",
+      "bookingChannel": "Walk-in",
+      "customerId": "usr-cust-5"
     },
     {
       "id": "apt-1103",
@@ -2623,7 +3093,10 @@
       "amountInr": 8500,
       "notes": "Treatment completed as scheduled.",
       "createdAt": "2026-07-02T12:00:00.000Z",
-      "updatedAt": "2026-07-04T12:00:00.000Z"
+      "updatedAt": "2026-07-04T12:00:00.000Z",
+      "room": "Slim-1",
+      "bookingChannel": "Phone Call",
+      "customerId": "usr-cust-6"
     },
     {
       "id": "apt-1104",
@@ -2644,7 +3117,10 @@
       "amountInr": 3500,
       "notes": "Treatment completed as scheduled.",
       "createdAt": "2026-07-05T12:00:00.000Z",
-      "updatedAt": "2026-07-07T12:00:00.000Z"
+      "updatedAt": "2026-07-07T12:00:00.000Z",
+      "room": "Slim-2",
+      "bookingChannel": "Walk-in",
+      "customerId": "usr-cust-1"
     },
     {
       "id": "apt-1105",
@@ -2665,7 +3141,10 @@
       "amountInr": 7200,
       "notes": "Treatment completed as scheduled.",
       "createdAt": "2026-07-08T12:00:00.000Z",
-      "updatedAt": "2026-07-10T12:00:00.000Z"
+      "updatedAt": "2026-07-10T12:00:00.000Z",
+      "room": "Skin / Hair",
+      "bookingChannel": "Phone Call",
+      "customerId": "usr-cust-2"
     },
     {
       "id": "apt-1106",
@@ -2686,7 +3165,10 @@
       "amountInr": 2000,
       "notes": "Treatment completed as scheduled.",
       "createdAt": "2026-07-11T12:00:00.000Z",
-      "updatedAt": "2026-07-13T12:00:00.000Z"
+      "updatedAt": "2026-07-13T12:00:00.000Z",
+      "room": "Consult 1",
+      "bookingChannel": "Walk-in",
+      "customerId": "usr-cust-3"
     },
     {
       "id": "apt-1107",
@@ -2707,7 +3189,10 @@
       "amountInr": 1800,
       "notes": "Treatment completed as scheduled.",
       "createdAt": "2026-07-14T12:00:00.000Z",
-      "updatedAt": "2026-07-16T12:00:00.000Z"
+      "updatedAt": "2026-07-16T12:00:00.000Z",
+      "room": "Consult 2",
+      "bookingChannel": "Phone Call",
+      "customerId": "usr-cust-4"
     },
     {
       "id": "apt-1108",
@@ -2728,7 +3213,10 @@
       "amountInr": 4200,
       "notes": "Treatment completed as scheduled.",
       "createdAt": "2026-07-17T12:00:00.000Z",
-      "updatedAt": "2026-07-19T12:00:00.000Z"
+      "updatedAt": "2026-07-19T12:00:00.000Z",
+      "room": "Slim-1",
+      "bookingChannel": "Walk-in",
+      "customerId": "usr-cust-5"
     },
     {
       "id": "apt-1109",
@@ -2749,7 +3237,10 @@
       "amountInr": 7200,
       "notes": "Treatment completed as scheduled.",
       "createdAt": "2026-08-03T12:00:00.000Z",
-      "updatedAt": "2026-08-05T12:00:00.000Z"
+      "updatedAt": "2026-08-05T12:00:00.000Z",
+      "room": "Slim-2",
+      "bookingChannel": "Phone Call",
+      "customerId": "usr-cust-3"
     },
     {
       "id": "apt-1110",
@@ -2770,7 +3261,10 @@
       "amountInr": 2000,
       "notes": "Treatment completed as scheduled.",
       "createdAt": "2026-08-06T12:00:00.000Z",
-      "updatedAt": "2026-08-08T12:00:00.000Z"
+      "updatedAt": "2026-08-08T12:00:00.000Z",
+      "room": "Skin / Hair",
+      "bookingChannel": "Walk-in",
+      "customerId": "usr-cust-4"
     },
     {
       "id": "apt-1111",
@@ -2791,7 +3285,10 @@
       "amountInr": 1800,
       "notes": "Treatment completed as scheduled.",
       "createdAt": "2026-08-09T12:00:00.000Z",
-      "updatedAt": "2026-08-11T12:00:00.000Z"
+      "updatedAt": "2026-08-11T12:00:00.000Z",
+      "room": "Consult 1",
+      "bookingChannel": "Phone Call",
+      "customerId": "usr-cust-5"
     },
     {
       "id": "apt-1112",
@@ -2812,7 +3309,10 @@
       "amountInr": 4200,
       "notes": "Treatment completed as scheduled.",
       "createdAt": "2026-08-12T12:00:00.000Z",
-      "updatedAt": "2026-08-14T12:00:00.000Z"
+      "updatedAt": "2026-08-14T12:00:00.000Z",
+      "room": "Consult 2",
+      "bookingChannel": "Walk-in",
+      "customerId": "usr-cust-6"
     },
     {
       "id": "apt-1113",
@@ -2833,7 +3333,10 @@
       "amountInr": 2200,
       "notes": "Treatment completed as scheduled.",
       "createdAt": "2026-08-15T12:00:00.000Z",
-      "updatedAt": "2026-08-17T12:00:00.000Z"
+      "updatedAt": "2026-08-17T12:00:00.000Z",
+      "room": "Slim-1",
+      "bookingChannel": "Phone Call",
+      "customerId": "usr-cust-1"
     },
     {
       "id": "apt-1114",
@@ -2854,7 +3357,10 @@
       "amountInr": 2500,
       "notes": "Treatment completed as scheduled.",
       "createdAt": "2026-08-18T12:00:00.000Z",
-      "updatedAt": "2026-08-20T12:00:00.000Z"
+      "updatedAt": "2026-08-20T12:00:00.000Z",
+      "room": "Slim-2",
+      "bookingChannel": "Walk-in",
+      "customerId": "usr-cust-2"
     },
     {
       "id": "apt-1115",
@@ -2875,7 +3381,10 @@
       "amountInr": 5500,
       "notes": "Treatment completed as scheduled.",
       "createdAt": "2026-08-21T12:00:00.000Z",
-      "updatedAt": "2026-08-23T12:00:00.000Z"
+      "updatedAt": "2026-08-23T12:00:00.000Z",
+      "room": "Skin / Hair",
+      "bookingChannel": "Phone Call",
+      "customerId": "usr-cust-3"
     },
     {
       "id": "apt-1116",
@@ -2896,7 +3405,10 @@
       "amountInr": 28500,
       "notes": "Treatment completed as scheduled.",
       "createdAt": "2026-08-24T12:00:00.000Z",
-      "updatedAt": "2026-08-26T12:00:00.000Z"
+      "updatedAt": "2026-08-26T12:00:00.000Z",
+      "room": "Consult 1",
+      "bookingChannel": "Walk-in",
+      "customerId": "usr-cust-4"
     },
     {
       "id": "apt-1117",
@@ -2917,7 +3429,10 @@
       "amountInr": 4500,
       "notes": "Treatment completed as scheduled.",
       "createdAt": "2026-07-31T12:00:00.000Z",
-      "updatedAt": "2026-08-02T12:00:00.000Z"
+      "updatedAt": "2026-08-02T12:00:00.000Z",
+      "room": "Consult 2",
+      "bookingChannel": "Phone Call",
+      "customerId": "usr-cust-5"
     },
     {
       "id": "apt-1118",
@@ -2938,7 +3453,10 @@
       "amountInr": 6800,
       "notes": "Treatment completed as scheduled.",
       "createdAt": "2026-08-03T12:00:00.000Z",
-      "updatedAt": "2026-08-05T12:00:00.000Z"
+      "updatedAt": "2026-08-05T12:00:00.000Z",
+      "room": "Slim-1",
+      "bookingChannel": "Walk-in",
+      "customerId": "usr-cust-6"
     },
     {
       "id": "apt-1119",
@@ -2959,7 +3477,10 @@
       "amountInr": 8500,
       "notes": "Treatment completed as scheduled.",
       "createdAt": "2026-08-06T12:00:00.000Z",
-      "updatedAt": "2026-08-08T12:00:00.000Z"
+      "updatedAt": "2026-08-08T12:00:00.000Z",
+      "room": "Slim-2",
+      "bookingChannel": "Phone Call",
+      "customerId": "usr-cust-1"
     },
     {
       "id": "apt-1120",
@@ -2980,7 +3501,10 @@
       "amountInr": 3500,
       "notes": "Treatment completed as scheduled.",
       "createdAt": "2026-08-09T12:00:00.000Z",
-      "updatedAt": "2026-08-11T12:00:00.000Z"
+      "updatedAt": "2026-08-11T12:00:00.000Z",
+      "room": "Skin / Hair",
+      "bookingChannel": "Walk-in",
+      "customerId": "usr-cust-2"
     },
     {
       "id": "apt-1121",
@@ -3001,7 +3525,10 @@
       "amountInr": 8500,
       "notes": "Treatment completed as scheduled.",
       "createdAt": "2026-09-01T12:00:00.000Z",
-      "updatedAt": "2026-09-03T12:00:00.000Z"
+      "updatedAt": "2026-09-03T12:00:00.000Z",
+      "room": "Consult 1",
+      "bookingChannel": "Phone Call",
+      "customerId": "usr-cust-2"
     },
     {
       "id": "apt-1122",
@@ -3022,7 +3549,10 @@
       "amountInr": 3500,
       "notes": "Treatment completed as scheduled.",
       "createdAt": "2026-09-04T12:00:00.000Z",
-      "updatedAt": "2026-09-06T12:00:00.000Z"
+      "updatedAt": "2026-09-06T12:00:00.000Z",
+      "room": "Consult 2",
+      "bookingChannel": "Walk-in",
+      "customerId": "usr-cust-3"
     },
     {
       "id": "apt-1123",
@@ -3043,7 +3573,10 @@
       "amountInr": 7200,
       "notes": "Treatment completed as scheduled.",
       "createdAt": "2026-09-07T12:00:00.000Z",
-      "updatedAt": "2026-09-09T12:00:00.000Z"
+      "updatedAt": "2026-09-09T12:00:00.000Z",
+      "room": "Slim-1",
+      "bookingChannel": "Phone Call",
+      "customerId": "usr-cust-4"
     },
     {
       "id": "apt-1124",
@@ -3064,7 +3597,10 @@
       "amountInr": 2000,
       "notes": "Treatment completed as scheduled.",
       "createdAt": "2026-09-10T12:00:00.000Z",
-      "updatedAt": "2026-09-12T12:00:00.000Z"
+      "updatedAt": "2026-09-12T12:00:00.000Z",
+      "room": "Slim-2",
+      "bookingChannel": "Walk-in",
+      "customerId": "usr-cust-5"
     },
     {
       "id": "apt-1125",
@@ -3085,7 +3621,10 @@
       "amountInr": 1800,
       "notes": "Treatment completed as scheduled.",
       "createdAt": "2026-09-13T12:00:00.000Z",
-      "updatedAt": "2026-09-15T12:00:00.000Z"
+      "updatedAt": "2026-09-15T12:00:00.000Z",
+      "room": "Skin / Hair",
+      "bookingChannel": "Phone Call",
+      "customerId": "usr-cust-6"
     },
     {
       "id": "apt-1126",
@@ -3106,7 +3645,10 @@
       "amountInr": 4200,
       "notes": "Treatment completed as scheduled.",
       "createdAt": "2026-09-16T12:00:00.000Z",
-      "updatedAt": "2026-09-18T12:00:00.000Z"
+      "updatedAt": "2026-09-18T12:00:00.000Z",
+      "room": "Consult 1",
+      "bookingChannel": "Walk-in",
+      "customerId": "usr-cust-1"
     },
     {
       "id": "apt-1127",
@@ -3127,7 +3669,10 @@
       "amountInr": 2200,
       "notes": "Treatment completed as scheduled.",
       "createdAt": "2026-09-19T12:00:00.000Z",
-      "updatedAt": "2026-09-21T12:00:00.000Z"
+      "updatedAt": "2026-09-21T12:00:00.000Z",
+      "room": "Consult 2",
+      "bookingChannel": "Phone Call",
+      "customerId": "usr-cust-2"
     },
     {
       "id": "apt-1128",
@@ -3148,7 +3693,10 @@
       "amountInr": 2500,
       "notes": "Treatment completed as scheduled.",
       "createdAt": "2026-09-22T12:00:00.000Z",
-      "updatedAt": "2026-09-24T12:00:00.000Z"
+      "updatedAt": "2026-09-24T12:00:00.000Z",
+      "room": "Slim-1",
+      "bookingChannel": "Walk-in",
+      "customerId": "usr-cust-3"
     },
     {
       "id": "apt-1129",
@@ -3169,7 +3717,10 @@
       "amountInr": 5500,
       "notes": "Treatment completed as scheduled.",
       "createdAt": "2026-09-25T12:00:00.000Z",
-      "updatedAt": "2026-09-27T12:00:00.000Z"
+      "updatedAt": "2026-09-27T12:00:00.000Z",
+      "room": "Slim-2",
+      "bookingChannel": "Phone Call",
+      "customerId": "usr-cust-4"
     },
     {
       "id": "apt-1130",
@@ -3190,7 +3741,10 @@
       "amountInr": 28500,
       "notes": "Treatment completed as scheduled.",
       "createdAt": "2026-09-01T12:00:00.000Z",
-      "updatedAt": "2026-09-03T12:00:00.000Z"
+      "updatedAt": "2026-09-03T12:00:00.000Z",
+      "room": "Skin / Hair",
+      "bookingChannel": "Walk-in",
+      "customerId": "usr-cust-5"
     },
     {
       "id": "apt-1131",
@@ -3211,7 +3765,10 @@
       "amountInr": 4500,
       "notes": "Treatment completed as scheduled.",
       "createdAt": "2026-09-29T12:00:00.000Z",
-      "updatedAt": "2026-10-01T12:00:00.000Z"
+      "updatedAt": "2026-10-01T12:00:00.000Z",
+      "room": "Consult 1",
+      "bookingChannel": "Phone Call",
+      "customerId": "usr-cust-1"
     },
     {
       "id": "apt-1132",
@@ -3232,7 +3789,10 @@
       "amountInr": 6800,
       "notes": "Customer requested early morning slot.",
       "createdAt": "2026-10-02T12:00:00.000Z",
-      "updatedAt": "2026-10-04T12:00:00.000Z"
+      "updatedAt": "2026-10-04T12:00:00.000Z",
+      "room": "Consult 2",
+      "bookingChannel": "Walk-in",
+      "customerId": "usr-cust-2"
     },
     {
       "id": "apt-1133",
@@ -3253,7 +3813,10 @@
       "amountInr": 8500,
       "notes": "Customer requested early morning slot.",
       "createdAt": "2026-10-05T12:00:00.000Z",
-      "updatedAt": "2026-10-07T12:00:00.000Z"
+      "updatedAt": "2026-10-07T12:00:00.000Z",
+      "room": "Slim-1",
+      "bookingChannel": "Phone Call",
+      "customerId": "usr-cust-3"
     },
     {
       "id": "apt-1134",
@@ -3274,7 +3837,10 @@
       "amountInr": 3500,
       "notes": "Customer requested early morning slot.",
       "createdAt": "2026-10-08T12:00:00.000Z",
-      "updatedAt": "2026-10-10T12:00:00.000Z"
+      "updatedAt": "2026-10-10T12:00:00.000Z",
+      "room": "Slim-2",
+      "bookingChannel": "Walk-in",
+      "customerId": "usr-cust-4"
     },
     {
       "id": "apt-1135",
@@ -3295,7 +3861,10 @@
       "amountInr": 7200,
       "notes": "Customer requested early morning slot.",
       "createdAt": "2026-10-11T12:00:00.000Z",
-      "updatedAt": "2026-10-13T12:00:00.000Z"
+      "updatedAt": "2026-10-13T12:00:00.000Z",
+      "room": "Skin / Hair",
+      "bookingChannel": "Phone Call",
+      "customerId": "usr-cust-5"
     },
     {
       "id": "apt-1136",
@@ -3316,7 +3885,10 @@
       "amountInr": 2000,
       "notes": "Customer requested early morning slot.",
       "createdAt": "2026-10-14T12:00:00.000Z",
-      "updatedAt": "2026-10-16T12:00:00.000Z"
+      "updatedAt": "2026-10-16T12:00:00.000Z",
+      "room": "Consult 1",
+      "bookingChannel": "Walk-in",
+      "customerId": "usr-cust-6"
     },
     {
       "id": "apt-1137",
@@ -3337,7 +3909,10 @@
       "amountInr": 1800,
       "notes": "Customer requested early morning slot.",
       "createdAt": "2026-10-17T12:00:00.000Z",
-      "updatedAt": "2026-10-19T12:00:00.000Z"
+      "updatedAt": "2026-10-19T12:00:00.000Z",
+      "room": "Consult 2",
+      "bookingChannel": "Phone Call",
+      "customerId": "usr-cust-1"
     },
     {
       "id": "apt-1138",
@@ -3358,7 +3933,10 @@
       "amountInr": 4200,
       "notes": "Customer requested early morning slot.",
       "createdAt": "2026-10-20T12:00:00.000Z",
-      "updatedAt": "2026-10-22T12:00:00.000Z"
+      "updatedAt": "2026-10-22T12:00:00.000Z",
+      "room": "Slim-1",
+      "bookingChannel": "Walk-in",
+      "customerId": "usr-cust-2"
     },
     {
       "id": "apt-1139",
@@ -3379,7 +3957,10 @@
       "amountInr": 4500,
       "notes": "Skin sensitivity consultation requested.",
       "createdAt": "2026-10-01T14:00:00Z",
-      "updatedAt": "2026-10-01T15:00:00Z"
+      "updatedAt": "2026-10-01T15:00:00Z",
+      "room": "Slim-2",
+      "bookingChannel": "Phone Call",
+      "customerId": "usr-cust-1"
     },
     {
       "id": "apt-1140",
@@ -3400,7 +3981,10 @@
       "amountInr": 2000,
       "notes": "Shoulder mobility focus.",
       "createdAt": "2026-10-01T18:00:00Z",
-      "updatedAt": "2026-10-02T08:00:00Z"
+      "updatedAt": "2026-10-02T08:00:00Z",
+      "room": "Skin / Hair",
+      "bookingChannel": "Walk-in",
+      "customerId": "usr-cust-2"
     },
     {
       "id": "apt-1141",
@@ -3421,7 +4005,10 @@
       "amountInr": 4200,
       "notes": "Completed session. Excellent client satisfaction.",
       "createdAt": "2026-09-29T10:00:00Z",
-      "updatedAt": "2026-10-01T16:00:00Z"
+      "updatedAt": "2026-10-01T16:00:00Z",
+      "room": "Consult 1",
+      "bookingChannel": "Phone Call",
+      "customerId": "usr-cust-3"
     }
   ],
   "inquiries": [
@@ -3551,6 +4138,1588 @@
       "read": false,
       "type": "system",
       "link": "/admin/inquiries"
+    }
+  ],
+  "customers": [
+    {
+      "id": "CUST-1012",
+      "name": "Test Prospect 3877",
+      "phone": "+91 977773877",
+      "email": "prospect.3877@example.com",
+      "leadSource": "Instagram",
+      "bookingChannel": "Phone Call",
+      "lifecycleStatus": "followup_required",
+      "initialRemarks": "Enquired via Instagram campaign for metabolic health.",
+      "notes": "",
+      "createdAt": "2026-10-11T12:07:04.262Z",
+      "updatedAt": "2026-10-11T12:07:04.264Z",
+      "totalSpendInr": 0,
+      "completedTreatments": 0
+    },
+    {
+      "id": "CUST-1011",
+      "name": "Test WalkIn User 3877",
+      "phone": "+91 999993877",
+      "email": "walkin.3877@example.com",
+      "leadSource": "Walk-in",
+      "bookingChannel": "Walk-in",
+      "lifecycleStatus": "package_purchased",
+      "initialRemarks": "Direct walk-in for aesthetic skin diagnostic.",
+      "notes": "",
+      "createdAt": "2026-10-11T12:07:04.212Z",
+      "updatedAt": "2026-10-11T12:07:04.257Z",
+      "totalSpendInr": 5000,
+      "completedTreatments": 1
+    },
+    {
+      "id": "CUST-1010",
+      "name": "Test Prospect 5698",
+      "phone": "+91 977775698",
+      "email": "prospect.5698@example.com",
+      "leadSource": "Instagram",
+      "bookingChannel": "Phone Call",
+      "lifecycleStatus": "followup_required",
+      "initialRemarks": "Enquired via Instagram campaign for metabolic health.",
+      "notes": "",
+      "createdAt": "2026-10-11T12:06:36.106Z",
+      "updatedAt": "2026-10-11T12:06:36.108Z",
+      "totalSpendInr": 0,
+      "completedTreatments": 0
+    },
+    {
+      "id": "CUST-1009",
+      "name": "Test WalkIn User 5698",
+      "phone": "+91 999995698",
+      "email": "walkin.5698@example.com",
+      "leadSource": "Walk-in",
+      "bookingChannel": "Walk-in",
+      "lifecycleStatus": "package_purchased",
+      "initialRemarks": "Direct walk-in for aesthetic skin diagnostic.",
+      "notes": "",
+      "createdAt": "2026-10-11T12:06:36.036Z",
+      "updatedAt": "2026-10-11T12:06:36.100Z",
+      "totalSpendInr": 5000,
+      "completedTreatments": 1
+    },
+    {
+      "id": "CUST-1008",
+      "name": "Test Prospect 2198",
+      "phone": "+91 977772198",
+      "email": "prospect.2198@example.com",
+      "leadSource": "Instagram",
+      "bookingChannel": "Phone Call",
+      "lifecycleStatus": "followup_required",
+      "initialRemarks": "Enquired via Instagram campaign for metabolic health.",
+      "notes": "",
+      "createdAt": "2026-10-11T12:04:42.652Z",
+      "updatedAt": "2026-10-11T12:04:42.656Z",
+      "totalSpendInr": 0,
+      "completedTreatments": 0
+    },
+    {
+      "id": "CUST-1007",
+      "name": "Test WalkIn User 2198",
+      "phone": "+91 999992198",
+      "email": "walkin.2198@example.com",
+      "leadSource": "Walk-in",
+      "bookingChannel": "Walk-in",
+      "lifecycleStatus": "package_purchased",
+      "initialRemarks": "Direct walk-in for aesthetic skin diagnostic.",
+      "notes": "",
+      "createdAt": "2026-10-11T12:04:42.589Z",
+      "updatedAt": "2026-10-11T12:04:42.642Z",
+      "totalSpendInr": 5000,
+      "completedTreatments": 1
+    },
+    {
+      "id": "CUST-1001",
+      "name": "Priya Sharma",
+      "phone": "+91 9849012345",
+      "email": "priya.sharma@example.com",
+      "leadSource": "Instagram",
+      "lifecycleStatus": "package_purchased",
+      "assignedEmployeeId": "usr-callcenter-1",
+      "assignedEmployeeName": "Pooja Reddy",
+      "interestedServiceId": "srv-1",
+      "interestedServiceName": "Hydra-Infusion Clinical Facial",
+      "initialRemarks": "Enquired via Instagram DM regarding stubborn hyperpigmentation.",
+      "notes": "Prefers morning appointments. Sensitive skin profile.",
+      "createdAt": "2025-02-01T10:00:00Z",
+      "updatedAt": "2026-10-02T10:00:00Z",
+      "totalSpendInr": 32500,
+      "completedTreatments": 4
+    },
+    {
+      "id": "CUST-1002",
+      "name": "Karthik Rao",
+      "phone": "+91 9849023456",
+      "email": "karthik.rao@example.com",
+      "leadSource": "Google",
+      "lifecycleStatus": "consultation_completed",
+      "assignedEmployeeId": "usr-callcenter-1",
+      "assignedEmployeeName": "Pooja Reddy",
+      "interestedServiceId": "srv-3",
+      "interestedServiceName": "Physician-Guided Metabolic Weight Loss",
+      "initialRemarks": "Searching for clinical metabolic weight management in Begumpet.",
+      "notes": "Completed initial bloodwork review. Recommended 8-week intensive package.",
+      "createdAt": "2025-03-10T11:00:00Z",
+      "updatedAt": "2026-10-01T15:30:00Z",
+      "totalSpendInr": 15000,
+      "completedTreatments": 2
+    },
+    {
+      "id": "CUST-1003",
+      "name": "Dr. Shalini Gupta",
+      "phone": "+91 9849034567",
+      "email": "shalini.gupta@example.com",
+      "leadSource": "Referral",
+      "lifecycleStatus": "package_purchased",
+      "assignedEmployeeId": "usr-frontdesk-1",
+      "assignedEmployeeName": "Sneha Rao",
+      "interestedServiceId": "srv-2",
+      "interestedServiceName": "Laser Skin Resurfacing & Texture Refining",
+      "initialRemarks": "Referred by Dr. Reddy for laser toning and photo-damage correction.",
+      "notes": "Undergoing session 3 of 6.",
+      "createdAt": "2025-04-15T14:30:00Z",
+      "updatedAt": "2026-10-02T09:00:00Z",
+      "totalSpendInr": 45000,
+      "completedTreatments": 3
+    },
+    {
+      "id": "CUST-1004",
+      "name": "Vikram Joshi",
+      "phone": "+91 9849045678",
+      "email": "vikram.joshi@example.com",
+      "leadSource": "Walk-in",
+      "lifecycleStatus": "appointment_confirmed",
+      "assignedEmployeeId": "usr-frontdesk-1",
+      "assignedEmployeeName": "Sneha Rao",
+      "interestedServiceId": "srv-5",
+      "interestedServiceName": "1-on-1 Bespoke Strength & Biomechanics Training",
+      "initialRemarks": "Walked in after work at Kura Towers asking about private gym suites.",
+      "notes": "Appointment scheduled for movement screen tomorrow.",
+      "createdAt": "2025-06-20T16:00:00Z",
+      "updatedAt": "2026-10-02T11:00:00Z",
+      "totalSpendInr": 0,
+      "completedTreatments": 0
+    },
+    {
+      "id": "CUST-1005",
+      "name": "Sunita Reddy",
+      "phone": "+91 9849056789",
+      "email": "sunita.reddy@example.com",
+      "leadSource": "Instagram",
+      "lifecycleStatus": "followup_required",
+      "assignedEmployeeId": "usr-callcenter-1",
+      "assignedEmployeeName": "Pooja Reddy",
+      "interestedServiceId": "srv-7",
+      "interestedServiceName": "Trichology Scalp Detox & Follicle Rejuvenation",
+      "initialRemarks": "Hair fall concerns post-viral recovery. Wants consultation slot.",
+      "notes": "Callback scheduled for today afternoon.",
+      "createdAt": "2026-09-28T14:00:00Z",
+      "updatedAt": "2026-10-02T08:30:00Z",
+      "totalSpendInr": 0,
+      "completedTreatments": 0
+    },
+    {
+      "id": "CUST-1006",
+      "name": "Arjun Kapoor",
+      "phone": "+91 9849067890",
+      "email": "arjun.kapoor@example.com",
+      "leadSource": "Google",
+      "lifecycleStatus": "new_prospect",
+      "assignedEmployeeId": "usr-callcenter-1",
+      "assignedEmployeeName": "Pooja Reddy",
+      "interestedServiceId": "srv-9",
+      "interestedServiceName": "Functional Gut Microbiome & Clinical Diet Plan",
+      "initialRemarks": "Enquired online about functional gut health testing.",
+      "notes": "First call pending.",
+      "createdAt": "2026-10-02T07:15:00Z",
+      "updatedAt": "2026-10-02T07:15:00Z",
+      "totalSpendInr": 0,
+      "completedTreatments": 0
+    }
+  ],
+  "callLogs": [
+    {
+      "id": "call-1791720424264-136",
+      "customerId": "CUST-1012",
+      "customerName": "Test Prospect 3877",
+      "customerPhone": "+91 977773877",
+      "employeeId": "usr-callcenter-1",
+      "employeeName": "Pooja Reddy",
+      "dateTime": "2026-10-11T12:07:04.264Z",
+      "outcome": "callback_requested",
+      "remarks": "Client interested in nutrition testing; requested callback on 2026-10-20 at 11 AM.",
+      "followUpDate": "2026-10-20",
+      "createdAt": "2026-10-11T12:07:04.264Z"
+    },
+    {
+      "id": "call-1791720396108-319",
+      "customerId": "CUST-1010",
+      "customerName": "Test Prospect 5698",
+      "customerPhone": "+91 977775698",
+      "employeeId": "usr-callcenter-1",
+      "employeeName": "Pooja Reddy",
+      "dateTime": "2026-10-11T12:06:36.108Z",
+      "outcome": "callback_requested",
+      "remarks": "Client interested in nutrition testing; requested callback on 2026-10-20 at 11 AM.",
+      "followUpDate": "2026-10-20",
+      "createdAt": "2026-10-11T12:06:36.108Z"
+    },
+    {
+      "id": "call-1791720282656-6",
+      "customerId": "CUST-1008",
+      "customerName": "Test Prospect 2198",
+      "customerPhone": "+91 977772198",
+      "employeeId": "usr-callcenter-1",
+      "employeeName": "Pooja Reddy",
+      "dateTime": "2026-10-11T12:04:42.656Z",
+      "outcome": "callback_requested",
+      "remarks": "Client interested in nutrition testing; requested callback on 2026-10-20 at 11 AM.",
+      "followUpDate": "2026-10-20",
+      "createdAt": "2026-10-11T12:04:42.656Z"
+    },
+    {
+      "id": "call-1",
+      "customerId": "CUST-1001",
+      "customerName": "Priya Sharma",
+      "customerPhone": "+91 9849012345",
+      "employeeId": "usr-callcenter-1",
+      "employeeName": "Pooja Reddy",
+      "dateTime": "2026-09-20T11:30:00Z",
+      "outcome": "appointment_confirmed",
+      "remarks": "Client confirmed appointment for Hydra-Infusion facial in Room Skin / Hair.",
+      "nextAction": "Confirmed with clinic calendar",
+      "createdAt": "2026-09-20T11:35:00Z"
+    },
+    {
+      "id": "call-2",
+      "customerId": "CUST-1002",
+      "customerName": "Karthik Rao",
+      "customerPhone": "+91 9849023456",
+      "employeeId": "usr-callcenter-1",
+      "employeeName": "Pooja Reddy",
+      "dateTime": "2026-09-25T14:00:00Z",
+      "outcome": "interested",
+      "remarks": "Discussed metabolic weight protocol. Client requested callback after checking spouse availability.",
+      "nextAction": "Follow up on Oct 2nd",
+      "followUpDate": "2026-10-02",
+      "createdAt": "2026-09-25T14:05:00Z"
+    },
+    {
+      "id": "call-3",
+      "customerId": "CUST-1005",
+      "customerName": "Sunita Reddy",
+      "customerPhone": "+91 9849056789",
+      "employeeId": "usr-callcenter-1",
+      "employeeName": "Pooja Reddy",
+      "dateTime": "2026-10-01T16:00:00Z",
+      "outcome": "callback_requested",
+      "remarks": "Customer in a meeting, asked to call back today between 11 AM and 1 PM.",
+      "nextAction": "Scheduled callback for 2026-10-02",
+      "followUpDate": "2026-10-02",
+      "createdAt": "2026-10-01T16:05:00Z"
+    }
+  ],
+  "followUps": [
+    {
+      "id": "flw-1791720424264",
+      "customerId": "CUST-1012",
+      "customerName": "Test Prospect 3877",
+      "customerPhone": "+91 977773877",
+      "type": "prospect",
+      "dueDate": "2026-10-20",
+      "dueTime": "11:00 AM",
+      "assignedEmployeeId": "usr-callcenter-1",
+      "assignedEmployeeName": "Pooja Reddy",
+      "reason": "Client interested in nutrition testing; requested callback on 2026-10-20 at 11 AM.",
+      "latestOutcome": "callback_requested",
+      "status": "pending",
+      "createdAt": "2026-10-11T12:07:04.264Z"
+    },
+    {
+      "id": "flw-1791720396108",
+      "customerId": "CUST-1010",
+      "customerName": "Test Prospect 5698",
+      "customerPhone": "+91 977775698",
+      "type": "prospect",
+      "dueDate": "2026-10-20",
+      "dueTime": "11:00 AM",
+      "assignedEmployeeId": "usr-callcenter-1",
+      "assignedEmployeeName": "Pooja Reddy",
+      "reason": "Client interested in nutrition testing; requested callback on 2026-10-20 at 11 AM.",
+      "latestOutcome": "callback_requested",
+      "status": "pending",
+      "createdAt": "2026-10-11T12:06:36.108Z"
+    },
+    {
+      "id": "flw-1791720282656",
+      "customerId": "CUST-1008",
+      "customerName": "Test Prospect 2198",
+      "customerPhone": "+91 977772198",
+      "type": "prospect",
+      "dueDate": "2026-10-20",
+      "dueTime": "11:00 AM",
+      "assignedEmployeeId": "usr-callcenter-1",
+      "assignedEmployeeName": "Pooja Reddy",
+      "reason": "Client interested in nutrition testing; requested callback on 2026-10-20 at 11 AM.",
+      "latestOutcome": "callback_requested",
+      "status": "pending",
+      "createdAt": "2026-10-11T12:04:42.656Z"
+    },
+    {
+      "id": "flw-1",
+      "customerId": "CUST-1005",
+      "customerName": "Sunita Reddy",
+      "customerPhone": "+91 9849056789",
+      "type": "prospect",
+      "dueDate": "2026-10-02",
+      "dueTime": "11:30 AM",
+      "assignedEmployeeId": "usr-callcenter-1",
+      "assignedEmployeeName": "Pooja Reddy",
+      "reason": "Requested callback regarding trichology treatment availability & pricing.",
+      "latestOutcome": "Pending call",
+      "status": "pending",
+      "createdAt": "2026-10-01T16:05:00Z"
+    },
+    {
+      "id": "flw-2",
+      "customerId": "CUST-1002",
+      "customerName": "Karthik Rao",
+      "customerPhone": "+91 9849023456",
+      "type": "consultation",
+      "dueDate": "2026-10-02",
+      "dueTime": "03:00 PM",
+      "assignedEmployeeId": "usr-callcenter-1",
+      "assignedEmployeeName": "Pooja Reddy",
+      "reason": "Follow-up on 8-week metabolic slimming package decision after initial consultation.",
+      "latestOutcome": "Pending decision",
+      "status": "pending",
+      "createdAt": "2026-10-01T15:30:00Z"
+    },
+    {
+      "id": "flw-3",
+      "customerId": "CUST-1006",
+      "customerName": "Arjun Kapoor",
+      "customerPhone": "+91 9849067890",
+      "type": "prospect",
+      "dueDate": "2026-10-01",
+      "dueTime": "04:00 PM",
+      "assignedEmployeeId": "usr-callcenter-1",
+      "assignedEmployeeName": "Pooja Reddy",
+      "reason": "Initial enquiry callback for clinical gut health program.",
+      "latestOutcome": "No answer on first attempt",
+      "status": "pending",
+      "createdAt": "2026-09-30T10:00:00Z"
+    }
+  ],
+  "consultations": [
+    {
+      "id": "cns-1791720424239",
+      "appointmentId": "apt-1791720424226",
+      "customerId": "CUST-1011",
+      "customerName": "Priya Sharma",
+      "customerPhone": "+91 9849012345",
+      "timeSlot": "02:30 PM - 03:30 PM",
+      "primaryStaffId": "st-1",
+      "primaryStaffName": "Dr. Ananya Reddy",
+      "secondaryStaffId": "st-3",
+      "secondaryStaffName": "Kavita Nair, RD",
+      "consultationDate": "2026-10-15",
+      "serviceOfInterestId": "srv-101",
+      "serviceOfInterestName": "Hydra-Infusion Clinical Facial",
+      "recommendedPackageOrService": "6-Session Cellular Renewal Protocol",
+      "outcome": "completed_package_purchased",
+      "remarks": "Client demonstrates excellent cellular response. Combined dietary antioxidant plan prescribed.",
+      "nextAction": "Enroll into 6-Session Package",
+      "nextFollowUpDate": "2026-10-22",
+      "completedAt": "2026-10-11T12:07:04.239Z",
+      "recordedBy": "Dr. Ananya Reddy",
+      "createdAt": "2026-10-11T12:07:04.239Z"
+    },
+    {
+      "id": "cns-1791720396069",
+      "appointmentId": "",
+      "customerId": "CUST-1009",
+      "customerName": "Priya Sharma",
+      "customerPhone": "+91 9849012345",
+      "timeSlot": "02:30 PM - 03:30 PM",
+      "primaryStaffId": "st-1",
+      "primaryStaffName": "Dr. Ananya Reddy",
+      "secondaryStaffId": "st-3",
+      "secondaryStaffName": "Kavita Nair, RD",
+      "consultationDate": "2026-10-15",
+      "serviceOfInterestId": "srv-101",
+      "serviceOfInterestName": "Hydra-Infusion Clinical Facial",
+      "recommendedPackageOrService": "6-Session Cellular Renewal Protocol",
+      "outcome": "completed_package_purchased",
+      "remarks": "Client demonstrates excellent cellular response. Combined dietary antioxidant plan prescribed.",
+      "nextAction": "Enroll into 6-Session Package",
+      "nextFollowUpDate": "2026-10-22",
+      "completedAt": "2026-10-11T12:06:36.069Z",
+      "recordedBy": "Dr. Ananya Reddy",
+      "createdAt": "2026-10-11T12:06:36.069Z"
+    },
+    {
+      "id": "cns-1791720282616",
+      "appointmentId": "apt-1791720282603",
+      "customerId": "CUST-1007",
+      "customerName": "Priya Sharma",
+      "customerPhone": "+91 9849012345",
+      "primaryStaffId": "st-1",
+      "primaryStaffName": "Dr. Ananya Reddy",
+      "secondaryStaffId": "st-3",
+      "secondaryStaffName": "Kavita Nair, RD",
+      "consultationDate": "2026-10-15",
+      "serviceId": "srv-101",
+      "serviceName": "Hydra-Infusion Clinical Facial",
+      "recommendedPackageOrService": "6-Session Cellular Renewal Protocol",
+      "outcome": "completed_package_purchased",
+      "remarks": "Client demonstrates excellent cellular response. Combined dietary antioxidant plan prescribed.",
+      "nextAction": "Enroll into 6-Session Package",
+      "nextFollowUpDate": "2026-10-22",
+      "completedAt": "2026-10-11T12:04:42.616Z",
+      "createdAt": "2026-10-11T12:04:42.616Z"
+    },
+    {
+      "id": "cns-1",
+      "customerId": "CUST-1001",
+      "customerName": "Priya Sharma",
+      "customerPhone": "+91 9849012345",
+      "appointmentId": "apt-1001",
+      "consultationDate": "2026-09-15",
+      "timeSlot": "10:00 AM - 11:00 AM",
+      "serviceOfInterestId": "srv-1",
+      "serviceOfInterestName": "Hydra-Infusion Clinical Facial",
+      "primaryStaffId": "st-1",
+      "primaryStaffName": "Dr. Ananya Reddy",
+      "secondaryStaffId": "st-5",
+      "secondaryStaffName": "Rohan Mehra",
+      "managerId": "usr-admin-1",
+      "managerName": "Priya Narayanan",
+      "outcome": "completed_package_purchased",
+      "recommendedPackageOrService": "6-Session Hydra-Glow & Skin Barrier Restoration Package",
+      "remarks": "Mild barrier damage detected with erythema. Recommended gentle AHA/BHA peel and 6-session hydration course.",
+      "nextAction": "Enrolled in 6-Session Package",
+      "completedAt": "2026-09-15T11:00:00Z",
+      "recordedBy": "Sneha Rao (Front Desk)",
+      "createdAt": "2026-09-15T11:05:00Z"
+    },
+    {
+      "id": "cns-2",
+      "customerId": "CUST-1002",
+      "customerName": "Karthik Rao",
+      "customerPhone": "+91 9849023456",
+      "appointmentId": "apt-1002",
+      "consultationDate": "2026-10-01",
+      "timeSlot": "02:30 PM - 03:30 PM",
+      "serviceOfInterestId": "srv-3",
+      "serviceOfInterestName": "Physician-Guided Metabolic Weight Loss",
+      "primaryStaffId": "st-1",
+      "primaryStaffName": "Dr. Ananya Reddy",
+      "secondaryStaffId": "st-3",
+      "secondaryStaffName": "Kavita Nair, RD",
+      "outcome": "completed_followup_required",
+      "recommendedPackageOrService": "8-Week Metabolic Reset & Body Contouring",
+      "remarks": "Client has visceral fat index 12. Dietitian Kavita outlined macro blueprint. Client will discuss investment with spouse.",
+      "nextAction": "Callback on Oct 2nd",
+      "nextFollowUpDate": "2026-10-02",
+      "completedAt": "2026-10-01T15:30:00Z",
+      "recordedBy": "Sneha Rao (Front Desk)",
+      "createdAt": "2026-10-01T15:35:00Z"
+    }
+  ],
+  "packages": [
+    {
+      "id": "pkg-1791720424244",
+      "customerId": "CUST-1011",
+      "customerName": "Priya Sharma",
+      "customerPhone": "+91 9849012345",
+      "serviceId": "srv-101",
+      "serviceName": "Hydra-Infusion Clinical Facial",
+      "packageName": "Comprehensive Skin & Metabolism Transformation",
+      "totalSessions": 4,
+      "packagePrice": 24000,
+      "discount": 0,
+      "purchaseDate": "2026-10-15",
+      "packageStatus": "active",
+      "completedSessions": 1,
+      "remainingSessions": 3,
+      "createdAt": "2026-10-11T12:07:04.244Z"
+    },
+    {
+      "id": "pkg-1791720396085",
+      "customerId": "CUST-1009",
+      "customerName": "Priya Sharma",
+      "customerPhone": "+91 9849012345",
+      "serviceId": "srv-101",
+      "serviceName": "Hydra-Infusion Clinical Facial",
+      "packageName": "Comprehensive Skin & Metabolism Transformation",
+      "totalSessions": 4,
+      "packagePrice": 24000,
+      "discount": 0,
+      "purchaseDate": "2026-10-15",
+      "packageStatus": "active",
+      "completedSessions": 1,
+      "remainingSessions": 3,
+      "createdAt": "2026-10-11T12:06:36.085Z"
+    },
+    {
+      "id": "pkg-1791720282620",
+      "customerId": "CUST-1007",
+      "customerName": "Priya Sharma",
+      "packageName": "Comprehensive Skin & Metabolism Transformation",
+      "totalSessions": 4,
+      "packagePrice": 24000,
+      "purchaseDate": "2026-10-15",
+      "packageStatus": "active",
+      "completedSessions": 1,
+      "remainingSessions": 3,
+      "createdAt": "2026-10-11T12:04:42.620Z"
+    },
+    {
+      "id": "pkg-1",
+      "customerId": "CUST-1001",
+      "customerName": "Priya Sharma",
+      "customerPhone": "+91 9849012345",
+      "serviceId": "srv-1",
+      "serviceName": "Hydra-Infusion Clinical Facial",
+      "packageName": "6-Session Hydra-Glow Restoration Package",
+      "purchaseDate": "2026-09-15",
+      "totalSessions": 6,
+      "completedSessions": 3,
+      "remainingSessions": 3,
+      "packagePrice": 24000,
+      "discount": 2000,
+      "invoiceId": "inv-1001",
+      "packageStatus": "active",
+      "expiryDate": "2027-03-15",
+      "createdAt": "2026-09-15T11:15:00Z"
+    },
+    {
+      "id": "pkg-2",
+      "customerId": "CUST-1003",
+      "customerName": "Dr. Shalini Gupta",
+      "customerPhone": "+91 9849034567",
+      "serviceId": "srv-2",
+      "serviceName": "Laser Skin Resurfacing & Texture Refining",
+      "packageName": "5-Session Precision Fractional Resurfacing",
+      "purchaseDate": "2026-08-10",
+      "totalSessions": 5,
+      "completedSessions": 3,
+      "remainingSessions": 2,
+      "packagePrice": 42000,
+      "discount": 0,
+      "invoiceId": "inv-1002",
+      "packageStatus": "active",
+      "expiryDate": "2027-02-10",
+      "createdAt": "2026-08-10T14:30:00Z"
+    }
+  ],
+  "sessions": [
+    {
+      "id": "ses-1791720424249-next",
+      "customerId": "CUST-1011",
+      "customerName": "Priya Sharma",
+      "packageId": "pkg-1791720424244",
+      "packageName": "Comprehensive Skin & Metabolism Transformation",
+      "sessionNumber": 2,
+      "serviceId": "srv-101",
+      "serviceName": "Hydra-Infusion Clinical Facial",
+      "scheduledDate": "2026-10-22",
+      "scheduledTime": "11:00 AM - 12:00 PM",
+      "primaryStaffId": "st-1",
+      "primaryStaffName": "Dr. Ananya Reddy",
+      "status": "scheduled",
+      "remarks": "Next session auto-scheduled post completion.",
+      "recordedBy": "Dr. Ananya Reddy",
+      "createdAt": "2026-10-11T12:07:04.249Z"
+    },
+    {
+      "id": "ses-1791720424246",
+      "customerId": "CUST-1011",
+      "customerName": "Priya Sharma",
+      "packageId": "pkg-1791720424244",
+      "packageName": "Comprehensive Skin & Metabolism Transformation",
+      "sessionNumber": 1,
+      "serviceId": "srv-101",
+      "serviceName": "Hydra-Infusion Clinical Facial",
+      "scheduledDate": "2026-10-15",
+      "scheduledTime": "11:00 AM - 12:00 PM",
+      "primaryStaffId": "st-1",
+      "primaryStaffName": "Dr. Ananya Reddy",
+      "status": "completed",
+      "createdAt": "2026-10-11T12:07:04.246Z",
+      "actualCompletedAt": "2026-10-15T12:05:00Z",
+      "remarks": "Deep hydration completed without erythema.",
+      "recordedBy": "Dr. Ananya Reddy"
+    },
+    {
+      "id": "ses-1791720396092-next",
+      "customerId": "CUST-1009",
+      "customerName": "Priya Sharma",
+      "packageId": "pkg-1791720396085",
+      "packageName": "Comprehensive Skin & Metabolism Transformation",
+      "sessionNumber": 2,
+      "serviceId": "srv-101",
+      "serviceName": "Hydra-Infusion Clinical Facial",
+      "scheduledDate": "2026-10-22",
+      "scheduledTime": "11:00 AM - 12:00 PM",
+      "primaryStaffId": "st-1",
+      "primaryStaffName": "Dr. Ananya Reddy",
+      "status": "scheduled",
+      "remarks": "Next session auto-scheduled post completion.",
+      "recordedBy": "Dr. Ananya Reddy",
+      "createdAt": "2026-10-11T12:06:36.092Z"
+    },
+    {
+      "id": "ses-1791720396089",
+      "customerId": "CUST-1009",
+      "customerName": "Priya Sharma",
+      "packageId": "pkg-1791720396085",
+      "packageName": "Comprehensive Skin & Metabolism Transformation",
+      "sessionNumber": 1,
+      "serviceId": "srv-101",
+      "serviceName": "Hydra-Infusion Clinical Facial",
+      "scheduledDate": "2026-10-15",
+      "scheduledTime": "11:00 AM - 12:00 PM",
+      "primaryStaffId": "st-1",
+      "primaryStaffName": "Dr. Ananya Reddy",
+      "status": "completed",
+      "createdAt": "2026-10-11T12:06:36.089Z",
+      "actualCompletedAt": "2026-10-15T12:05:00Z",
+      "remarks": "Deep hydration completed without erythema.",
+      "recordedBy": "Dr. Ananya Reddy"
+    },
+    {
+      "id": "ses-1791720282631-next",
+      "customerId": "CUST-1007",
+      "customerName": "Priya Sharma",
+      "packageId": "pkg-1791720282620",
+      "packageName": "Comprehensive Skin & Metabolism Transformation",
+      "sessionNumber": 2,
+      "serviceId": "srv-101",
+      "serviceName": "Hydra-Infusion Clinical Facial",
+      "scheduledDate": "2026-10-22",
+      "scheduledTime": "11:00 AM - 12:00 PM",
+      "primaryStaffId": "st-1",
+      "primaryStaffName": "Dr. Ananya Reddy",
+      "status": "scheduled",
+      "remarks": "Next session auto-scheduled post completion.",
+      "recordedBy": "Dr. Ananya Reddy",
+      "createdAt": "2026-10-11T12:04:42.631Z"
+    },
+    {
+      "id": "ses-1791720282625",
+      "customerId": "CUST-1007",
+      "customerName": "Priya Sharma",
+      "packageId": "pkg-1791720282620",
+      "packageName": "Comprehensive Skin & Metabolism Transformation",
+      "sessionNumber": 1,
+      "serviceId": "srv-101",
+      "serviceName": "Hydra-Infusion Clinical Facial",
+      "scheduledDate": "2026-10-15",
+      "scheduledTime": "11:00 AM - 12:00 PM",
+      "primaryStaffId": "st-1",
+      "primaryStaffName": "Dr. Ananya Reddy",
+      "status": "completed",
+      "createdAt": "2026-10-11T12:04:42.625Z",
+      "actualCompletedAt": "2026-10-15T12:05:00Z",
+      "remarks": "Deep hydration completed without erythema.",
+      "recordedBy": "Dr. Ananya Reddy"
+    },
+    {
+      "id": "ses-1",
+      "customerId": "CUST-1001",
+      "customerName": "Priya Sharma",
+      "packageId": "pkg-1",
+      "packageName": "6-Session Hydra-Glow Restoration Package",
+      "sessionNumber": 1,
+      "serviceId": "srv-1",
+      "serviceName": "Hydra-Infusion Clinical Facial",
+      "scheduledDate": "2026-09-18",
+      "scheduledTime": "10:00 AM - 11:00 AM",
+      "actualCompletedAt": "2026-09-18T11:00:00Z",
+      "primaryStaffId": "st-1",
+      "primaryStaffName": "Dr. Ananya Reddy",
+      "secondaryStaffId": "st-5",
+      "secondaryStaffName": "Rohan Mehra",
+      "status": "completed",
+      "remarks": "First session completed smoothly. Minimal redness, good hydration response.",
+      "recordedBy": "Sneha Rao",
+      "nextSessionDate": "2026-09-25",
+      "nextSessionTime": "10:00 AM",
+      "createdAt": "2026-09-15T11:20:00Z"
+    },
+    {
+      "id": "ses-2",
+      "customerId": "CUST-1001",
+      "customerName": "Priya Sharma",
+      "packageId": "pkg-1",
+      "packageName": "6-Session Hydra-Glow Restoration Package",
+      "sessionNumber": 2,
+      "serviceId": "srv-1",
+      "serviceName": "Hydra-Infusion Clinical Facial",
+      "scheduledDate": "2026-09-25",
+      "scheduledTime": "10:00 AM - 11:00 AM",
+      "actualCompletedAt": "2026-09-25T11:05:00Z",
+      "primaryStaffId": "st-1",
+      "primaryStaffName": "Dr. Ananya Reddy",
+      "status": "completed",
+      "remarks": "Session 2 completed. Added peptide infusion for barrier recovery.",
+      "recordedBy": "Sneha Rao",
+      "nextSessionDate": "2026-10-02",
+      "nextSessionTime": "10:00 AM",
+      "createdAt": "2026-09-18T11:05:00Z"
+    },
+    {
+      "id": "ses-3",
+      "customerId": "CUST-1001",
+      "customerName": "Priya Sharma",
+      "packageId": "pkg-1",
+      "packageName": "6-Session Hydra-Glow Restoration Package",
+      "sessionNumber": 3,
+      "serviceId": "srv-1",
+      "serviceName": "Hydra-Infusion Clinical Facial",
+      "scheduledDate": "2026-10-02",
+      "scheduledTime": "10:00 AM - 11:00 AM",
+      "primaryStaffId": "st-1",
+      "primaryStaffName": "Dr. Ananya Reddy",
+      "status": "scheduled",
+      "remarks": "Session 3 scheduled for today.",
+      "recordedBy": "Sneha Rao",
+      "createdAt": "2026-09-25T11:10:00Z"
+    }
+  ],
+  "invoices": [
+    {
+      "id": "inv-1791720424253",
+      "invoiceNumber": "INV-2026-1006",
+      "customerId": "CUST-1011",
+      "customerName": "Priya Sharma",
+      "customerPhone": "+91 9849012345",
+      "serviceOrPackageName": "Advanced Cellular Treatment Block",
+      "subtotal": 10000,
+      "discount": 0,
+      "tax": 0,
+      "finalBilledAmount": 10000,
+      "invoiceDate": "2026-10-15",
+      "status": "payment_postponed",
+      "createdBy": "Front Desk",
+      "paidAmount": 5000,
+      "outstandingBalance": 5000,
+      "createdAt": "2026-10-11T12:07:04.253Z"
+    },
+    {
+      "id": "inv-1791720396095",
+      "invoiceNumber": "INV-2026-1005",
+      "customerId": "CUST-1009",
+      "customerName": "Priya Sharma",
+      "customerPhone": "+91 9849012345",
+      "serviceOrPackageName": "Advanced Cellular Treatment Block",
+      "subtotal": 10000,
+      "discount": 0,
+      "tax": 0,
+      "finalBilledAmount": 10000,
+      "invoiceDate": "2026-10-15",
+      "status": "payment_postponed",
+      "createdBy": "Front Desk",
+      "paidAmount": 5000,
+      "outstandingBalance": 5000,
+      "createdAt": "2026-10-11T12:06:36.095Z"
+    },
+    {
+      "id": "inv-1791720282635",
+      "invoiceNumber": "INV-2026-1004",
+      "customerId": "CUST-1007",
+      "customerName": "Priya Sharma",
+      "subtotal": 10000,
+      "discount": 0,
+      "tax": 0,
+      "invoiceDate": "2026-10-15",
+      "items": [
+        {
+          "serviceId": "srv-101",
+          "name": "Advanced Cellular Treatment Block",
+          "unitPrice": 10000,
+          "quantity": 1,
+          "totalPrice": 10000
+        }
+      ],
+      "finalBilledAmount": 10000,
+      "paidAmount": 5000,
+      "outstandingBalance": 5000,
+      "status": "payment_postponed",
+      "createdBy": "Front Desk",
+      "createdAt": "2026-10-11T12:04:42.635Z"
+    },
+    {
+      "id": "inv-1001",
+      "invoiceNumber": "INV-2026-1001",
+      "customerId": "CUST-1001",
+      "customerName": "Priya Sharma",
+      "customerPhone": "+91 9849012345",
+      "packageId": "pkg-1",
+      "serviceOrPackageName": "6-Session Hydra-Glow Restoration Package",
+      "invoiceDate": "2026-09-15",
+      "subtotal": 24000,
+      "discount": 2000,
+      "tax": 0,
+      "finalBilledAmount": 22000,
+      "paidAmount": 22000,
+      "outstandingBalance": 0,
+      "status": "paid",
+      "createdBy": "Sneha Rao (Front Desk)",
+      "createdAt": "2026-09-15T11:15:00Z"
+    },
+    {
+      "id": "inv-1002",
+      "invoiceNumber": "INV-2026-1002",
+      "customerId": "CUST-1003",
+      "customerName": "Dr. Shalini Gupta",
+      "customerPhone": "+91 9849034567",
+      "packageId": "pkg-2",
+      "serviceOrPackageName": "5-Session Precision Fractional Resurfacing",
+      "invoiceDate": "2026-08-10",
+      "subtotal": 42000,
+      "discount": 0,
+      "tax": 0,
+      "finalBilledAmount": 42000,
+      "paidAmount": 30000,
+      "outstandingBalance": 12000,
+      "status": "partially_paid",
+      "createdBy": "Sneha Rao (Front Desk)",
+      "createdAt": "2026-08-10T14:30:00Z"
+    },
+    {
+      "id": "inv-1003",
+      "invoiceNumber": "INV-2026-1003",
+      "customerId": "CUST-1002",
+      "customerName": "Karthik Rao",
+      "customerPhone": "+91 9849023456",
+      "serviceId": "srv-3",
+      "serviceOrPackageName": "Physician Comprehensive Consultation & Metabolic Screen",
+      "invoiceDate": "2026-10-01",
+      "subtotal": 3500,
+      "discount": 0,
+      "tax": 0,
+      "finalBilledAmount": 3500,
+      "paidAmount": 0,
+      "outstandingBalance": 3500,
+      "status": "payment_postponed",
+      "createdBy": "Sneha Rao (Front Desk)",
+      "createdAt": "2026-10-01T15:35:00Z"
+    }
+  ],
+  "payments": [
+    {
+      "id": "pay-1791720424257",
+      "invoiceId": "inv-1791720424253",
+      "invoiceNumber": "INV-2026-1006",
+      "customerId": "CUST-1011",
+      "customerName": "Priya Sharma",
+      "amountReceived": 2000,
+      "paymentMethod": "card",
+      "paymentDate": "2026-10-15",
+      "transactionRef": "CC-TXN-202",
+      "recordedBy": "Front Desk",
+      "createdAt": "2026-10-11T12:07:04.257Z"
+    },
+    {
+      "id": "pay-1791720424255",
+      "invoiceId": "inv-1791720424253",
+      "invoiceNumber": "INV-2026-1006",
+      "customerId": "CUST-1011",
+      "customerName": "Priya Sharma",
+      "amountReceived": 3000,
+      "paymentMethod": "upi",
+      "paymentDate": "2026-10-15",
+      "transactionRef": "UPI-TXN-101",
+      "recordedBy": "Front Desk",
+      "createdAt": "2026-10-11T12:07:04.255Z"
+    },
+    {
+      "id": "pay-1791720396100",
+      "invoiceId": "inv-1791720396095",
+      "invoiceNumber": "INV-2026-1005",
+      "customerId": "CUST-1009",
+      "customerName": "Priya Sharma",
+      "amountReceived": 2000,
+      "paymentMethod": "card",
+      "paymentDate": "2026-10-15",
+      "transactionRef": "CC-TXN-202",
+      "recordedBy": "Front Desk",
+      "createdAt": "2026-10-11T12:06:36.100Z"
+    },
+    {
+      "id": "pay-1791720396098",
+      "invoiceId": "inv-1791720396095",
+      "invoiceNumber": "INV-2026-1005",
+      "customerId": "CUST-1009",
+      "customerName": "Priya Sharma",
+      "amountReceived": 3000,
+      "paymentMethod": "upi",
+      "paymentDate": "2026-10-15",
+      "transactionRef": "UPI-TXN-101",
+      "recordedBy": "Front Desk",
+      "createdAt": "2026-10-11T12:06:36.098Z"
+    },
+    {
+      "id": "pay-1791720282642",
+      "invoiceId": "inv-1791720282635",
+      "invoiceNumber": "INV-2026-1004",
+      "customerId": "CUST-1007",
+      "customerName": "Priya Sharma",
+      "amountReceived": 2000,
+      "paymentMethod": "credit_card",
+      "paymentDate": "2026-10-15",
+      "transactionRef": "CC-TXN-202",
+      "createdAt": "2026-10-11T12:04:42.642Z"
+    },
+    {
+      "id": "pay-1791720282639",
+      "invoiceId": "inv-1791720282635",
+      "invoiceNumber": "INV-2026-1004",
+      "customerId": "CUST-1007",
+      "customerName": "Priya Sharma",
+      "amountReceived": 3000,
+      "paymentMethod": "upi",
+      "paymentDate": "2026-10-15",
+      "transactionRef": "UPI-TXN-101",
+      "createdAt": "2026-10-11T12:04:42.639Z"
+    },
+    {
+      "id": "pay-1",
+      "invoiceId": "inv-1001",
+      "invoiceNumber": "INV-2026-1001",
+      "customerId": "CUST-1001",
+      "customerName": "Priya Sharma",
+      "amountReceived": 22000,
+      "paymentMethod": "upi",
+      "paymentDate": "2026-09-15T11:20:00Z",
+      "transactionRef": "UPI-9849012345-0915",
+      "recordedBy": "Sneha Rao",
+      "remarks": "Paid in full via GPay at reception counter.",
+      "createdAt": "2026-09-15T11:20:00Z"
+    },
+    {
+      "id": "pay-2",
+      "invoiceId": "inv-1002",
+      "invoiceNumber": "INV-2026-1002",
+      "customerId": "CUST-1003",
+      "customerName": "Dr. Shalini Gupta",
+      "amountReceived": 30000,
+      "paymentMethod": "card",
+      "paymentDate": "2026-08-10T14:40:00Z",
+      "transactionRef": "POS-TXN-492019",
+      "recordedBy": "Sneha Rao",
+      "remarks": "Initial deposit paid via HDFC Credit Card.",
+      "createdAt": "2026-08-10T14:40:00Z"
+    }
+  ],
+  "paymentFollowUps": [
+    {
+      "id": "pf-1791720424259",
+      "invoiceId": "inv-1791720424253",
+      "invoiceNumber": "INV-2026-1006",
+      "customerId": "CUST-1011",
+      "customerName": "Priya Sharma",
+      "customerPhone": "+91 9849012345",
+      "amountBilled": 10000,
+      "amountReceived": 5000,
+      "remainingBalance": 5000,
+      "expectedPaymentDate": "2026-10-25",
+      "assignedFollowUpOwner": "Sneha Rao",
+      "postponementReason": "Awaiting corporate wellness reimbursement cycle.",
+      "remarks": "Client agreed to clear remaining balance on 25th via bank transfer.",
+      "status": "pending",
+      "createdAt": "2026-10-11T12:07:04.260Z"
+    },
+    {
+      "id": "pf-1791720396103",
+      "invoiceId": "inv-1791720396095",
+      "invoiceNumber": "INV-2026-1005",
+      "customerId": "CUST-1009",
+      "customerName": "Priya Sharma",
+      "customerPhone": "+91 9849012345",
+      "amountBilled": 10000,
+      "amountReceived": 5000,
+      "remainingBalance": 5000,
+      "expectedPaymentDate": "2026-10-25",
+      "assignedFollowUpOwner": "Sneha Rao",
+      "postponementReason": "Awaiting corporate wellness reimbursement cycle.",
+      "remarks": "Client agreed to clear remaining balance on 25th via bank transfer.",
+      "status": "pending",
+      "createdAt": "2026-10-11T12:06:36.103Z"
+    },
+    {
+      "id": "pf-1791720282646",
+      "invoiceId": "inv-1791720282635",
+      "invoiceNumber": "INV-2026-1004",
+      "customerId": "CUST-1007",
+      "customerName": "Priya Sharma",
+      "remainingBalance": 5000,
+      "expectedPaymentDate": "2026-10-25",
+      "assignedEmployeeId": "usr-frontdesk-1",
+      "assignedEmployeeName": "Sneha Rao",
+      "postponementReason": "Awaiting corporate wellness reimbursement cycle.",
+      "remarks": "Client agreed to clear remaining balance on 25th via bank transfer.",
+      "status": "pending",
+      "createdAt": "2026-10-11T12:04:42.646Z"
+    },
+    {
+      "id": "pf-1",
+      "invoiceId": "inv-1003",
+      "invoiceNumber": "INV-2026-1003",
+      "customerId": "CUST-1002",
+      "customerName": "Karthik Rao",
+      "customerPhone": "+91 9849023456",
+      "amountBilled": 3500,
+      "amountReceived": 0,
+      "remainingBalance": 3500,
+      "postponementReason": "Client forgot wallet and mobile banking limit reached for the day.",
+      "expectedPaymentDate": "2026-10-03",
+      "assignedFollowUpOwner": "Sneha Rao (Front Desk)",
+      "remarks": "Promised to transfer via UPI by tomorrow morning.",
+      "status": "pending",
+      "createdAt": "2026-10-01T15:40:00Z"
+    },
+    {
+      "id": "pf-2",
+      "invoiceId": "inv-1002",
+      "invoiceNumber": "INV-2026-1002",
+      "customerId": "CUST-1003",
+      "customerName": "Dr. Shalini Gupta",
+      "customerPhone": "+91 9849034567",
+      "amountBilled": 42000,
+      "amountReceived": 30000,
+      "remainingBalance": 12000,
+      "postponementReason": "Balance due upon session 4 completion.",
+      "expectedPaymentDate": "2026-10-15",
+      "assignedFollowUpOwner": "Sneha Rao (Front Desk)",
+      "remarks": "Agreed 2-installment schedule.",
+      "status": "pending",
+      "createdAt": "2026-08-10T14:45:00Z"
+    }
+  ],
+  "auditLogs": [
+    {
+      "id": "aud-1791720424268-737",
+      "actorId": "system",
+      "actorName": "Front Desk",
+      "actorRole": "front_desk",
+      "action": "CREATE_APPOINTMENT",
+      "recordType": "appointment",
+      "recordId": "apt-1791720424268",
+      "details": "Booked appointment NF-2026-3747 for Client Alpha in Slim-1 with Coach Vikram Singh",
+      "timestamp": "2026-10-11T12:07:04.268Z"
+    },
+    {
+      "id": "aud-1791720424264-887",
+      "actorId": "usr-callcenter-1",
+      "actorName": "Pooja Reddy",
+      "actorRole": "call_center",
+      "action": "RECORD_CALL",
+      "recordType": "callLog",
+      "recordId": "call-1791720424264-136",
+      "details": "Recorded callback_requested call with Test Prospect 3877",
+      "timestamp": "2026-10-11T12:07:04.264Z"
+    },
+    {
+      "id": "aud-1791720424262-782",
+      "actorId": "system",
+      "actorName": "Pooja Reddy (Call Center Lead)",
+      "actorRole": "call_center",
+      "action": "CREATE_PROSPECT",
+      "recordType": "customer",
+      "recordId": "CUST-1012",
+      "details": "Created new prospect Test Prospect 3877 (+91 977773877) via Instagram",
+      "timestamp": "2026-10-11T12:07:04.262Z"
+    },
+    {
+      "id": "aud-1791720424260-396",
+      "actorId": "system",
+      "actorName": "Sneha Rao",
+      "actorRole": "front_desk",
+      "action": "POSTPONE_PAYMENT",
+      "recordType": "invoice",
+      "recordId": "inv-1791720424253",
+      "details": "Postponed balance of ₹5000 for Priya Sharma until 2026-10-25. Reason: Awaiting corporate wellness reimbursement cycle.",
+      "timestamp": "2026-10-11T12:07:04.260Z"
+    },
+    {
+      "id": "aud-1791720424257-676",
+      "actorId": "system",
+      "actorName": "Front Desk",
+      "actorRole": "front_desk",
+      "action": "RECORD_PAYMENT",
+      "recordType": "payment",
+      "recordId": "pay-1791720424257",
+      "details": "Received ₹2000 from Priya Sharma via card for invoice INV-2026-1006",
+      "timestamp": "2026-10-11T12:07:04.257Z"
+    },
+    {
+      "id": "aud-1791720424255-424",
+      "actorId": "system",
+      "actorName": "Front Desk",
+      "actorRole": "front_desk",
+      "action": "RECORD_PAYMENT",
+      "recordType": "payment",
+      "recordId": "pay-1791720424255",
+      "details": "Received ₹3000 from Priya Sharma via upi for invoice INV-2026-1006",
+      "timestamp": "2026-10-11T12:07:04.255Z"
+    },
+    {
+      "id": "aud-1791720424253-409",
+      "actorId": "system",
+      "actorName": "Front Desk",
+      "actorRole": "front_desk",
+      "action": "CREATE_INVOICE",
+      "recordType": "invoice",
+      "recordId": "inv-1791720424253",
+      "details": "Created invoice INV-2026-1006 for Priya Sharma totaling ₹10000",
+      "timestamp": "2026-10-11T12:07:04.253Z"
+    },
+    {
+      "id": "aud-1791720424249-812",
+      "actorId": "st-1",
+      "actorName": "Dr. Ananya Reddy",
+      "actorRole": "staff",
+      "action": "COMPLETE_SESSION",
+      "recordType": "session",
+      "recordId": "ses-1791720424246",
+      "details": "Completed session #1 for Priya Sharma by Dr. Ananya Reddy",
+      "timestamp": "2026-10-11T12:07:04.249Z"
+    },
+    {
+      "id": "aud-1791720424247-924",
+      "actorId": "system",
+      "actorName": "Front Desk",
+      "actorRole": "front_desk",
+      "action": "SCHEDULE_SESSION",
+      "recordType": "session",
+      "recordId": "ses-1791720424246",
+      "details": "Scheduled Session #1 for Priya Sharma on 2026-10-15",
+      "timestamp": "2026-10-11T12:07:04.247Z"
+    },
+    {
+      "id": "aud-1791720424244-882",
+      "actorId": "system",
+      "actorName": "Front Desk",
+      "actorRole": "front_desk",
+      "action": "ENROLL_PACKAGE",
+      "recordType": "package",
+      "recordId": "pkg-1791720424244",
+      "details": "Enrolled Priya Sharma into Comprehensive Skin & Metabolism Transformation (4 sessions)",
+      "timestamp": "2026-10-11T12:07:04.244Z"
+    },
+    {
+      "id": "aud-1791720424239-261",
+      "actorId": "system",
+      "actorName": "Dr. Ananya Reddy",
+      "actorRole": "front_desk",
+      "action": "RECORD_CONSULTATION",
+      "recordType": "consultation",
+      "recordId": "cns-1791720424239",
+      "details": "Consultation completed for Priya Sharma by Dr. Ananya Reddy & Kavita Nair, RD. Outcome: completed_package_purchased",
+      "timestamp": "2026-10-11T12:07:04.239Z"
+    },
+    {
+      "id": "aud-1791720424236-648",
+      "actorId": "system",
+      "actorName": "Dr. Ananya Reddy",
+      "actorRole": "front_desk",
+      "action": "UPDATE_APPOINTMENT_STATUS",
+      "recordType": "appointment",
+      "recordId": "apt-1791720424226",
+      "details": "Status changed from in_consultation to consultation_completed",
+      "timestamp": "2026-10-11T12:07:04.236Z"
+    },
+    {
+      "id": "aud-1791720424233-523",
+      "actorId": "system",
+      "actorName": "Front Desk",
+      "actorRole": "front_desk",
+      "action": "UPDATE_APPOINTMENT_STATUS",
+      "recordType": "appointment",
+      "recordId": "apt-1791720424226",
+      "details": "Status changed from checked_in to in_consultation",
+      "timestamp": "2026-10-11T12:07:04.233Z"
+    },
+    {
+      "id": "aud-1791720424231-743",
+      "actorId": "system",
+      "actorName": "Front Desk",
+      "actorRole": "front_desk",
+      "action": "UPDATE_APPOINTMENT_STATUS",
+      "recordType": "appointment",
+      "recordId": "apt-1791720424226",
+      "details": "Status changed from confirmed to checked_in",
+      "timestamp": "2026-10-11T12:07:04.231Z"
+    },
+    {
+      "id": "aud-1791720424226-259",
+      "actorId": "system",
+      "actorName": "Front Desk",
+      "actorRole": "front_desk",
+      "action": "CREATE_APPOINTMENT",
+      "recordType": "appointment",
+      "recordId": "apt-1791720424226",
+      "details": "Booked appointment NF-2026-6009 for Test WalkIn User 3877 in Skin / Hair with Dr. Ananya Reddy",
+      "timestamp": "2026-10-11T12:07:04.226Z"
+    },
+    {
+      "id": "aud-1791720424212-847",
+      "actorId": "system",
+      "actorName": "Sneha Rao (Front Desk Executive)",
+      "actorRole": "call_center",
+      "action": "CREATE_PROSPECT",
+      "recordType": "customer",
+      "recordId": "CUST-1011",
+      "details": "Created new prospect Test WalkIn User 3877 (+91 999993877) via Walk-in",
+      "timestamp": "2026-10-11T12:07:04.212Z"
+    },
+    {
+      "id": "aud-1791720396108-190",
+      "actorId": "usr-callcenter-1",
+      "actorName": "Pooja Reddy",
+      "actorRole": "call_center",
+      "action": "RECORD_CALL",
+      "recordType": "callLog",
+      "recordId": "call-1791720396108-319",
+      "details": "Recorded callback_requested call with Test Prospect 5698",
+      "timestamp": "2026-10-11T12:06:36.108Z"
+    },
+    {
+      "id": "aud-1791720396106-68",
+      "actorId": "system",
+      "actorName": "Pooja Reddy (Call Center Lead)",
+      "actorRole": "call_center",
+      "action": "CREATE_PROSPECT",
+      "recordType": "customer",
+      "recordId": "CUST-1010",
+      "details": "Created new prospect Test Prospect 5698 (+91 977775698) via Instagram",
+      "timestamp": "2026-10-11T12:06:36.106Z"
+    },
+    {
+      "id": "aud-1791720396103-921",
+      "actorId": "system",
+      "actorName": "Sneha Rao",
+      "actorRole": "front_desk",
+      "action": "POSTPONE_PAYMENT",
+      "recordType": "invoice",
+      "recordId": "inv-1791720396095",
+      "details": "Postponed balance of ₹5000 for Priya Sharma until 2026-10-25. Reason: Awaiting corporate wellness reimbursement cycle.",
+      "timestamp": "2026-10-11T12:06:36.103Z"
+    },
+    {
+      "id": "aud-1791720396100-43",
+      "actorId": "system",
+      "actorName": "Front Desk",
+      "actorRole": "front_desk",
+      "action": "RECORD_PAYMENT",
+      "recordType": "payment",
+      "recordId": "pay-1791720396100",
+      "details": "Received ₹2000 from Priya Sharma via card for invoice INV-2026-1005",
+      "timestamp": "2026-10-11T12:06:36.100Z"
+    },
+    {
+      "id": "aud-1791720396098-676",
+      "actorId": "system",
+      "actorName": "Front Desk",
+      "actorRole": "front_desk",
+      "action": "RECORD_PAYMENT",
+      "recordType": "payment",
+      "recordId": "pay-1791720396098",
+      "details": "Received ₹3000 from Priya Sharma via upi for invoice INV-2026-1005",
+      "timestamp": "2026-10-11T12:06:36.098Z"
+    },
+    {
+      "id": "aud-1791720396095-392",
+      "actorId": "system",
+      "actorName": "Front Desk",
+      "actorRole": "front_desk",
+      "action": "CREATE_INVOICE",
+      "recordType": "invoice",
+      "recordId": "inv-1791720396095",
+      "details": "Created invoice INV-2026-1005 for Priya Sharma totaling ₹10000",
+      "timestamp": "2026-10-11T12:06:36.095Z"
+    },
+    {
+      "id": "aud-1791720396092-220",
+      "actorId": "st-1",
+      "actorName": "Dr. Ananya Reddy",
+      "actorRole": "staff",
+      "action": "COMPLETE_SESSION",
+      "recordType": "session",
+      "recordId": "ses-1791720396089",
+      "details": "Completed session #1 for Priya Sharma by Dr. Ananya Reddy",
+      "timestamp": "2026-10-11T12:06:36.092Z"
+    },
+    {
+      "id": "aud-1791720396089-547",
+      "actorId": "system",
+      "actorName": "Front Desk",
+      "actorRole": "front_desk",
+      "action": "SCHEDULE_SESSION",
+      "recordType": "session",
+      "recordId": "ses-1791720396089",
+      "details": "Scheduled Session #1 for Priya Sharma on 2026-10-15",
+      "timestamp": "2026-10-11T12:06:36.089Z"
+    },
+    {
+      "id": "aud-1791720396085-703",
+      "actorId": "system",
+      "actorName": "Front Desk",
+      "actorRole": "front_desk",
+      "action": "ENROLL_PACKAGE",
+      "recordType": "package",
+      "recordId": "pkg-1791720396085",
+      "details": "Enrolled Priya Sharma into Comprehensive Skin & Metabolism Transformation (4 sessions)",
+      "timestamp": "2026-10-11T12:06:36.086Z"
+    },
+    {
+      "id": "aud-1791720396069-554",
+      "actorId": "system",
+      "actorName": "Dr. Ananya Reddy",
+      "actorRole": "front_desk",
+      "action": "RECORD_CONSULTATION",
+      "recordType": "consultation",
+      "recordId": "cns-1791720396069",
+      "details": "Consultation completed for Priya Sharma by Dr. Ananya Reddy & Kavita Nair, RD. Outcome: completed_package_purchased",
+      "timestamp": "2026-10-11T12:06:36.069Z"
+    },
+    {
+      "id": "aud-1791720396036-101",
+      "actorId": "system",
+      "actorName": "Sneha Rao (Front Desk Executive)",
+      "actorRole": "call_center",
+      "action": "CREATE_PROSPECT",
+      "recordType": "customer",
+      "recordId": "CUST-1009",
+      "details": "Created new prospect Test WalkIn User 5698 (+91 999995698) via Walk-in",
+      "timestamp": "2026-10-11T12:06:36.037Z"
+    },
+    {
+      "id": "aud-1791720282661-279",
+      "actorId": "system",
+      "actorName": "Front Desk",
+      "actorRole": "front_desk",
+      "action": "CREATE_APPOINTMENT",
+      "recordType": "appointment",
+      "recordId": "apt-1791720282661",
+      "details": "Booked appointment NF-2026-1998 for Client Alpha in Slim-1 with Coach Vikram Singh",
+      "timestamp": "2026-10-11T12:04:42.661Z"
+    },
+    {
+      "id": "aud-1791720282656-841",
+      "actorId": "usr-callcenter-1",
+      "actorName": "Pooja Reddy",
+      "actorRole": "call_center",
+      "action": "RECORD_CALL",
+      "recordType": "callLog",
+      "recordId": "call-1791720282656-6",
+      "details": "Recorded callback_requested call with Test Prospect 2198",
+      "timestamp": "2026-10-11T12:04:42.656Z"
+    },
+    {
+      "id": "aud-1791720282652-459",
+      "actorId": "system",
+      "actorName": "Pooja Reddy (Call Center Lead)",
+      "actorRole": "call_center",
+      "action": "CREATE_PROSPECT",
+      "recordType": "customer",
+      "recordId": "CUST-1008",
+      "details": "Created new prospect Test Prospect 2198 (+91 977772198) via Instagram",
+      "timestamp": "2026-10-11T12:04:42.652Z"
+    },
+    {
+      "id": "aud-1791720282646-607",
+      "actorId": "system",
+      "actorName": "Sneha Rao",
+      "actorRole": "front_desk",
+      "action": "POSTPONE_PAYMENT",
+      "recordType": "invoice",
+      "recordId": "inv-1791720282635",
+      "details": "Postponed balance of ₹5000 for Priya Sharma until 2026-10-25. Reason: Awaiting corporate wellness reimbursement cycle.",
+      "timestamp": "2026-10-11T12:04:42.646Z"
+    },
+    {
+      "id": "aud-1791720282642-732",
+      "actorId": "system",
+      "actorName": "Front Desk",
+      "actorRole": "front_desk",
+      "action": "RECORD_PAYMENT",
+      "recordType": "payment",
+      "recordId": "pay-1791720282642",
+      "details": "Received ₹2000 from Priya Sharma via credit_card for invoice INV-2026-1004",
+      "timestamp": "2026-10-11T12:04:42.642Z"
+    },
+    {
+      "id": "aud-1791720282639-0",
+      "actorId": "system",
+      "actorName": "Front Desk",
+      "actorRole": "front_desk",
+      "action": "RECORD_PAYMENT",
+      "recordType": "payment",
+      "recordId": "pay-1791720282639",
+      "details": "Received ₹3000 from Priya Sharma via upi for invoice INV-2026-1004",
+      "timestamp": "2026-10-11T12:04:42.639Z"
+    },
+    {
+      "id": "aud-1791720282635-116",
+      "actorId": "system",
+      "actorName": "Front Desk",
+      "actorRole": "front_desk",
+      "action": "CREATE_INVOICE",
+      "recordType": "invoice",
+      "recordId": "inv-1791720282635",
+      "details": "Created invoice INV-2026-1004 for Priya Sharma totaling ₹10000",
+      "timestamp": "2026-10-11T12:04:42.635Z"
+    },
+    {
+      "id": "aud-1791720282631-851",
+      "actorId": "st-1",
+      "actorName": "Dr. Ananya Reddy",
+      "actorRole": "staff",
+      "action": "COMPLETE_SESSION",
+      "recordType": "session",
+      "recordId": "ses-1791720282625",
+      "details": "Completed session #1 for Priya Sharma by Dr. Ananya Reddy",
+      "timestamp": "2026-10-11T12:04:42.631Z"
+    },
+    {
+      "id": "aud-1791720282625-230",
+      "actorId": "system",
+      "actorName": "Front Desk",
+      "actorRole": "front_desk",
+      "action": "SCHEDULE_SESSION",
+      "recordType": "session",
+      "recordId": "ses-1791720282625",
+      "details": "Scheduled Session #1 for Priya Sharma on 2026-10-15",
+      "timestamp": "2026-10-11T12:04:42.625Z"
+    },
+    {
+      "id": "aud-1791720282620-670",
+      "actorId": "system",
+      "actorName": "Front Desk",
+      "actorRole": "front_desk",
+      "action": "ENROLL_PACKAGE",
+      "recordType": "package",
+      "recordId": "pkg-1791720282620",
+      "details": "Enrolled Priya Sharma into Comprehensive Skin & Metabolism Transformation (4 sessions)",
+      "timestamp": "2026-10-11T12:04:42.620Z"
+    },
+    {
+      "id": "aud-1791720282616-725",
+      "actorId": "system",
+      "actorName": "Dr. Ananya Reddy",
+      "actorRole": "front_desk",
+      "action": "RECORD_CONSULTATION",
+      "recordType": "consultation",
+      "recordId": "cns-1791720282616",
+      "details": "Consultation completed for Priya Sharma by Dr. Ananya Reddy & Kavita Nair, RD. Outcome: completed_package_purchased",
+      "timestamp": "2026-10-11T12:04:42.616Z"
+    },
+    {
+      "id": "aud-1791720282613-434",
+      "actorId": "system",
+      "actorName": "Dr. Ananya Reddy",
+      "actorRole": "front_desk",
+      "action": "UPDATE_APPOINTMENT_STATUS",
+      "recordType": "appointment",
+      "recordId": "apt-1791720282603",
+      "details": "Status changed from in_consultation to consultation_completed",
+      "timestamp": "2026-10-11T12:04:42.613Z"
+    },
+    {
+      "id": "aud-1791720282609-849",
+      "actorId": "system",
+      "actorName": "Front Desk",
+      "actorRole": "front_desk",
+      "action": "UPDATE_APPOINTMENT_STATUS",
+      "recordType": "appointment",
+      "recordId": "apt-1791720282603",
+      "details": "Status changed from checked_in to in_consultation",
+      "timestamp": "2026-10-11T12:04:42.609Z"
+    },
+    {
+      "id": "aud-1791720282606-241",
+      "actorId": "system",
+      "actorName": "Front Desk",
+      "actorRole": "front_desk",
+      "action": "UPDATE_APPOINTMENT_STATUS",
+      "recordType": "appointment",
+      "recordId": "apt-1791720282603",
+      "details": "Status changed from confirmed to checked_in",
+      "timestamp": "2026-10-11T12:04:42.606Z"
+    },
+    {
+      "id": "aud-1791720282603-852",
+      "actorId": "system",
+      "actorName": "Front Desk",
+      "actorRole": "front_desk",
+      "action": "CREATE_APPOINTMENT",
+      "recordType": "appointment",
+      "recordId": "apt-1791720282603",
+      "details": "Booked appointment NF-2026-5360 for Test WalkIn User 2198 in Skin / Hair with Dr. Ananya Reddy",
+      "timestamp": "2026-10-11T12:04:42.603Z"
+    },
+    {
+      "id": "aud-1791720282590-899",
+      "actorId": "system",
+      "actorName": "Sneha Rao (Front Desk Executive)",
+      "actorRole": "call_center",
+      "action": "CREATE_PROSPECT",
+      "recordType": "customer",
+      "recordId": "CUST-1007",
+      "details": "Created new prospect Test WalkIn User 2198 (+91 999992198) via Walk-in",
+      "timestamp": "2026-10-11T12:04:42.590Z"
+    },
+    {
+      "id": "aud-1791712610948-61",
+      "actorId": "system",
+      "actorName": "Sneha Rao (Front Desk Executive)",
+      "actorRole": "front_desk",
+      "action": "CREATE_APPOINTMENT",
+      "recordType": "appointment",
+      "recordId": "apt-1791712610948",
+      "details": "Booked appointment NF-2026-2716 for Rohit Varma in Skin / Hair with Dr. Ananya Rao",
+      "timestamp": "2026-10-11T09:56:50.948Z"
+    },
+    {
+      "id": "aud-1",
+      "actorId": "usr-callcenter-1",
+      "actorName": "Pooja Reddy",
+      "actorRole": "call_center",
+      "timestamp": "2026-10-01T16:05:00Z",
+      "action": "SCHEDULE_CALLBACK",
+      "recordType": "followUp",
+      "recordId": "flw-1",
+      "details": "Scheduled callback for Sunita Reddy regarding trichology detox."
+    },
+    {
+      "id": "aud-2",
+      "actorId": "usr-frontdesk-1",
+      "actorName": "Sneha Rao",
+      "actorRole": "front_desk",
+      "timestamp": "2026-10-01T15:35:00Z",
+      "action": "RECORD_CONSULTATION",
+      "recordType": "consultation",
+      "recordId": "cns-2",
+      "details": "Recorded consultation outcome for Karthik Rao with Dr. Ananya and Dietitian Kavita."
+    },
+    {
+      "id": "aud-3",
+      "actorId": "usr-frontdesk-1",
+      "actorName": "Sneha Rao",
+      "actorRole": "front_desk",
+      "timestamp": "2026-10-01T15:40:00Z",
+      "action": "POSTPONE_PAYMENT",
+      "recordType": "invoice",
+      "recordId": "inv-1003",
+      "details": "Postponed payment of ₹3,500 for Karthik Rao with follow-up on 2026-10-03."
     }
   ]
 }
