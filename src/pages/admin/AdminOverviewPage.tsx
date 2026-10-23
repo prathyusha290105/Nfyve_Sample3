@@ -63,9 +63,9 @@ export const AdminOverviewPage: React.FC = () => {
     ])
       .then(([m, apts, flws, pfs]) => {
         setMetrics(m);
-        setAppointments(apts);
-        setFollowUps(flws);
-        setPaymentFollowUps(pfs);
+        setAppointments(Array.isArray(apts) ? apts : []);
+        setFollowUps(Array.isArray(flws) ? flws : []);
+        setPaymentFollowUps(Array.isArray(pfs) ? pfs : []);
       })
       .catch(console.error)
       .finally(() => setIsLoading(false));

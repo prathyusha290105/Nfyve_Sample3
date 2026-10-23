@@ -33,7 +33,8 @@ import {
   Calendar, 
   MessageSquare,
   ShieldAlert,
-  ChevronRight
+  ChevronRight,
+  Clock
 } from 'lucide-react';
 
 export const CallCenterOverviewPage: React.FC = () => {
@@ -45,6 +46,7 @@ export const CallCenterOverviewPage: React.FC = () => {
   const [services, setServices] = useState<Service[]>([]);
   const [staffList, setStaffList] = useState<Staff[]>([]);
   const [isLoading, setIsLoading] = useState(true);
+  const [error, setError] = useState<string | null>(null);
 
   // Global Search
   const [searchQuery, setSearchQuery] = useState('');
@@ -86,6 +88,7 @@ export const CallCenterOverviewPage: React.FC = () => {
 
   const loadData = async () => {
     setIsLoading(true);
+    setError(null);
     try {
       const [custs, calls, flws, apts, srvs, stf] = await Promise.all([
         api.getCustomers(),
@@ -95,21 +98,24 @@ export const CallCenterOverviewPage: React.FC = () => {
         api.getServices(),
         api.getStaff()
       ]);
-      setCustomers(custs);
-      setCallLogs(calls);
-      setFollowUps(flws);
-      setAppointments(apts);
-      setServices(srvs);
-      setStaffList(stf);
-      if (srvs.length > 0) {
-        setProspectServiceId(srvs[0].id);
-        setApptServiceId(srvs[0].id);
+      setCustomers(Array.isArray(custs) ? custs : []);
+      setCallLogs(Array.isArray(calls) ? calls : []);
+      setFollowUps(Array.isArray(flws) ? flws : []);
+      setAppointments(Array.isArray(apts) ? apts : []);
+      const validSrvs = Array.isArray(srvs) ? srvs : [];
+      const validStf = Array.isArray(stf) ? stf : [];
+      setServices(validSrvs);
+      setStaffList(validStf);
+      if (validSrvs.length > 0) {
+        setProspectServiceId(validSrvs[0].id);
+        setApptServiceId(validSrvs[0].id);
       }
-      if (stf.length > 0) {
-        setApptStaffId(stf[0].id);
+      if (validStf.length > 0) {
+        setApptStaffId(validStf[0].id);
       }
-    } catch (err) {
+    } catch (err: any) {
       console.error('Error loading Call Center dashboard data:', err);
+      setError(err?.message || 'Unable to synchronize with Call Center service. Please try again.');
     } finally {
       setIsLoading(false);
     }
@@ -268,14 +274,19 @@ export const CallCenterOverviewPage: React.FC = () => {
     }
   };
 
-  // KPIs
+  // KPIs (Defensive calculation)
   const todayStr = '2026-10-02';
-  const newLeadsToday = customers.filter(c => c.createdAt.startsWith(todayStr)).length;
-  const callsToday = callLogs.filter(c => c.dateTime.startsWith(todayStr)).length;
-  const callbacksDueToday = followUps.filter(f => f.dueDate === todayStr && f.status === 'pending').length;
-  const overdueCallbacks = followUps.filter(f => f.dueDate < todayStr && f.status === 'pending').length;
-  const apptsBookedToday = appointments.filter(a => a.bookingChannel === 'Phone Call').length;
-  const leadsAwaitingDecision = customers.filter(c => c.lifecycleStatus === 'followup_required' || c.lifecycleStatus === 'contacted').length;
+  const safeCustomers = Array.isArray(customers) ? customers : [];
+  const safeCallLogs = Array.isArray(callLogs) ? callLogs : [];
+  const safeFollowUps = Array.isArray(followUps) ? followUps : [];
+  const safeAppointments = Array.isArray(appointments) ? appointments : [];
+
+  const newLeadsToday = safeCustomers.filter(c => c.createdAt && c.createdAt.startsWith(todayStr)).length;
+  const callsToday = safeCallLogs.filter(c => c.dateTime && c.dateTime.startsWith(todayStr)).length;
+  const callbacksDueToday = safeFollowUps.filter(f => f.dueDate === todayStr && f.status === 'pending').length;
+  const overdueCallbacks = safeFollowUps.filter(f => f.dueDate < todayStr && f.status === 'pending').length;
+  const apptsBookedToday = safeAppointments.filter(a => a.bookingChannel === 'Phone Call').length;
+  const leadsAwaitingDecision = safeCustomers.filter(c => c.lifecycleStatus === 'followup_required' || c.lifecycleStatus === 'contacted').length;
 
   return (
     <div className="p-4 sm:p-8 space-y-8 max-w-7xl mx-auto w-full">
@@ -297,6 +308,14 @@ export const CallCenterOverviewPage: React.FC = () => {
 
         <div className="flex items-center gap-3">
           <button
+            onClick={() => loadData()}
+            disabled={isLoading}
+            className="inline-flex items-center gap-1.5 px-3 py-2 bg-white border border-[#DDD9CE] text-[#55584D] rounded-xl text-xs font-medium hover:bg-[#F7F5F0] transition-colors shadow-2xs"
+          >
+            <Clock className={`w-3.5 h-3.5 ${isLoading ? 'animate-spin' : ''}`} />
+            <span>Sync</span>
+          </button>
+          <button
             onClick={() => setIsNewProspectOpen(true)}
             className="inline-flex items-center gap-2 px-4 py-2.5 bg-[#1E3B2E] text-white rounded-xl text-xs font-semibold hover:bg-[#2A5140] transition-colors shadow-sm"
           >
@@ -305,6 +324,38 @@ export const CallCenterOverviewPage: React.FC = () => {
           </button>
         </div>
       </div>
+
+      {/* Error / Service Notice Banner */}
+      {error && (
+        <div className="bg-red-50 border border-red-200 text-red-900 rounded-xl p-4 flex flex-col sm:flex-row sm:items-center justify-between gap-3 shadow-2xs">
+          <div className="flex items-center gap-3">
+            <ShieldAlert className="w-5 h-5 text-red-600 flex-shrink-0" />
+            <div>
+              <p className="text-xs font-semibold">Live Data Synchronization Issue</p>
+              <p className="text-xs text-red-700">{error}</p>
+            </div>
+          </div>
+          <button
+            onClick={loadData}
+            className="self-start sm:self-auto px-3.5 py-1.5 bg-red-600 text-white rounded-lg text-xs font-medium hover:bg-red-700 transition-colors shadow-2xs"
+          >
+            Retry Connection
+          </button>
+        </div>
+      )}
+
+      {/* Loading Skeleton */}
+      {isLoading && safeCustomers.length === 0 && (
+        <div className="space-y-4 animate-pulse">
+          <div className="h-24 bg-white border border-[#DDD9CE] rounded-2xl" />
+          <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
+            <div className="h-20 bg-white border border-[#DDD9CE] rounded-xl" />
+            <div className="h-20 bg-white border border-[#DDD9CE] rounded-xl" />
+            <div className="h-20 bg-white border border-[#DDD9CE] rounded-xl" />
+            <div className="h-20 bg-white border border-[#DDD9CE] rounded-xl" />
+          </div>
+        </div>
+      )}
 
       {/* Global Search Bar */}
       <div className="relative">

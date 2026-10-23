@@ -13,16 +13,17 @@ export const CallCenterAppointmentsPage: React.FC = () => {
   useEffect(() => {
     setIsLoading(true);
     api.getAppointments()
-      .then(res => setAppointments(res))
+      .then(res => setAppointments(Array.isArray(res) ? res : []))
       .catch(console.error)
       .finally(() => setIsLoading(false));
   }, []);
 
-  const filtered = appointments.filter(a => 
-    a.customerName.toLowerCase().includes(search.toLowerCase()) ||
-    a.customerPhone.includes(search) ||
-    a.bookingRef.toLowerCase().includes(search.toLowerCase()) ||
-    a.serviceName.toLowerCase().includes(search.toLowerCase())
+  const safeAppointments = Array.isArray(appointments) ? appointments : [];
+  const filtered = safeAppointments.filter(a => 
+    (a.customerName || '').toLowerCase().includes(search.toLowerCase()) ||
+    (a.customerPhone || '').includes(search) ||
+    (a.bookingRef || '').toLowerCase().includes(search.toLowerCase()) ||
+    (a.serviceName || '').toLowerCase().includes(search.toLowerCase())
   );
 
   return (

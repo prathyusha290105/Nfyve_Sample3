@@ -32,12 +32,14 @@ export const FrontDeskOverviewPage: React.FC = () => {
   const [sessions, setSessions] = useState<TreatmentSession[]>([]);
   const [paymentFollowUps, setPaymentFollowUps] = useState<PaymentFollowUp[]>([]);
   const [isLoading, setIsLoading] = useState(true);
+  const [error, setError] = useState<string | null>(null);
   const [active360CustomerId, setActive360CustomerId] = useState<string | null>(null);
 
   const todayStr = '2026-10-02';
 
   const loadData = async () => {
     setIsLoading(true);
+    setError(null);
     try {
       const [apts, cns, ses, pf] = await Promise.all([
         api.getAppointments({ date: todayStr }),
@@ -45,12 +47,13 @@ export const FrontDeskOverviewPage: React.FC = () => {
         api.getSessions(),
         api.getPaymentFollowUps('pending')
       ]);
-      setAppointments(apts);
-      setConsultations(cns);
-      setSessions(ses);
-      setPaymentFollowUps(pf);
-    } catch (err) {
+      setAppointments(Array.isArray(apts) ? apts : []);
+      setConsultations(Array.isArray(cns) ? cns : []);
+      setSessions(Array.isArray(ses) ? ses : []);
+      setPaymentFollowUps(Array.isArray(pf) ? pf : []);
+    } catch (err: any) {
       console.error('Error loading Front Desk overview:', err);
+      setError(err?.message || 'Unable to connect to Front Desk service. Please try again.');
     } finally {
       setIsLoading(false);
     }
@@ -69,13 +72,16 @@ export const FrontDeskOverviewPage: React.FC = () => {
     }
   };
 
-  // Metrics
-  const todayAppointments = appointments.filter(a => a.status !== 'cancelled');
-  const checkedInCount = appointments.filter(a => a.status === 'checked_in').length;
-  const inConsultationCount = appointments.filter(a => a.status === 'in_consultation').length;
-  const inProgressCount = appointments.filter(a => a.status === 'in_progress').length;
-  const completedTodayCount = appointments.filter(a => a.status === 'completed' || a.status === 'consultation_completed').length;
-  const paymentFollowUpsCount = paymentFollowUps.length;
+  // Defensive Metrics
+  const safeAppointments = Array.isArray(appointments) ? appointments : [];
+  const safePaymentFollowUps = Array.isArray(paymentFollowUps) ? paymentFollowUps : [];
+
+  const todayAppointments = safeAppointments.filter(a => a.status !== 'cancelled');
+  const checkedInCount = safeAppointments.filter(a => a.status === 'checked_in').length;
+  const inConsultationCount = safeAppointments.filter(a => a.status === 'in_consultation').length;
+  const inProgressCount = safeAppointments.filter(a => a.status === 'in_progress').length;
+  const completedTodayCount = safeAppointments.filter(a => a.status === 'completed' || a.status === 'consultation_completed').length;
+  const paymentFollowUpsCount = safePaymentFollowUps.length;
 
   return (
     <div className="p-4 sm:p-8 space-y-8 max-w-7xl mx-auto w-full">
@@ -96,6 +102,14 @@ export const FrontDeskOverviewPage: React.FC = () => {
         </div>
 
         <div className="flex items-center gap-3">
+          <button
+            onClick={() => loadData()}
+            disabled={isLoading}
+            className="inline-flex items-center gap-1.5 px-3 py-2 bg-white border border-[#DDD9CE] text-[#55584D] rounded-xl text-xs font-medium hover:bg-[#F7F5F0] transition-colors shadow-2xs"
+          >
+            <Clock className={`w-3.5 h-3.5 ${isLoading ? 'animate-spin' : ''}`} />
+            <span>Sync</span>
+          </button>
           <Link
             to="/front-desk/walk-in"
             className="inline-flex items-center gap-2 px-4 py-2.5 bg-[#1E3B2E] text-white rounded-xl text-xs font-semibold hover:bg-[#2A5140] transition-colors shadow-sm"
@@ -112,6 +126,36 @@ export const FrontDeskOverviewPage: React.FC = () => {
           </Link>
         </div>
       </div>
+
+      {/* Error Banner */}
+      {error && (
+        <div className="bg-red-50 border border-red-200 text-red-900 rounded-xl p-4 flex flex-col sm:flex-row sm:items-center justify-between gap-3 shadow-2xs">
+          <div className="flex items-center gap-3">
+            <AlertCircle className="w-5 h-5 text-red-600 flex-shrink-0" />
+            <div>
+              <p className="text-xs font-semibold">Front Desk Data Communication Error</p>
+              <p className="text-xs text-red-700">{error}</p>
+            </div>
+          </div>
+          <button
+            onClick={loadData}
+            className="self-start sm:self-auto px-3.5 py-1.5 bg-red-600 text-white rounded-lg text-xs font-medium hover:bg-red-700 transition-colors shadow-2xs"
+          >
+            Retry Connection
+          </button>
+        </div>
+      )}
+
+      {/* Loading Skeleton */}
+      {isLoading && safeAppointments.length === 0 && (
+        <div className="space-y-4 animate-pulse">
+          <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-6 gap-3">
+            {[1, 2, 3, 4, 5, 6].map(i => (
+              <div key={i} className="h-24 bg-white border border-[#DDD9CE] rounded-xl" />
+            ))}
+          </div>
+        </div>
+      )}
 
       {/* 6 Metric Cards */}
       <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-6 gap-3 sm:gap-4">

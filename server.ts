@@ -18,6 +18,12 @@ async function startServer() {
   // Mount API endpoints
   app.use('/api', apiRouter);
 
+  // Serve public static assets and favicon
+  app.use(express.static(path.resolve(__dirname, 'public')));
+  app.get(['/favicon.ico', '/favicon.svg'], (req, res) => {
+    res.sendFile(path.resolve(__dirname, 'public/favicon.svg'));
+  });
+
   // Serve generated assets statically if needed
   app.use('/src/assets', express.static(path.resolve(__dirname, 'src/assets')));
 

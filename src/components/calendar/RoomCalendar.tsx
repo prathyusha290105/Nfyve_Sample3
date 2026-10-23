@@ -45,7 +45,7 @@ export const RoomCalendar: React.FC<RoomCalendarProps> = ({
   const fetchAppointments = () => {
     setIsLoading(true);
     api.getAppointments({ date: selectedDate })
-      .then(res => setAppointments(res))
+      .then(res => setAppointments(Array.isArray(res) ? res : []))
       .catch(err => console.error('Error fetching calendar appointments:', err))
       .finally(() => setIsLoading(false));
   };

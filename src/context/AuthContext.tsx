@@ -77,6 +77,16 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
               createdAt: data.createdAt || new Date().toISOString(),
             };
             setUser(appUser);
+
+            if (!authStorage.getToken()) {
+              api.firebaseSession(fbUser.email || '', fbUser.uid, appUser.name)
+                .then(res => {
+                  if (res.token) authStorage.setToken(res.token);
+                })
+                .catch(err => {
+                  console.info('[NFYVE Auth] Session bridge deferred:', err.message);
+                });
+            }
           } else {
             // First time login - auto initialize customer profile in Firestore
             const initialRole: Role = fbUser.email === 'admin@nfyve.com' ? 'admin' : 'customer';
@@ -91,7 +101,7 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
             };
             await setDoc(userDocRef, newUserData);
 
-            setUser({
+            const newUserObj: User = {
               id: fbUser.uid,
               uid: fbUser.uid,
               name: newUserData.name,
@@ -100,10 +110,21 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
               role: initialRole,
               active: true,
               createdAt: newUserData.createdAt,
-            });
+            };
+            setUser(newUserObj);
+
+            if (!authStorage.getToken()) {
+              api.firebaseSession(fbUser.email || '', fbUser.uid, newUserObj.name)
+                .then(res => {
+                  if (res.token) authStorage.setToken(res.token);
+                })
+                .catch(err => {
+                  console.info('[NFYVE Auth] Session bridge deferred:', err.message);
+                });
+            }
           }
         } catch (err) {
-          console.error('Error fetching Firestore user dossier:', err);
+          console.info('[NFYVE Auth] Using local operational session:', err);
           checkLocalSession();
         } finally {
           setIsLoading(false);
@@ -233,9 +254,23 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
         };
 
         setUser(appUser);
+
+        try {
+          const sessionRes = await api.firebaseSession(cred.user.email || email, cred.user.uid, appUser.name);
+          if (sessionRes.token) {
+            authStorage.setToken(sessionRes.token);
+          }
+        } catch (sessErr: any) {
+          console.info('[NFYVE Auth] Session bridge note:', sessErr.message);
+        }
+
         return appUser;
       } catch (err: any) {
-        console.warn('Firebase Auth sign in failed, falling back to local credentials:', err.message);
+        if (err.code === 'auth/invalid-credential' || err.code === 'auth/user-not-found' || err.code === 'auth/invalid-login-credentials') {
+          console.info(`[NFYVE Auth] Verifying credentials for ${email} with local operational ledger.`);
+        } else {
+          console.warn('Firebase Auth notice, falling back to local operational credentials:', err.message);
+        }
       }
     }
 
@@ -284,9 +319,19 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
         };
 
         setUser(appUser);
+
+        try {
+          const sessionRes = await api.firebaseSession(cred.user.email || email, cred.user.uid, appUser.name);
+          if (sessionRes.token) {
+            authStorage.setToken(sessionRes.token);
+          }
+        } catch (sessErr: any) {
+          console.info('[NFYVE Auth] Session bridge note:', sessErr.message);
+        }
+
         return appUser;
       } catch (err: any) {
-        console.warn('Firebase Auth registration failed, using local server fallback:', err.message);
+        console.info('[NFYVE Auth] Registration completing via primary operational ledger:', err.message);
       }
     }
 

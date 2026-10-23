@@ -32,7 +32,7 @@ export const CallCenterProspectsPage: React.FC = () => {
       status: statusFilter !== 'all' ? statusFilter : undefined,
       source: sourceFilter !== 'all' ? sourceFilter : undefined
     })
-      .then(res => setCustomers(res))
+      .then(res => setCustomers(Array.isArray(res) ? res : []))
       .catch(console.error)
       .finally(() => setIsLoading(false));
   };

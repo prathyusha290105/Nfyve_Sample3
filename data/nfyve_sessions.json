@@ -1,0 +1,17 @@
+{
+  "nfyve_token_w32ac1u11hamvkzr9f6": {
+    "userId": "usr-callcenter-1",
+    "role": "call_center",
+    "expiresAt": 1793366044530
+  },
+  "nfyve_token_mejjn9lywfgmvkzrd7w": {
+    "userId": "usr-callcenter-1",
+    "role": "call_center",
+    "expiresAt": 1793366049452
+  },
+  "nfyve_token_0xby7xyv2wfmvkzrgue": {
+    "userId": "usr-frontdesk-1",
+    "role": "front_desk",
+    "expiresAt": 1793366054150
+  }
+}

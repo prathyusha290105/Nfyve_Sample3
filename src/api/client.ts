@@ -35,6 +35,31 @@ export const authStorage = {
   clearToken: () => localStorage.removeItem(TOKEN_KEY),
 };
 
+export function normalizeArrayResponse<T>(data: unknown, entityKey?: string): T[] {
+  if (Array.isArray(data)) {
+    return data as T[];
+  }
+
+  if (data && typeof data === 'object') {
+    // If wrapped in an entity key like { customers: [...] } or { appointments: [...] }
+    if (entityKey && Array.isArray((data as any)[entityKey])) {
+      return (data as any)[entityKey] as T[];
+    }
+    // Check common wrapper keys
+    for (const key of ['data', 'items', 'list', 'records', 'customers', 'appointments', 'callLogs', 'followUps', 'consultations', 'packages', 'sessions', 'invoices', 'payments', 'paymentFollowUps', 'services', 'staff', 'rooms']) {
+      if (Array.isArray((data as any)[key])) {
+        return (data as any)[key] as T[];
+      }
+    }
+    // If the object has an error property, throw the error
+    if ('error' in data && typeof (data as any).error === 'string') {
+      throw new Error((data as any).error);
+    }
+  }
+
+  throw new Error(`Data format error: expected an array of records${entityKey ? ` for "${entityKey}"` : ''}, received ${typeof data}`);
+}
+
 async function request<T>(endpoint: string, options: RequestInit = {}): Promise<T> {
   const token = authStorage.getToken();
   const headers: Record<string, string> = {
@@ -51,7 +76,17 @@ async function request<T>(endpoint: string, options: RequestInit = {}): Promise<
     headers,
   });
 
-  const data = await res.json().catch(() => ({}));
+  const contentType = res.headers.get('content-type') || '';
+  let data: any = {};
+  if (contentType.includes('application/json')) {
+    data = await res.json().catch(() => ({}));
+  } else {
+    // Non-JSON response (e.g. HTML from Vite SPA or server error page)
+    if (!res.ok) {
+      throw new Error(`Request failed with status ${res.status}: ${res.statusText}`);
+    }
+    throw new Error(`Unexpected non-JSON response from server for /api${endpoint} (${contentType || 'text/html'})`);
+  }
 
   if (!res.ok) {
     throw new Error(data.error || `Request failed with status ${res.status}`);
@@ -101,16 +136,20 @@ export const api = {
     }),
 
   // Rooms
-  getRooms: () => request<Room[]>('/rooms'),
+  getRooms: async () => {
+    const raw = await request<unknown>('/rooms');
+    return normalizeArrayResponse<Room>(raw, 'rooms');
+  },
 
   // Customers & Prospects (Call Center / Front Desk / Admin)
-  getCustomers: (query?: { search?: string; status?: string; source?: string }) => {
+  getCustomers: async (query?: { search?: string; status?: string; source?: string }): Promise<Customer[]> => {
     const params = new URLSearchParams();
     if (query?.search) params.append('search', query.search);
     if (query?.status) params.append('status', query.status);
     if (query?.source) params.append('source', query.source);
     const qs = params.toString() ? `?${params.toString()}` : '';
-    return request<Customer[]>(`/customers${qs}`);
+    const raw = await request<unknown>(`/customers${qs}`);
+    return normalizeArrayResponse<Customer>(raw, 'customers');
   },
 
   searchCustomerPhone: (phone: string) =>
@@ -144,9 +183,10 @@ export const api = {
     }),
 
   // Call Logs
-  getCallLogs: (customerId?: string) => {
+  getCallLogs: async (customerId?: string): Promise<CallLog[]> => {
     const qs = customerId ? `?customerId=${encodeURIComponent(customerId)}` : '';
-    return request<CallLog[]>(`/call-logs${qs}`);
+    const raw = await request<unknown>(`/call-logs${qs}`);
+    return normalizeArrayResponse<CallLog>(raw, 'callLogs');
   },
 
   createCallLog: (payload: {
@@ -164,13 +204,15 @@ export const api = {
     }),
 
   // Follow-ups & Callbacks
-  getFollowUps: (query?: { status?: string; period?: string; employeeId?: string }) => {
+  getFollowUps: async (query?: { status?: string; period?: string; employeeId?: string; todayDate?: string }): Promise<FollowUp[]> => {
     const params = new URLSearchParams();
     if (query?.status) params.append('status', query.status);
     if (query?.period) params.append('period', query.period);
     if (query?.employeeId) params.append('employeeId', query.employeeId);
+    if (query?.todayDate) params.append('todayDate', query.todayDate);
     const qs = params.toString() ? `?${params.toString()}` : '';
-    return request<FollowUp[]>(`/follow-ups${qs}`);
+    const raw = await request<unknown>(`/follow-ups${qs}`);
+    return normalizeArrayResponse<FollowUp>(raw, 'followUps');
   },
 
   createFollowUp: (payload: Partial<FollowUp>) =>
@@ -194,7 +236,7 @@ export const api = {
     return request<{ hasConflict: boolean; reason?: string }>(`/appointments/check-conflict?${params.toString()}`);
   },
 
-  getAppointments: (query?: { date?: string; room?: RoomId; staffId?: string; status?: string; search?: string }) => {
+  getAppointments: async (query?: { date?: string; room?: RoomId; staffId?: string; status?: string; search?: string }): Promise<Appointment[]> => {
     const params = new URLSearchParams();
     if (query?.date) params.append('date', query.date);
     if (query?.room) params.append('room', query.room);
@@ -202,7 +244,8 @@ export const api = {
     if (query?.status) params.append('status', query.status);
     if (query?.search) params.append('search', query.search);
     const qs = params.toString() ? `?${params.toString()}` : '';
-    return request<Appointment[]>(`/appointments${qs}`);
+    const raw = await request<unknown>(`/appointments${qs}`);
+    return normalizeArrayResponse<Appointment>(raw, 'appointments');
   },
 
   getAppointmentById: (id: string) => request<Appointment>(`/appointments/${id}`),
@@ -246,9 +289,10 @@ export const api = {
     }),
 
   // Consultations
-  getConsultations: (customerId?: string) => {
+  getConsultations: async (customerId?: string): Promise<Consultation[]> => {
     const qs = customerId ? `?customerId=${encodeURIComponent(customerId)}` : '';
-    return request<Consultation[]>(`/consultations${qs}`);
+    const raw = await request<unknown>(`/consultations${qs}`);
+    return normalizeArrayResponse<Consultation>(raw, 'consultations');
   },
 
   createConsultation: (payload: Partial<Consultation>) =>
@@ -258,9 +302,10 @@ export const api = {
     }),
 
   // Packages
-  getPackages: (customerId?: string) => {
+  getPackages: async (customerId?: string): Promise<PackageRecord[]> => {
     const qs = customerId ? `?customerId=${encodeURIComponent(customerId)}` : '';
-    return request<PackageRecord[]>(`/packages${qs}`);
+    const raw = await request<unknown>(`/packages${qs}`);
+    return normalizeArrayResponse<PackageRecord>(raw, 'packages');
   },
 
   createPackage: (payload: Partial<PackageRecord>) =>
@@ -270,12 +315,13 @@ export const api = {
     }),
 
   // Treatment Sessions
-  getSessions: (query?: { packageId?: string; customerId?: string }) => {
+  getSessions: async (query?: { packageId?: string; customerId?: string }): Promise<TreatmentSession[]> => {
     const params = new URLSearchParams();
     if (query?.packageId) params.append('packageId', query.packageId);
     if (query?.customerId) params.append('customerId', query.customerId);
     const qs = params.toString() ? `?${params.toString()}` : '';
-    return request<TreatmentSession[]>(`/sessions${qs}`);
+    const raw = await request<unknown>(`/sessions${qs}`);
+    return normalizeArrayResponse<TreatmentSession>(raw, 'sessions');
   },
 
   createSession: (payload: Partial<TreatmentSession>) =>
@@ -300,9 +346,10 @@ export const api = {
     }),
 
   // Invoices & Billing
-  getInvoices: (customerId?: string) => {
+  getInvoices: async (customerId?: string): Promise<Invoice[]> => {
     const qs = customerId ? `?customerId=${encodeURIComponent(customerId)}` : '';
-    return request<Invoice[]>(`/invoices${qs}`);
+    const raw = await request<unknown>(`/invoices${qs}`);
+    return normalizeArrayResponse<Invoice>(raw, 'invoices');
   },
 
   getInvoiceById: (id: string) => request<Invoice>(`/invoices/${id}`),
@@ -314,12 +361,13 @@ export const api = {
     }),
 
   // Payments
-  getPayments: (query?: { invoiceId?: string; customerId?: string }) => {
+  getPayments: async (query?: { invoiceId?: string; customerId?: string }): Promise<PaymentTransaction[]> => {
     const params = new URLSearchParams();
     if (query?.invoiceId) params.append('invoiceId', query.invoiceId);
     if (query?.customerId) params.append('customerId', query.customerId);
     const qs = params.toString() ? `?${params.toString()}` : '';
-    return request<PaymentTransaction[]>(`/payments${qs}`);
+    const raw = await request<unknown>(`/payments${qs}`);
+    return normalizeArrayResponse<PaymentTransaction>(raw, 'payments');
   },
 
   createPayment: (payload: Partial<PaymentTransaction>) =>
@@ -329,9 +377,10 @@ export const api = {
     }),
 
   // Payment Postponements & Follow-ups
-  getPaymentFollowUps: (status?: string) => {
+  getPaymentFollowUps: async (status?: string): Promise<PaymentFollowUp[]> => {
     const qs = status ? `?status=${encodeURIComponent(status)}` : '';
-    return request<PaymentFollowUp[]>(`/payment-postponements${qs}`);
+    const raw = await request<unknown>(`/payment-postponements${qs}`);
+    return normalizeArrayResponse<PaymentFollowUp>(raw, 'paymentFollowUps');
   },
 
   createPaymentPostponement: (payload: Partial<PaymentFollowUp>) =>
@@ -341,12 +390,13 @@ export const api = {
     }),
 
   // Audit Logs
-  getAuditLogs: (query?: { recordType?: string; recordId?: string }) => {
+  getAuditLogs: async (query?: { recordType?: string; recordId?: string }): Promise<AuditLog[]> => {
     const params = new URLSearchParams();
     if (query?.recordType) params.append('recordType', query.recordType);
     if (query?.recordId) params.append('recordId', query.recordId);
     const qs = params.toString() ? `?${params.toString()}` : '';
-    return request<AuditLog[]>(`/audit-logs${qs}`);
+    const raw = await request<unknown>(`/audit-logs${qs}`);
+    return normalizeArrayResponse<AuditLog>(raw, 'auditLogs');
   },
 
   // Analytics
@@ -358,16 +408,20 @@ export const api = {
   getStaffDashboard: (period: DateFilterPeriod = 'this_month') =>
     request<StaffDashboardData>(`/staff/my-dashboard?period=${period}`),
   getStaffDashboardById: (id: string) => request<StaffDashboardData>(`/staff/${id}/dashboard`),
-  getStaffAppointments: (query?: any) => {
+  getStaffAppointments: async (query?: any): Promise<Appointment[]> => {
     const params = new URLSearchParams(query || {});
     const qs = params.toString() ? `?${params.toString()}` : '';
-    return request<Appointment[]>(`/appointments${qs}`);
+    const raw = await request<unknown>(`/appointments${qs}`);
+    return normalizeArrayResponse<Appointment>(raw, 'appointments');
   },
   updateStaffAppointmentNotes: (id: string, notes: string) =>
     request<Appointment>(`/appointments/${id}/status`, { method: 'PATCH', body: JSON.stringify({ notes }) }),
   completeStaffAppointment: (id: string) =>
     request<Appointment>(`/appointments/${id}/status`, { method: 'PATCH', body: JSON.stringify({ status: 'completed' }) }),
-  getStaffClients: () => request<any>('/customers'),
+  getStaffClients: async (): Promise<Customer[]> => {
+    const raw = await request<unknown>('/customers');
+    return normalizeArrayResponse<Customer>(raw, 'customers');
+  },
   getStaffMe: () => request<{ staff: Staff; user: User }>('/staff/me'),
   getStaffPerformance: (period: DateFilterPeriod = 'this_month') =>
     request<StaffPerformanceData>(`/analytics?period=${period}`),
@@ -379,14 +433,21 @@ export const api = {
     request<AnalyticsSummary>(`/analytics?period=${period}`),
   getAdminAnalytics: (period: DateFilterPeriod = 'this_month', start?: string, end?: string) =>
     request<AnalyticsSummary>(`/analytics?period=${period}`),
-  getAdminAppointments: (query?: any) => {
+  getAdminAppointments: async (query?: any): Promise<Appointment[]> => {
     const params = new URLSearchParams(query || {});
     const qs = params.toString() ? `?${params.toString()}` : '';
-    return request<Appointment[]>(`/appointments${qs}`);
+    const raw = await request<unknown>(`/appointments${qs}`);
+    return normalizeArrayResponse<Appointment>(raw, 'appointments');
   },
-  getAdminCustomers: (query?: any) => request<Customer[]>('/customers'),
+  getAdminCustomers: async (query?: any): Promise<Customer[]> => {
+    const raw = await request<unknown>('/customers');
+    return normalizeArrayResponse<Customer>(raw, 'customers');
+  },
   getAdminCustomerDetails: (id: string) => request<any>(`/customers/${id}`),
-  getAdminStaff: () => request<Staff[]>('/staff'),
+  getAdminStaff: async (): Promise<Staff[]> => {
+    const raw = await request<unknown>('/staff');
+    return normalizeArrayResponse<Staff>(raw, 'staff');
+  },
   createAdminStaff: (staff: Partial<Staff>) =>
     request<Staff>('/staff', { method: 'POST', body: JSON.stringify(staff) }),
   updateAdminStaff: (id: string, updates: Partial<Staff>) =>
@@ -395,9 +456,18 @@ export const api = {
     request<Staff>(`/staff/${id}/toggle`, { method: 'PATCH' }),
   resetAdminStaffPassword: (id: string, tempPass?: string) =>
     request<{ message: string; tempPass?: string }>(`/staff/${id}/reset-password`, { method: 'POST', body: JSON.stringify({ tempPass }) }),
-  getAdminInquiries: () => request<ContactInquiry[]>('/inquiries'),
-  getAdminReviews: () => request<Review[]>('/reviews/all'),
-  getMyAppointments: () => request<Appointment[]>('/appointments/my'),
+  getAdminInquiries: async (): Promise<ContactInquiry[]> => {
+    const raw = await request<unknown>('/inquiries');
+    return normalizeArrayResponse<ContactInquiry>(raw, 'inquiries');
+  },
+  getAdminReviews: async (): Promise<Review[]> => {
+    const raw = await request<unknown>('/reviews/all');
+    return normalizeArrayResponse<Review>(raw, 'reviews');
+  },
+  getMyAppointments: async (): Promise<Appointment[]> => {
+    const raw = await request<unknown>('/appointments/my');
+    return normalizeArrayResponse<Appointment>(raw, 'appointments');
+  },
   cancelAppointment: (id: string) =>
     request<{ message: string; appointment: Appointment }>(`/appointments/${id}/status`, {
       method: 'PATCH',
@@ -434,8 +504,14 @@ export const api = {
   },
 
   // Categories & Services
-  getCategories: () => request<ServiceCategory[]>('/categories'),
-  getServices: () => request<Service[]>('/services'),
+  getCategories: async (): Promise<ServiceCategory[]> => {
+    const raw = await request<unknown>('/categories');
+    return normalizeArrayResponse<ServiceCategory>(raw, 'categories');
+  },
+  getServices: async (): Promise<Service[]> => {
+    const raw = await request<unknown>('/services');
+    return normalizeArrayResponse<Service>(raw, 'services');
+  },
   getServiceById: (id: string) => request<Service>(`/services/${id}`),
   createService: (service: Partial<Service>) =>
     request<Service>('/services', { method: 'POST', body: JSON.stringify(service) }),
@@ -444,7 +520,10 @@ export const api = {
   deleteService: (id: string) => request<{ success: boolean }>(`/services/${id}`, { method: 'DELETE' }),
 
   // Staff Directory
-  getStaff: () => request<Staff[]>('/staff'),
+  getStaff: async (): Promise<Staff[]> => {
+    const raw = await request<unknown>('/staff');
+    return normalizeArrayResponse<Staff>(raw, 'staff');
+  },
   getStaffById: (id: string) => request<Staff>(`/staff/${id}`),
   createStaff: (staff: Partial<Staff>) =>
     request<Staff>('/staff', { method: 'POST', body: JSON.stringify(staff) }),
@@ -452,7 +531,10 @@ export const api = {
     request<Staff>(`/staff/${id}`, { method: 'PUT', body: JSON.stringify(updates) }),
 
   // Inquiries
-  getInquiries: () => request<ContactInquiry[]>('/inquiries'),
+  getInquiries: async (): Promise<ContactInquiry[]> => {
+    const raw = await request<unknown>('/inquiries');
+    return normalizeArrayResponse<ContactInquiry>(raw, 'inquiries');
+  },
   createInquiry: (inquiry: Partial<ContactInquiry>) =>
     request<{ message: string; inquiry: ContactInquiry }>('/inquiries', {
       method: 'POST',
@@ -465,8 +547,10 @@ export const api = {
     }),
 
   // Reviews
-  getReviews: (onlyApproved = true) =>
-    request<Review[]>(onlyApproved ? '/reviews' : '/reviews/all'),
+  getReviews: async (onlyApproved = true): Promise<Review[]> => {
+    const raw = await request<unknown>(onlyApproved ? '/reviews' : '/reviews/all');
+    return normalizeArrayResponse<Review>(raw, 'reviews');
+  },
   createReview: (review: Partial<Review>) =>
     request<Review>('/reviews', { method: 'POST', body: JSON.stringify(review) }),
   approveReview: (id: string, isApproved: boolean) =>
@@ -481,7 +565,17 @@ export const api = {
     request<BusinessSettings>('/settings', { method: 'PUT', body: JSON.stringify(settings) }),
 
   // Notifications
-  getNotifications: () => request<SystemNotification[]>('/notifications'),
+  getNotifications: async (): Promise<SystemNotification[]> => {
+    const raw = await request<unknown>('/notifications');
+    return normalizeArrayResponse<SystemNotification>(raw, 'notifications');
+  },
   markNotificationRead: (id: string) =>
     request<{ success: boolean }>(`/notifications/${id}/read`, { method: 'PATCH' }),
+
+  // Firebase Auth & Backend Session Bridge
+  firebaseSession: (email: string, uid?: string, name?: string) =>
+    request<{ message: string; token: string; user: User }>('/auth/firebase-session', {
+      method: 'POST',
+      body: JSON.stringify({ email, uid, name }),
+    }),
 };

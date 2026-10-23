@@ -13,10 +13,51 @@ import {
   ROOMS
 } from '../types';
 
+import fs from 'fs';
+import path from 'path';
+
 export const apiRouter = Router();
 
-// In-memory token storage (Simple & robust for active sessions)
+// File-backed token storage for active sessions across server reloads
+const SESSIONS_FILE = path.resolve(process.cwd(), 'data', 'nfyve_sessions.json');
 const SESSIONS: Map<string, { userId: string; role: string; expiresAt: number }> = new Map();
+
+function loadSessions() {
+  try {
+    if (fs.existsSync(SESSIONS_FILE)) {
+      const raw = fs.readFileSync(SESSIONS_FILE, 'utf-8');
+      const parsed = JSON.parse(raw);
+      if (typeof parsed === 'object' && parsed !== null) {
+        const now = Date.now();
+        for (const [k, v] of Object.entries(parsed)) {
+          const val = v as { userId: string; role: string; expiresAt: number };
+          if (val && val.expiresAt > now) {
+            SESSIONS.set(k, val);
+          }
+        }
+      }
+    }
+  } catch (err) {
+    console.warn('Failed to load sessions from file, starting with empty session map:', err);
+  }
+}
+
+function saveSessions() {
+  try {
+    const obj: Record<string, { userId: string; role: string; expiresAt: number }> = {};
+    for (const [k, v] of SESSIONS.entries()) {
+      if (v.expiresAt > Date.now()) {
+        obj[k] = v;
+      }
+    }
+    fs.writeFileSync(SESSIONS_FILE, JSON.stringify(obj, null, 2), 'utf-8');
+  } catch (err) {
+    console.warn('Failed to save sessions to file:', err);
+  }
+}
+
+// Initial session load
+loadSessions();
 
 function generateToken(userId: string, role: string): string {
   const token = `nfyve_token_${Math.random().toString(36).substring(2)}${Date.now().toString(36)}`;
@@ -25,6 +66,7 @@ function generateToken(userId: string, role: string): string {
     role,
     expiresAt: Date.now() + 7 * 24 * 60 * 60 * 1000 // 7 days
   });
+  saveSessions();
   return token;
 }
 
@@ -154,6 +196,52 @@ apiRouter.post('/auth/login', (req, res) => {
   });
 });
 
+// Firebase Auth Session Exchange / Synchronization
+apiRouter.post('/auth/firebase-session', (req, res) => {
+  const { email, uid, name } = req.body;
+  if (!email && !uid) {
+    return res.status(400).json({ error: 'Email or UID is required for Firebase session verification.' });
+  }
+
+  let user: any = email ? db.getUserByEmail(email) : null;
+  if (!user && uid) {
+    user = db.getUserById(uid);
+  }
+
+  // If user does not exist in local db yet (e.g. newly signed up via Firebase Auth), create them
+  if (!user && email) {
+    const role = email.includes('admin') ? 'admin' 
+      : email.includes('frontdesk') ? 'front_desk' 
+      : email.includes('callcenter') ? 'call_center' 
+      : email.includes('staff') || email.includes('dr.') ? 'staff' 
+      : 'customer';
+    
+    user = {
+      id: uid || `usr-${Date.now()}`,
+      name: name || email.split('@')[0],
+      email: email.toLowerCase().trim(),
+      phone: '+91 9000023050',
+      role,
+      passwordHash: '',
+      createdAt: new Date().toISOString()
+    };
+    db.createUser(user);
+  }
+
+  if (!user) {
+    return res.status(404).json({ error: 'User account could not be found or provisioned.' });
+  }
+
+  const token = generateToken(user.id, user.role);
+  const { passwordHash: _, ...safeUser } = user as any;
+
+  res.json({
+    message: 'Firebase session verified',
+    token,
+    user: safeUser,
+  });
+});
+
 // Current User
 apiRouter.get('/auth/me', requireAuth, (req: AuthenticatedRequest, res) => {
   const { passwordHash: _, ...safeUser } = req.user as any;
@@ -166,6 +254,7 @@ apiRouter.post('/auth/logout', (req, res) => {
   if (authHeader && authHeader.startsWith('Bearer ')) {
     const token = authHeader.split(' ')[1];
     SESSIONS.delete(token);
+    saveSessions();
   }
   res.json({ message: 'Logged out successfully' });
 });
