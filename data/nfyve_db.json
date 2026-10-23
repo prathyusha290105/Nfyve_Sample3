@@ -214,7 +214,7 @@
       "name": "Medical Micro-Needling with Growth Factors",
       "slug": "medical-micro-needling",
       "shortDesc": "Automated fractional microneedling paired with bio-identical growth factors for scar revision and texture refinement.",
-      "fullDesc": "Medical-grade automated micro-needles create calibrated vertical micro-channels that trigger the skin’s wound-healing cascade. Infused with sterile recombinant growth factors and polynucleotides to visibly improve acne scarring, textural irregularities, and enlarged pores.",
+      "fullDesc": "Medical-grade automated micro-needles create calibrated vertical micro-channels that trigger the skinΓÇÖs wound-healing cascade. Infused with sterile recombinant growth factors and polynucleotides to visibly improve acne scarring, textural irregularities, and enlarged pores.",
       "durationMins": 75,
       "priceInr": 8500,
       "imageUrl": "/src/assets/images/nfyve_clinical_aesthetics_1790943438599.jpg",
@@ -385,10 +385,10 @@
     {
       "id": "srv-601",
       "categoryId": "cat-6",
-      "name": "The 360° NFYVE Transformation Protocol",
+      "name": "The 360┬░ NFYVE Transformation Protocol",
       "slug": "360-transformation-protocol",
       "shortDesc": "Our signature 8-week coordinated program uniting aesthetics, metabolic weight loss, fitness, nutrition, and salon care.",
-      "fullDesc": "The definitive manifestation of NFYVE – The Change. A collaborative multidisciplinary journey where your clinical aesthetician, fitness coach, senior nutritionist, and salon stylist work as one unified team to recalibrate your wellness and appearance inside and out.",
+      "fullDesc": "The definitive manifestation of NFYVE ΓÇô The Change. A collaborative multidisciplinary journey where your clinical aesthetician, fitness coach, senior nutritionist, and salon stylist work as one unified team to recalibrate your wellness and appearance inside and out.",
       "durationMins": 90,
       "priceInr": 28500,
       "imageUrl": "/src/assets/images/nfyve_hero_wellness_1790943426252.jpg",
@@ -943,7 +943,7 @@
       "customerEmail": "priya.sharma@example.com",
       "customerPhone": "+91 9849012345",
       "serviceId": "srv-601",
-      "serviceName": "The 360° NFYVE Transformation Protocol",
+      "serviceName": "The 360┬░ NFYVE Transformation Protocol",
       "categoryName": "Integrated Wellness Programs",
       "staffId": "st-1",
       "staffName": "Dr. Ananya Reddy",
@@ -1231,7 +1231,7 @@
       "customerEmail": "karthik.rao@example.com",
       "customerPhone": "+91 9849023456",
       "serviceId": "srv-601",
-      "serviceName": "The 360° NFYVE Transformation Protocol",
+      "serviceName": "The 360┬░ NFYVE Transformation Protocol",
       "categoryName": "Integrated Wellness Programs",
       "staffId": "st-2",
       "staffName": "Coach Vikram Singh",
@@ -1471,7 +1471,7 @@
       "customerEmail": "shalini.gupta@example.com",
       "customerPhone": "+91 9849034567",
       "serviceId": "srv-601",
-      "serviceName": "The 360° NFYVE Transformation Protocol",
+      "serviceName": "The 360┬░ NFYVE Transformation Protocol",
       "categoryName": "Integrated Wellness Programs",
       "staffId": "st-3",
       "staffName": "Kavita Nair, RD",
@@ -1903,7 +1903,7 @@
       "customerEmail": "vikram.joshi@example.com",
       "customerPhone": "+91 9849045678",
       "serviceId": "srv-601",
-      "serviceName": "The 360° NFYVE Transformation Protocol",
+      "serviceName": "The 360┬░ NFYVE Transformation Protocol",
       "categoryName": "Integrated Wellness Programs",
       "staffId": "st-4",
       "staffName": "Sameer Khan",
@@ -2287,7 +2287,7 @@
       "customerEmail": "sunita.reddy@example.com",
       "customerPhone": "+91 9849056789",
       "serviceId": "srv-601",
-      "serviceName": "The 360° NFYVE Transformation Protocol",
+      "serviceName": "The 360┬░ NFYVE Transformation Protocol",
       "categoryName": "Integrated Wellness Programs",
       "staffId": "st-1",
       "staffName": "Dr. Ananya Reddy",
@@ -2623,7 +2623,7 @@
       "customerEmail": "priya.sharma@example.com",
       "customerPhone": "+91 9849012345",
       "serviceId": "srv-601",
-      "serviceName": "The 360° NFYVE Transformation Protocol",
+      "serviceName": "The 360┬░ NFYVE Transformation Protocol",
       "categoryName": "Integrated Wellness Programs",
       "staffId": "st-3",
       "staffName": "Kavita Nair, RD",
@@ -2863,7 +2863,7 @@
       "customerEmail": "karthik.rao@example.com",
       "customerPhone": "+91 9849023456",
       "serviceId": "srv-601",
-      "serviceName": "The 360° NFYVE Transformation Protocol",
+      "serviceName": "The 360┬░ NFYVE Transformation Protocol",
       "categoryName": "Integrated Wellness Programs",
       "staffId": "st-4",
       "staffName": "Sameer Khan",
@@ -3151,7 +3151,7 @@
       "customerEmail": "karthik.rao@example.com",
       "customerPhone": "+91 9849023456",
       "serviceId": "srv-601",
-      "serviceName": "The 360° NFYVE Transformation Protocol",
+      "serviceName": "The 360┬░ NFYVE Transformation Protocol",
       "categoryName": "Integrated Wellness Programs",
       "staffId": "st-4",
       "staffName": "Sameer Khan",
@@ -3295,7 +3295,7 @@
       "customerEmail": "shalini.gupta@example.com",
       "customerPhone": "+91 9849034567",
       "serviceId": "srv-601",
-      "serviceName": "The 360° NFYVE Transformation Protocol",
+      "serviceName": "The 360┬░ NFYVE Transformation Protocol",
       "categoryName": "Integrated Wellness Programs",
       "staffId": "st-1",
       "staffName": "Dr. Ananya Reddy",
@@ -3679,7 +3679,7 @@
       "customerEmail": "vikram.joshi@example.com",
       "customerPhone": "+91 9849045678",
       "serviceId": "srv-601",
-      "serviceName": "The 360° NFYVE Transformation Protocol",
+      "serviceName": "The 360┬░ NFYVE Transformation Protocol",
       "categoryName": "Integrated Wellness Programs",
       "staffId": "st-2",
       "staffName": "Coach Vikram Singh",
@@ -4015,7 +4015,7 @@
       "customerEmail": "sunita.reddy@example.com",
       "customerPhone": "+91 9849056789",
       "serviceId": "srv-601",
-      "serviceName": "The 360° NFYVE Transformation Protocol",
+      "serviceName": "The 360┬░ NFYVE Transformation Protocol",
       "categoryName": "Integrated Wellness Programs",
       "staffId": "st-3",
       "staffName": "Kavita Nair, RD",
@@ -4237,15 +4237,16 @@
       "staffName": "Dr. Ananya Reddy",
       "appointmentDate": "2026-10-02",
       "timeSlot": "10:30 AM - 11:30 AM",
-      "status": "confirmed",
+      "status": "checked_in",
       "paymentStatus": "paid",
       "amountInr": 4500,
       "notes": "Skin sensitivity consultation requested.",
       "createdAt": "2026-10-01T14:00:00Z",
-      "updatedAt": "2026-10-01T15:00:00Z",
+      "updatedAt": "2026-10-23T13:59:18.850Z",
       "room": "Slim-2",
       "bookingChannel": "Phone Call",
-      "customerId": "usr-cust-1"
+      "customerId": "usr-cust-1",
+      "checkedInAt": "2026-10-23T13:59:18.850Z"
     },
     {
       "id": "apt-1140",
@@ -4294,6 +4295,35 @@
       "room": "Consult 1",
       "bookingChannel": "Phone Call",
       "customerId": "usr-cust-3"
+    },
+    {
+      "id": "apt-1792763520579",
+      "bookingRef": "NF-2026-8624",
+      "customerId": "CUST-1006",
+      "userId": "CUST-1006",
+      "customerName": "Arjun Kapoor",
+      "customerEmail": "arjun.kapoor@example.com",
+      "customerPhone": "+91 9849067890",
+      "serviceId": "srv-101",
+      "serviceName": "Hydra-Infusion Clinical Facial",
+      "categoryName": "General Wellness",
+      "room": "Consult 1",
+      "durationMins": 60,
+      "staffId": "st-1",
+      "staffName": "Dr. Ananya Reddy",
+      "assignedStaffId": "st-1",
+      "assignedStaffName": "Dr. Ananya Reddy",
+      "bookingChannel": "Phone Call",
+      "appointmentDate": "2026-10-02",
+      "timeSlot": "12:00 PM - 01:00 PM",
+      "status": "in_consultation",
+      "paymentStatus": "pending",
+      "amountInr": 4500,
+      "notes": "Booked via Call Center",
+      "createdBy": "Pooja Reddy (Call Center Lead)",
+      "createdAt": "2026-10-23T13:52:00.579Z",
+      "updatedAt": "2026-10-23T13:59:28.045Z",
+      "checkedInAt": "2026-10-23T13:59:04.067Z"
     }
   ],
   "inquiries": [
@@ -4302,7 +4332,7 @@
       "name": "Sunita Reddy",
       "email": "sunita.reddy@example.com",
       "phone": "+91 9849056789",
-      "subject": "Inquiry regarding 360° Transformation Protocol",
+      "subject": "Inquiry regarding 360┬░ Transformation Protocol",
       "message": "Hello NFYVE team, I work nearby in Begumpet and would like to understand if the 360 program includes both medical body contouring and nutritional guidance.",
       "status": "in_progress",
       "createdAt": "2026-10-01T09:30:00Z"
@@ -4336,7 +4366,7 @@
       "serviceCategory": "Fitness & Gym",
       "serviceName": "1-on-1 Bespoke Personal Training Session",
       "rating": 5,
-      "reviewText": "Coach Vikram’s biomechanical assessment pinpointed my chronic lower back stiffness on day one. Training in a calm, private space without loud commercial gym chaos made my consistency effortless.",
+      "reviewText": "Coach VikramΓÇÖs biomechanical assessment pinpointed my chronic lower back stiffness on day one. Training in a calm, private space without loud commercial gym chaos made my consistency effortless.",
       "reviewDate": "2026-07-28",
       "isApproved": true,
       "isSample": true
@@ -4376,15 +4406,15 @@
     }
   ],
   "settings": {
-    "businessName": "NFYVE – The Change",
+    "businessName": "NFYVE ΓÇô The Change",
     "location": "Begumpet, Hyderabad",
     "address": "4th Floor, Kura Towers, Begumpet, Hyderabad, Telangana 500016, India",
     "phone": "+91 9000023050",
     "email": "support@nfyve.com",
     "openingHours": {
-      "weekdays": "7:00 AM – 9:00 PM",
-      "saturday": "8:00 AM – 8:00 PM",
-      "sunday": "8:00 AM – 6:00 PM"
+      "weekdays": "7:00 AM ΓÇô 9:00 PM",
+      "saturday": "8:00 AM ΓÇô 8:00 PM",
+      "sunday": "8:00 AM ΓÇô 6:00 PM"
     },
     "cancellationPolicy": "Appointments may be cancelled or rescheduled up to 12 hours prior to the scheduled slot with zero cancellation penalty. Late cancellations can be rescheduled through our concierge team."
   },
@@ -4402,7 +4432,7 @@
     {
       "id": "notif-2",
       "title": "Desk Payment Received",
-      "message": "₹4,500 collected from Priya Sharma for completed dermatological session.",
+      "message": "Γé╣4,500 collected from Priya Sharma for completed dermatological session.",
       "time": "1 hour ago",
       "read": false,
       "type": "payment"
@@ -4792,7 +4822,7 @@
       "phone": "+91 9849067890",
       "email": "arjun.kapoor@example.com",
       "leadSource": "Google",
-      "lifecycleStatus": "new_prospect",
+      "lifecycleStatus": "appointment_confirmed",
       "assignedEmployeeId": "usr-callcenter-1",
       "assignedEmployeeName": "Pooja Reddy",
       "interestedServiceId": "srv-9",
@@ -4800,7 +4830,7 @@
       "initialRemarks": "Enquired online about functional gut health testing.",
       "notes": "First call pending.",
       "createdAt": "2026-10-02T07:15:00Z",
-      "updatedAt": "2026-10-02T07:15:00Z",
+      "updatedAt": "2026-10-23T13:52:00.580Z",
       "totalSpendInr": 0,
       "completedTreatments": 0
     }
@@ -4963,6 +4993,19 @@
       "nextAction": "Scheduled callback for 2026-10-02",
       "followUpDate": "2026-10-02",
       "createdAt": "2026-10-01T16:05:00Z"
+    },
+    {
+      "id": "call-1792763414395-560",
+      "customerId": "CUST-1006",
+      "customerName": "Arjun Kapoor",
+      "customerPhone": "+91 9849067890",
+      "employeeId": "usr-callcenter-1",
+      "employeeName": "Pooja Reddy (Call Center Lead)",
+      "dateTime": "2026-10-23T13:50:14.392Z",
+      "outcome": "appointment_confirmed",
+      "remarks": "followed up the second day and customer confirmed the aappointment",
+      "nextAction": "Customer offline visite to the Nfyve",
+      "createdAt": "2026-10-23T13:50:14.397Z"
     }
   ],
   "followUps": [
@@ -6706,7 +6749,7 @@
       "action": "POSTPONE_PAYMENT",
       "recordType": "invoice",
       "recordId": "inv-1792764874563",
-      "details": "Postponed balance of ₹5000 for Priya Sharma until 2026-10-25. Reason: Awaiting corporate wellness reimbursement cycle.",
+      "details": "Postponed balance of Γé╣5000 for Priya Sharma until 2026-10-25. Reason: Awaiting corporate wellness reimbursement cycle.",
       "timestamp": "2026-10-23T14:14:34.581Z"
     },
     {
@@ -6717,7 +6760,7 @@
       "action": "RECORD_PAYMENT",
       "recordType": "payment",
       "recordId": "pay-1792764874575",
-      "details": "Received ₹2000 from Priya Sharma via card for invoice INV-2026-1012",
+      "details": "Received Γé╣2000 from Priya Sharma via card for invoice INV-2026-1012",
       "timestamp": "2026-10-23T14:14:34.575Z"
     },
     {
@@ -6728,7 +6771,7 @@
       "action": "RECORD_PAYMENT",
       "recordType": "payment",
       "recordId": "pay-1792764874569",
-      "details": "Received ₹3000 from Priya Sharma via upi for invoice INV-2026-1012",
+      "details": "Received Γé╣3000 from Priya Sharma via upi for invoice INV-2026-1012",
       "timestamp": "2026-10-23T14:14:34.569Z"
     },
     {
@@ -6739,7 +6782,7 @@
       "action": "CREATE_INVOICE",
       "recordType": "invoice",
       "recordId": "inv-1792764874563",
-      "details": "Created invoice INV-2026-1012 for Priya Sharma totaling ₹10000",
+      "details": "Created invoice INV-2026-1012 for Priya Sharma totaling Γé╣10000",
       "timestamp": "2026-10-23T14:14:34.563Z"
     },
     {
@@ -6882,7 +6925,7 @@
       "action": "POSTPONE_PAYMENT",
       "recordType": "invoice",
       "recordId": "inv-1792764757904",
-      "details": "Postponed balance of ₹5000 for Priya Sharma until 2026-10-25. Reason: Awaiting corporate wellness reimbursement cycle.",
+      "details": "Postponed balance of Γé╣5000 for Priya Sharma until 2026-10-25. Reason: Awaiting corporate wellness reimbursement cycle.",
       "timestamp": "2026-10-23T14:12:37.922Z"
     },
     {
@@ -6893,7 +6936,7 @@
       "action": "RECORD_PAYMENT",
       "recordType": "payment",
       "recordId": "pay-1792764757916",
-      "details": "Received ₹2000 from Priya Sharma via card for invoice INV-2026-1011",
+      "details": "Received Γé╣2000 from Priya Sharma via card for invoice INV-2026-1011",
       "timestamp": "2026-10-23T14:12:37.916Z"
     },
     {
@@ -6904,7 +6947,7 @@
       "action": "RECORD_PAYMENT",
       "recordType": "payment",
       "recordId": "pay-1792764757910",
-      "details": "Received ₹3000 from Priya Sharma via upi for invoice INV-2026-1011",
+      "details": "Received Γé╣3000 from Priya Sharma via upi for invoice INV-2026-1011",
       "timestamp": "2026-10-23T14:12:37.910Z"
     },
     {
@@ -6915,7 +6958,7 @@
       "action": "CREATE_INVOICE",
       "recordType": "invoice",
       "recordId": "inv-1792764757904",
-      "details": "Created invoice INV-2026-1011 for Priya Sharma totaling ₹10000",
+      "details": "Created invoice INV-2026-1011 for Priya Sharma totaling Γé╣10000",
       "timestamp": "2026-10-23T14:12:37.904Z"
     },
     {
@@ -7058,7 +7101,7 @@
       "action": "POSTPONE_PAYMENT",
       "recordType": "invoice",
       "recordId": "inv-1792764722010",
-      "details": "Postponed balance of ₹5000 for Priya Sharma until 2026-10-25. Reason: Awaiting corporate wellness reimbursement cycle.",
+      "details": "Postponed balance of Γé╣5000 for Priya Sharma until 2026-10-25. Reason: Awaiting corporate wellness reimbursement cycle.",
       "timestamp": "2026-10-23T14:12:02.018Z"
     },
     {
@@ -7069,7 +7112,7 @@
       "action": "RECORD_PAYMENT",
       "recordType": "payment",
       "recordId": "pay-1792764722015",
-      "details": "Received ₹2000 from Priya Sharma via card for invoice INV-2026-1010",
+      "details": "Received Γé╣2000 from Priya Sharma via card for invoice INV-2026-1010",
       "timestamp": "2026-10-23T14:12:02.015Z"
     },
     {
@@ -7080,7 +7123,7 @@
       "action": "RECORD_PAYMENT",
       "recordType": "payment",
       "recordId": "pay-1792764722013",
-      "details": "Received ₹3000 from Priya Sharma via upi for invoice INV-2026-1010",
+      "details": "Received Γé╣3000 from Priya Sharma via upi for invoice INV-2026-1010",
       "timestamp": "2026-10-23T14:12:02.013Z"
     },
     {
@@ -7091,7 +7134,7 @@
       "action": "CREATE_INVOICE",
       "recordType": "invoice",
       "recordId": "inv-1792764722010",
-      "details": "Created invoice INV-2026-1010 for Priya Sharma totaling ₹10000",
+      "details": "Created invoice INV-2026-1010 for Priya Sharma totaling Γé╣10000",
       "timestamp": "2026-10-23T14:12:02.010Z"
     },
     {
@@ -7223,7 +7266,7 @@
       "action": "POSTPONE_PAYMENT",
       "recordType": "invoice",
       "recordId": "inv-1792764692333",
-      "details": "Postponed balance of ₹5000 for Priya Sharma until 2026-10-25. Reason: Awaiting corporate wellness reimbursement cycle.",
+      "details": "Postponed balance of Γé╣5000 for Priya Sharma until 2026-10-25. Reason: Awaiting corporate wellness reimbursement cycle.",
       "timestamp": "2026-10-23T14:11:32.341Z"
     },
     {
@@ -7234,7 +7277,7 @@
       "action": "RECORD_PAYMENT",
       "recordType": "payment",
       "recordId": "pay-1792764692338",
-      "details": "Received ₹2000 from Priya Sharma via card for invoice INV-2026-1009",
+      "details": "Received Γé╣2000 from Priya Sharma via card for invoice INV-2026-1009",
       "timestamp": "2026-10-23T14:11:32.338Z"
     },
     {
@@ -7245,7 +7288,7 @@
       "action": "RECORD_PAYMENT",
       "recordType": "payment",
       "recordId": "pay-1792764692336",
-      "details": "Received ₹3000 from Priya Sharma via upi for invoice INV-2026-1009",
+      "details": "Received Γé╣3000 from Priya Sharma via upi for invoice INV-2026-1009",
       "timestamp": "2026-10-23T14:11:32.336Z"
     },
     {
@@ -7256,7 +7299,7 @@
       "action": "CREATE_INVOICE",
       "recordType": "invoice",
       "recordId": "inv-1792764692333",
-      "details": "Created invoice INV-2026-1009 for Priya Sharma totaling ₹10000",
+      "details": "Created invoice INV-2026-1009 for Priya Sharma totaling Γé╣10000",
       "timestamp": "2026-10-23T14:11:32.333Z"
     },
     {
@@ -7355,7 +7398,7 @@
       "action": "POSTPONE_PAYMENT",
       "recordType": "invoice",
       "recordId": "inv-1792761274446",
-      "details": "Postponed balance of ₹5000 for Priya Sharma until 2026-10-25. Reason: Awaiting corporate wellness reimbursement cycle.",
+      "details": "Postponed balance of Γé╣5000 for Priya Sharma until 2026-10-25. Reason: Awaiting corporate wellness reimbursement cycle.",
       "timestamp": "2026-10-23T13:14:34.454Z"
     },
     {
@@ -7366,7 +7409,7 @@
       "action": "RECORD_PAYMENT",
       "recordType": "payment",
       "recordId": "pay-1792761274451",
-      "details": "Received ₹2000 from Priya Sharma via card for invoice INV-2026-1008",
+      "details": "Received Γé╣2000 from Priya Sharma via card for invoice INV-2026-1008",
       "timestamp": "2026-10-23T13:14:34.451Z"
     },
     {
@@ -7377,7 +7420,7 @@
       "action": "RECORD_PAYMENT",
       "recordType": "payment",
       "recordId": "pay-1792761274449",
-      "details": "Received ₹3000 from Priya Sharma via upi for invoice INV-2026-1008",
+      "details": "Received Γé╣3000 from Priya Sharma via upi for invoice INV-2026-1008",
       "timestamp": "2026-10-23T13:14:34.449Z"
     },
     {
@@ -7388,7 +7431,7 @@
       "action": "CREATE_INVOICE",
       "recordType": "invoice",
       "recordId": "inv-1792761274446",
-      "details": "Created invoice INV-2026-1008 for Priya Sharma totaling ₹10000",
+      "details": "Created invoice INV-2026-1008 for Priya Sharma totaling Γé╣10000",
       "timestamp": "2026-10-23T13:14:34.446Z"
     },
     {
@@ -7531,7 +7574,7 @@
       "action": "POSTPONE_PAYMENT",
       "recordType": "invoice",
       "recordId": "inv-1792761199401",
-      "details": "Postponed balance of ₹5000 for Priya Sharma until 2026-10-25. Reason: Awaiting corporate wellness reimbursement cycle.",
+      "details": "Postponed balance of Γé╣5000 for Priya Sharma until 2026-10-25. Reason: Awaiting corporate wellness reimbursement cycle.",
       "timestamp": "2026-10-23T13:13:19.408Z"
     },
     {
@@ -7542,7 +7585,7 @@
       "action": "RECORD_PAYMENT",
       "recordType": "payment",
       "recordId": "pay-1792761199405",
-      "details": "Received ₹2000 from Priya Sharma via card for invoice INV-2026-1007",
+      "details": "Received Γé╣2000 from Priya Sharma via card for invoice INV-2026-1007",
       "timestamp": "2026-10-23T13:13:19.405Z"
     },
     {
@@ -7553,7 +7596,7 @@
       "action": "RECORD_PAYMENT",
       "recordType": "payment",
       "recordId": "pay-1792761199403",
-      "details": "Received ₹3000 from Priya Sharma via upi for invoice INV-2026-1007",
+      "details": "Received Γé╣3000 from Priya Sharma via upi for invoice INV-2026-1007",
       "timestamp": "2026-10-23T13:13:19.403Z"
     },
     {
@@ -7564,7 +7607,7 @@
       "action": "CREATE_INVOICE",
       "recordType": "invoice",
       "recordId": "inv-1792761199401",
-      "details": "Created invoice INV-2026-1007 for Priya Sharma totaling ₹10000",
+      "details": "Created invoice INV-2026-1007 for Priya Sharma totaling Γé╣10000",
       "timestamp": "2026-10-23T13:13:19.401Z"
     },
     {
@@ -7707,7 +7750,7 @@
       "action": "POSTPONE_PAYMENT",
       "recordType": "invoice",
       "recordId": "inv-1791720424253",
-      "details": "Postponed balance of ₹5000 for Priya Sharma until 2026-10-25. Reason: Awaiting corporate wellness reimbursement cycle.",
+      "details": "Postponed balance of Γé╣5000 for Priya Sharma until 2026-10-25. Reason: Awaiting corporate wellness reimbursement cycle.",
       "timestamp": "2026-10-11T12:07:04.260Z"
     },
     {
@@ -7718,7 +7761,7 @@
       "action": "RECORD_PAYMENT",
       "recordType": "payment",
       "recordId": "pay-1791720424257",
-      "details": "Received ₹2000 from Priya Sharma via card for invoice INV-2026-1006",
+      "details": "Received Γé╣2000 from Priya Sharma via card for invoice INV-2026-1006",
       "timestamp": "2026-10-11T12:07:04.257Z"
     },
     {
@@ -7729,7 +7772,7 @@
       "action": "RECORD_PAYMENT",
       "recordType": "payment",
       "recordId": "pay-1791720424255",
-      "details": "Received ₹3000 from Priya Sharma via upi for invoice INV-2026-1006",
+      "details": "Received Γé╣3000 from Priya Sharma via upi for invoice INV-2026-1006",
       "timestamp": "2026-10-11T12:07:04.255Z"
     },
     {
@@ -7740,7 +7783,7 @@
       "action": "CREATE_INVOICE",
       "recordType": "invoice",
       "recordId": "inv-1791720424253",
-      "details": "Created invoice INV-2026-1006 for Priya Sharma totaling ₹10000",
+      "details": "Created invoice INV-2026-1006 for Priya Sharma totaling Γé╣10000",
       "timestamp": "2026-10-11T12:07:04.253Z"
     },
     {
@@ -7872,7 +7915,7 @@
       "action": "POSTPONE_PAYMENT",
       "recordType": "invoice",
       "recordId": "inv-1791720396095",
-      "details": "Postponed balance of ₹5000 for Priya Sharma until 2026-10-25. Reason: Awaiting corporate wellness reimbursement cycle.",
+      "details": "Postponed balance of Γé╣5000 for Priya Sharma until 2026-10-25. Reason: Awaiting corporate wellness reimbursement cycle.",
       "timestamp": "2026-10-11T12:06:36.103Z"
     },
     {
@@ -7883,7 +7926,7 @@
       "action": "RECORD_PAYMENT",
       "recordType": "payment",
       "recordId": "pay-1791720396100",
-      "details": "Received ₹2000 from Priya Sharma via card for invoice INV-2026-1005",
+      "details": "Received Γé╣2000 from Priya Sharma via card for invoice INV-2026-1005",
       "timestamp": "2026-10-11T12:06:36.100Z"
     },
     {
@@ -7894,7 +7937,7 @@
       "action": "RECORD_PAYMENT",
       "recordType": "payment",
       "recordId": "pay-1791720396098",
-      "details": "Received ₹3000 from Priya Sharma via upi for invoice INV-2026-1005",
+      "details": "Received Γé╣3000 from Priya Sharma via upi for invoice INV-2026-1005",
       "timestamp": "2026-10-11T12:06:36.098Z"
     },
     {
@@ -7905,7 +7948,7 @@
       "action": "CREATE_INVOICE",
       "recordType": "invoice",
       "recordId": "inv-1791720396095",
-      "details": "Created invoice INV-2026-1005 for Priya Sharma totaling ₹10000",
+      "details": "Created invoice INV-2026-1005 for Priya Sharma totaling Γé╣10000",
       "timestamp": "2026-10-11T12:06:36.095Z"
     },
     {
@@ -8004,7 +8047,7 @@
       "action": "POSTPONE_PAYMENT",
       "recordType": "invoice",
       "recordId": "inv-1791720282635",
-      "details": "Postponed balance of ₹5000 for Priya Sharma until 2026-10-25. Reason: Awaiting corporate wellness reimbursement cycle.",
+      "details": "Postponed balance of Γé╣5000 for Priya Sharma until 2026-10-25. Reason: Awaiting corporate wellness reimbursement cycle.",
       "timestamp": "2026-10-11T12:04:42.646Z"
     },
     {
@@ -8015,7 +8058,7 @@
       "action": "RECORD_PAYMENT",
       "recordType": "payment",
       "recordId": "pay-1791720282642",
-      "details": "Received ₹2000 from Priya Sharma via credit_card for invoice INV-2026-1004",
+      "details": "Received Γé╣2000 from Priya Sharma via credit_card for invoice INV-2026-1004",
       "timestamp": "2026-10-11T12:04:42.642Z"
     },
     {
@@ -8026,7 +8069,7 @@
       "action": "RECORD_PAYMENT",
       "recordType": "payment",
       "recordId": "pay-1791720282639",
-      "details": "Received ₹3000 from Priya Sharma via upi for invoice INV-2026-1004",
+      "details": "Received Γé╣3000 from Priya Sharma via upi for invoice INV-2026-1004",
       "timestamp": "2026-10-11T12:04:42.639Z"
     },
     {
@@ -8037,7 +8080,7 @@
       "action": "CREATE_INVOICE",
       "recordType": "invoice",
       "recordId": "inv-1791720282635",
-      "details": "Created invoice INV-2026-1004 for Priya Sharma totaling ₹10000",
+      "details": "Created invoice INV-2026-1004 for Priya Sharma totaling Γé╣10000",
       "timestamp": "2026-10-11T12:04:42.635Z"
     },
     {
@@ -8181,7 +8224,62 @@
       "action": "POSTPONE_PAYMENT",
       "recordType": "invoice",
       "recordId": "inv-1003",
-      "details": "Postponed payment of ₹3,500 for Karthik Rao with follow-up on 2026-10-03."
+      "details": "Postponed payment of Γé╣3,500 for Karthik Rao with follow-up on 2026-10-03."
+    },
+    {
+      "id": "aud-1792763968045-770",
+      "actorId": "system",
+      "actorName": "Sneha Rao (Front Desk Executive)",
+      "actorRole": "front_desk",
+      "action": "UPDATE_APPOINTMENT_STATUS",
+      "recordType": "appointment",
+      "recordId": "apt-1792763520579",
+      "details": "Status changed from checked_in to in_consultation",
+      "timestamp": "2026-10-23T13:59:28.045Z"
+    },
+    {
+      "id": "aud-1792763958850-713",
+      "actorId": "system",
+      "actorName": "Sneha Rao (Front Desk Executive)",
+      "actorRole": "front_desk",
+      "action": "UPDATE_APPOINTMENT_STATUS",
+      "recordType": "appointment",
+      "recordId": "apt-1139",
+      "details": "Status changed from confirmed to checked_in",
+      "timestamp": "2026-10-23T13:59:18.850Z"
+    },
+    {
+      "id": "aud-1792763944067-977",
+      "actorId": "system",
+      "actorName": "Sneha Rao (Front Desk Executive)",
+      "actorRole": "front_desk",
+      "action": "UPDATE_APPOINTMENT_STATUS",
+      "recordType": "appointment",
+      "recordId": "apt-1792763520579",
+      "details": "Status changed from confirmed to checked_in",
+      "timestamp": "2026-10-23T13:59:04.067Z"
+    },
+    {
+      "id": "aud-1792763520580-656",
+      "actorId": "system",
+      "actorName": "Pooja Reddy (Call Center Lead)",
+      "actorRole": "front_desk",
+      "action": "CREATE_APPOINTMENT",
+      "recordType": "appointment",
+      "recordId": "apt-1792763520579",
+      "details": "Booked appointment NF-2026-8624 for Arjun Kapoor in Consult 1 with Dr. Ananya Reddy",
+      "timestamp": "2026-10-23T13:52:00.580Z"
+    },
+    {
+      "id": "aud-1792763414398-712",
+      "actorId": "usr-callcenter-1",
+      "actorName": "Pooja Reddy (Call Center Lead)",
+      "actorRole": "call_center",
+      "action": "RECORD_CALL",
+      "recordType": "callLog",
+      "recordId": "call-1792763414395-560",
+      "details": "Recorded appointment_confirmed call with Arjun Kapoor",
+      "timestamp": "2026-10-23T13:50:14.398Z"
     }
   ]
 }

@@ -13,5 +13,10 @@
     "userId": "usr-frontdesk-1",
     "role": "front_desk",
     "expiresAt": 1793366054150
+  },
+  "nfyve_token_ucktdsmtpnmvl19l0j": {
+    "userId": "usr-frontdesk-1",
+    "role": "front_desk",
+    "expiresAt": 1793368578979
   }
 }
